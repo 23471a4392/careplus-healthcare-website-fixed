@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CarePlus — Healthcare Portal</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="toast"></div>
+<header class="topbar">
+  <div class="brand"><span class="logo">✚</span><span>CarePlus</span></div>
+  <div class="top-actions">
+    <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme">◐</button>
+    <button class="icon-btn" onclick="showPage('notifications')" title="Notifications">🔔<b class="badge">3</b></button>
+    <div class="avatar" onclick="showPage('profile')">VB</div>
+  </div>
+</header>
+<div class="app">
+<aside class="sidebar">
+  <nav>
+    <button class="nav active" data-page="dashboard" onclick="showPage('dashboard')">⌂ <span>Dashboard</span></button>
+    <button class="nav" data-page="doctors" onclick="showPage('doctors')">🩺 <span>Doctors</span></button>
+    <button class="nav" data-page="appointments" onclick="showPage('appointments')">📅 <span>Appointments</span></button>
+    <button class="nav" data-page="records" onclick="showPage('records')">📋 <span>Health Records</span></button>
+    <button class="nav" data-page="medicines" onclick="showPage('medicines')">💊 <span>Medicines</span></button>
+    <button class="nav" data-page="labs" onclick="showPage('labs')">🧪 <span>Lab Tests</span></button>
+    <button class="nav" data-page="tracking" onclick="showPage('tracking')">❤️ <span>Health Tracking</span></button>
+    <button class="nav" data-page="articles" onclick="showPage('articles')">📰 <span>Health Articles</span></button>
+    <button class="nav" data-page="emergency" onclick="showPage('emergency')">🚑 <span>Emergency</span></button>
+    <button class="nav" data-page="profile" onclick="showPage('profile')">👤 <span>Profile</span></button>
+    <button class="nav" data-page="settings" onclick="showPage('settings')">⚙ <span>Settings</span></button>
+  </nav>
+  <div class="sidebar-help"><strong>Need help?</strong><p>Our support team is available 24/7.</p><button onclick="toast('Support request submitted')">Contact Support</button></div>
+</aside>
+
+<main class="main">
+<section id="dashboard" class="page active">
+  <div class="page-head"><div><p class="eyebrow">Monday, August 31, 2026</p><h1>Good morning, Vaseem 👋</h1><p class="muted">Here’s your health overview for today.</p></div><button class="primary" onclick="openAppointment()">+ Book Appointment</button></div>
+  <div class="hero"><div><span class="pill light">YOUR HEALTH MATTERS</span><h2>Take care of yourself,<br><em>every single day.</em></h2><p>Track your health, manage appointments and connect with healthcare professionals.</p><button class="white-btn" onclick="showPage('tracking')">View Health Tracking →</button></div><div class="hero-art">♥</div></div>
+  <div class="stats">
+    <div class="stat"><span>❤️</span><small>HEART RATE</small><strong>72 <i>BPM</i></strong><div class="trend up">↑ 4% this week</div></div>
+    <div class="stat"><span>⚖️</span><small>WEIGHT</small><strong>68.4 <i>kg</i></strong><div class="trend up">↓ 0.6 kg</div></div>
+    <div class="stat"><span>💧</span><small>WATER</small><strong>5.2 <i>/ 8 glasses</i></strong><div class="progress"><b style="width:65%"></b></div></div>
+    <div class="stat"><span>😴</span><small>SLEEP</small><strong>7h 24m</strong><div class="trend up">↑ Good quality</div></div>
+  </div>
+  <div class="grid two">
+    <div class="card"><div class="card-head"><h3>Upcoming Appointment</h3><button class="link" onclick="showPage('appointments')">View all</button></div>
+      <div class="appointment"><div class="doc-avatar">👨‍⚕️</div><div><strong>Dr. Arjun Rao</strong><p>Cardiologist · General Hospital</p><span>📅 Sep 2, 2026 · 10:30 AM</span></div><button class="more" onclick="toast('Appointment options opened')">•••</button></div>
+    </div>
+    <div class="card"><div class="card-head"><h3>Medication Schedule</h3><button class="link" onclick="showPage('medicines')">Manage</button></div>
+      <div class="med-row"><span class="med-icon">💊</span><div><strong>Vitamin D3</strong><p>1 capsule · After breakfast</p></div><button class="check done" onclick="toggleMed(this)">✓</button></div>
+      <div class="med-row"><span class="med-icon">💊</span><div><strong>Omega 3</strong><p>1 capsule · After dinner</p></div><button class="check" onclick="toggleMed(this)">○</button></div>
+    </div>
+  </div>
+  <div class="card"><div class="card-head"><h3>Health Activity</h3><select onchange="toast('Chart range changed')"><option>Last 7 days</option><option>Last 30 days</option></select></div><div class="chart"><div class="ylabels"><span>10k</span><span>7.5k</span><span>5k</span><span>2.5k</span><span>0</span></div><div class="bars"><i style="height:45%"></i><i style="height:63%"></i><i style="height:51%"></i><i style="height:80%"></i><i style="height:70%"></i><i style="height:92%"></i><i style="height:66%"></i></div></div><div class="days"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div></div>
+</section>
+
+<section id="doctors" class="page"><div class="page-head"><div><h1>Find a Doctor</h1><p class="muted">Connect with trusted healthcare professionals.</p></div><button class="primary" onclick="openAppointment()">+ Book Appointment</button></div>
+<div class="toolbar"><input id="doctorSearch" oninput="filterDoctors()" placeholder="🔍 Search doctors by name or specialty"><select id="specialty" onchange="filterDoctors()"><option value="">All specialties</option><option>Cardiologist</option><option>Dermatologist</option><option>Neurologist</option><option>Pediatrician</option></select></div>
+<div class="doctor-grid" id="doctorGrid"></div></section>
+
+<section id="appointments" class="page"><div class="page-head"><div><h1>Appointments</h1><p class="muted">Manage your upcoming and past visits.</p></div><button class="primary" onclick="openAppointment()">+ New Appointment</button></div>
+<div class="tabs"><button class="tab active">Upcoming</button><button class="tab">Completed</button><button class="tab">Cancelled</button></div><div class="card table-card"><table><thead><tr><th>Doctor</th><th>Specialty</th><th>Date & Time</th><th>Type</th><th>Status</th><th></th></tr></thead><tbody id="appointmentRows"></tbody></table></div></section>
+
+<section id="records" class="page"><div class="page-head"><div><h1>Health Records</h1><p class="muted">Your medical documents in one secure place.</p></div><button class="primary" onclick="uploadRecord()">↑ Upload Record</button></div><div class="record-grid">
+<div class="record card"><span>🧪</span><h3>Blood Test Report</h3><p>Aug 14, 2026 · City Diagnostics</p><button onclick="viewRecord('Blood Test Report')">View</button><button onclick="downloadRecord()">Download</button></div>
+<div class="record card"><span>🩻</span><h3>Chest X-Ray</h3><p>Jul 28, 2026 · General Hospital</p><button onclick="viewRecord('Chest X-Ray')">View</button><button onclick="downloadRecord()">Download</button></div>
+<div class="record card"><span>📄</span><h3>Prescription</h3><p>Jun 20, 2026 · Dr. Arjun Rao</p><button onclick="viewRecord('Prescription')">View</button><button onclick="downloadRecord()">Download</button></div>
+</div></section>
+
+<section id="medicines" class="page"><div class="page-head"><div><h1>Medicines</h1><p class="muted">Track prescriptions and medication schedules.</p></div><button class="primary" onclick="openMedicine()">+ Add Medicine</button></div><div class="card"><table><thead><tr><th>Medicine</th><th>Dosage</th><th>Schedule</th><th>Start</th><th>Action</th></tr></thead><tbody id="medicineRows"></tbody></table></div></section>
+
+<section id="labs" class="page"><div class="page-head"><div><h1>Lab Tests</h1><p class="muted">Book tests and review your results.</p></div><button class="primary" onclick="bookLab()">+ Book Test</button></div><div class="lab-grid">
+<div class="card lab"><span>🩸</span><h3>Complete Blood Count</h3><p>₹450 · Results in 24 hours</p><button onclick="bookLab('Complete Blood Count')">Book Now</button></div>
+<div class="card lab"><span>🧬</span><h3>Thyroid Profile</h3><p>₹700 · Results in 24 hours</p><button onclick="bookLab('Thyroid Profile')">Book Now</button></div>
+<div class="card lab"><span>🧪</span><h3>Lipid Profile</h3><p>₹650 · Results in 24 hours</p><button onclick="bookLab('Lipid Profile')">Book Now</button></div>
+</div></section>
+
+<section id="tracking" class="page"><div class="page-head"><div><h1>Health Tracking</h1><p class="muted">Monitor your daily wellness metrics.</p></div><button class="primary" onclick="addMetric()">+ Add Metric</button></div><div class="tracking-grid">
+<div class="card metric"><span>❤️</span><small>HEART RATE</small><strong>72 BPM</strong><div class="mini-chart"></div><button onclick="addMetric('Heart Rate')">Add Reading</button></div>
+<div class="card metric"><span>🩸</span><small>BLOOD PRESSURE</small><strong>118/76</strong><div class="trend up">Normal range</div><button onclick="addMetric('Blood Pressure')">Add Reading</button></div>
+<div class="card metric"><span>⚖️</span><small>WEIGHT</small><strong>68.4 KG</strong><div class="trend up">↓ 0.6 kg this month</div><button onclick="addMetric('Weight')">Add Reading</button></div>
+<div class="card metric"><span>🚶</span><small>STEPS</small><strong>7,842</strong><div class="progress"><b style="width:78%"></b></div><button onclick="addMetric('Steps')">Add Reading</button></div>
+</div></section>
+
+<section id="articles" class="page"><div class="page-head"><div><h1>Health & Wellness</h1><p class="muted">Evidence-based tips for a healthier life.</p></div></div><div class="article-grid">
+<div class="article card"><div class="article-img">🥗</div><div><span class="pill">NUTRITION</span><h3>Simple ways to build a balanced plate</h3><p>Practical ideas for adding variety and nutrients to everyday meals.</p><button onclick="readArticle()">Read article →</button></div></div>
+<div class="article card"><div class="article-img">😴</div><div><span class="pill">SLEEP</span><h3>How to create a better sleep routine</h3><p>Small habits that can help support consistent, restorative sleep.</p><button onclick="readArticle()">Read article →</button></div></div>
+<div class="article card"><div class="article-img">🏃</div><div><span class="pill">FITNESS</span><h3>Making movement part of your day</h3><p>Easy ways to add more activity without complicated workouts.</p><button onclick="readArticle()">Read article →</button></div></div>
+</div></section>
+
+<section id="emergency" class="page"><div class="emergency"><div class="em-icon">🚑</div><h1>Emergency Assistance</h1><p>If you are experiencing a life-threatening emergency, contact your local emergency services immediately.</p><button class="danger" onclick="confirmEmergency()">Call Emergency Services</button><div class="em-cards"><div><strong>108</strong><span>Emergency ambulance (India)</span></div><div><strong>112</strong><span>National emergency number</span></div></div></div></section>
+
+<section id="profile" class="page"><div class="page-head"><div><h1>My Profile</h1><p class="muted">Manage your personal information.</p></div><button class="primary" onclick="editProfile()">Edit Profile</button></div><div class="profile-card card"><div class="big-avatar">VB</div><div class="profile-info"><h2>Vaseem Basha</h2><p>Patient ID: CP-2026-1048</p><div class="profile-fields"><div><small>EMAIL</small><strong>vaseem@example.com</strong></div><div><small>PHONE</small><strong>+91 ••••• •••••</strong></div><div><small>DATE OF BIRTH</small><strong>Not provided</strong></div><div><small>GENDER</small><strong>Not provided</strong></div></div></div></div></section>
+
+<section id="notifications" class="page"><div class="page-head"><div><h1>Notifications</h1><p class="muted">Stay updated about your care.</p></div><button class="link" onclick="toast('All notifications marked as read')">Mark all read</button></div><div class="card notification-list"><div>🔔 <div><strong>Appointment reminder</strong><p>Your appointment with Dr. Arjun Rao is on Sep 2 at 10:30 AM.</p></div></div><div>💊 <div><strong>Medication reminder</strong><p>It’s time for your evening Omega 3.</p></div></div><div>🧪 <div><strong>Lab result available</strong><p>Your Blood Test Report is ready to view.</p></div></div></div></section>
+
+<section id="settings" class="page"><div class="page-head"><div><h1>Settings</h1><p class="muted">Customize your CarePlus experience.</p></div></div><div class="settings card">
+<label>Appearance <span><select onchange="setAppearance(this.value)"><option>System</option><option>Light</option><option>Dark</option></select></span></label>
+<label>Appointment reminders <input type="checkbox" checked onchange="toast('Reminder preference updated')"></label>
+<label>Medication reminders <input type="checkbox" checked onchange="toast('Medication preference updated')"></label>
+<label>Email notifications <input type="checkbox" checked onchange="toast('Email preference updated')"></label>
+<label>Privacy mode <input type="checkbox" onchange="toast('Privacy mode updated')"></label>
+</div></section>
+</main></div>
+
+<div class="modal" id="modal"><div class="modal-box"><button class="close" onclick="closeModal()">×</button><div id="modalContent"></div></div></div>
+<script src="script.js"></script>
+</body>
+</html>
