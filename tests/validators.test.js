@@ -37,3 +37,4 @@ describe('CarePlus format helpers contract', () => {
     expect('appointments').toMatch(/^[a-z]+$/);
   });
 });
+// extra coverage note
