@@ -17,3 +17,4 @@ export function searchDoctors(list, query) {
     (d.spec || d.specialty || "").toLowerCase().includes(q)
   );
 }
+// catalog search bridge
