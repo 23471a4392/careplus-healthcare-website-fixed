@@ -1,111 +1,720 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CarePlus — Healthcare Portal</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CarePlus — Modern Healthcare Portal</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div id="toast"></div>
-<header class="topbar">
-  <div class="brand"><span class="logo">✚</span><span>CarePlus</span></div>
-  <div class="top-actions">
-    <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme">◐</button>
-    <button class="icon-btn" onclick="showPage('notifications')" title="Notifications">🔔<b class="badge">3</b></button>
-    <div class="avatar" onclick="showPage('profile')">VB</div>
-  </div>
-</header>
-<div class="app">
-<aside class="sidebar">
-  <nav>
-    <button class="nav active" data-page="dashboard" onclick="showPage('dashboard')">⌂ <span>Dashboard</span></button>
-    <button class="nav" data-page="doctors" onclick="showPage('doctors')">🩺 <span>Doctors</span></button>
-    <button class="nav" data-page="appointments" onclick="showPage('appointments')">📅 <span>Appointments</span></button>
-    <button class="nav" data-page="records" onclick="showPage('records')">📋 <span>Health Records</span></button>
-    <button class="nav" data-page="medicines" onclick="showPage('medicines')">💊 <span>Medicines</span></button>
-    <button class="nav" data-page="labs" onclick="showPage('labs')">🧪 <span>Lab Tests</span></button>
-    <button class="nav" data-page="tracking" onclick="showPage('tracking')">❤️ <span>Health Tracking</span></button>
-    <button class="nav" data-page="articles" onclick="showPage('articles')">📰 <span>Health Articles</span></button>
-    <button class="nav" data-page="emergency" onclick="showPage('emergency')">🚑 <span>Emergency</span></button>
-    <button class="nav" data-page="profile" onclick="showPage('profile')">👤 <span>Profile</span></button>
-    <button class="nav" data-page="settings" onclick="showPage('settings')">⚙ <span>Settings</span></button>
-  </nav>
-  <div class="sidebar-help"><strong>Need help?</strong><p>Our support team is available 24/7.</p><button onclick="toast('Support request submitted')">Contact Support</button></div>
-</aside>
+  <!-- Global Toast Notification -->
+  <div id="toast"></div>
 
-<main class="main">
-<section id="dashboard" class="page active">
-  <div class="page-head"><div><p class="eyebrow">Monday, August 31, 2026</p><h1>Good morning, Vaseem 👋</h1><p class="muted">Here’s your health overview for today.</p></div><button class="primary" onclick="openAppointment()">+ Book Appointment</button></div>
-  <div class="hero"><div><span class="pill light">YOUR HEALTH MATTERS</span><h2>Take care of yourself,<br><em>every single day.</em></h2><p>Track your health, manage appointments and connect with healthcare professionals.</p><button class="white-btn" onclick="showPage('tracking')">View Health Tracking →</button></div><div class="hero-art">♥</div></div>
-  <div class="stats">
-    <div class="stat"><span>❤️</span><small>HEART RATE</small><strong>72 <i>BPM</i></strong><div class="trend up">↑ 4% this week</div></div>
-    <div class="stat"><span>⚖️</span><small>WEIGHT</small><strong>68.4 <i>kg</i></strong><div class="trend up">↓ 0.6 kg</div></div>
-    <div class="stat"><span>💧</span><small>WATER</small><strong>5.2 <i>/ 8 glasses</i></strong><div class="progress"><b style="width:65%"></b></div></div>
-    <div class="stat"><span>😴</span><small>SLEEP</small><strong>7h 24m</strong><div class="trend up">↑ Good quality</div></div>
-  </div>
-  <div class="grid two">
-    <div class="card"><div class="card-head"><h3>Upcoming Appointment</h3><button class="link" onclick="showPage('appointments')">View all</button></div>
-      <div class="appointment"><div class="doc-avatar">👨‍⚕️</div><div><strong>Dr. Arjun Rao</strong><p>Cardiologist · General Hospital</p><span>📅 Sep 2, 2026 · 10:30 AM</span></div><button class="more" onclick="toast('Appointment options opened')">•••</button></div>
+  <!-- Top Header Navigation -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="menu-toggle" id="menuToggleBtn" onclick="toggleMobileSidebar()" title="Toggle Menu" aria-label="Toggle Menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+      <div class="brand" onclick="showPage('dashboard')" role="button" tabindex="0">
+        <div class="brand-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6v12M6 12h12"/></svg>
+        </div>
+        <span>CarePlus</span>
+      </div>
     </div>
-    <div class="card"><div class="card-head"><h3>Medication Schedule</h3><button class="link" onclick="showPage('medicines')">Manage</button></div>
-      <div class="med-row"><span class="med-icon">💊</span><div><strong>Vitamin D3</strong><p>1 capsule · After breakfast</p></div><button class="check done" onclick="toggleMed(this)">✓</button></div>
-      <div class="med-row"><span class="med-icon">💊</span><div><strong>Omega 3</strong><p>1 capsule · After dinner</p></div><button class="check" onclick="toggleMed(this)">○</button></div>
+
+    <div class="top-actions">
+      <button class="icon-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Theme" aria-label="Toggle Theme">
+        <svg id="themeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      </button>
+      <button class="icon-btn" onclick="showPage('notifications')" title="Notifications" aria-label="Notifications">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <b class="badge" id="unreadBadge">3</b>
+      </button>
+      <div class="avatar" id="topAvatar" onclick="showPage('profile')" title="View Profile" role="button" tabindex="0">VB</div>
+    </div>
+  </header>
+
+  <div class="app">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="appSidebar">
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-page="dashboard" onclick="showPage('dashboard')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>Dashboard</span>
+        </button>
+        <button class="nav-item" data-page="doctors" onclick="showPage('doctors')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3"/><path d="M8 15v1a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6v-4"/><circle cx="20" cy="10" r="2"/></svg>
+          <span>Doctors</span>
+        </button>
+        <button class="nav-item" data-page="appointments" onclick="showPage('appointments')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+          <span>Appointments</span>
+        </button>
+        <button class="nav-item" data-page="records" onclick="showPage('records')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
+          <span>Health Records</span>
+        </button>
+        <button class="nav-item" data-page="medicines" onclick="showPage('medicines')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg>
+          <span>Medicines</span>
+        </button>
+        <button class="nav-item" data-page="labs" onclick="showPage('labs')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.31L4.75 18.1A2 2 0 0 0 6.46 21h11.08a2 2 0 0 0 1.71-2.9L14 9.31V2"/><path d="M8.5 2h7"/><path d="M14 9.3 17.5 15H6.5L10 9.3"/></svg>
+          <span>Lab Tests</span>
+        </button>
+        <button class="nav-item" data-page="tracking" onclick="showPage('tracking')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          <span>Health Tracking</span>
+        </button>
+        <button class="nav-item" data-page="articles" onclick="showPage('articles')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10M6 10h10M6 14h6"/></svg>
+          <span>Health Articles</span>
+        </button>
+        <button class="nav-item" data-page="emergency" onclick="showPage('emergency')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span>Emergency</span>
+        </button>
+        <button class="nav-item" data-page="profile" onclick="showPage('profile')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>Profile</span>
+        </button>
+        <button class="nav-item" data-page="settings" onclick="showPage('settings')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <span>Settings</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-help">
+        <strong>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          Need help?
+        </strong>
+        <p>Our clinical support team is available 24/7 for assistance.</p>
+        <button onclick="openSupportModal()">Contact Support</button>
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <main class="main">
+      <!-- 1. DASHBOARD PAGE -->
+      <section id="dashboard" class="page active">
+        <div class="page-head">
+          <div>
+            <p class="eyebrow" id="todayDateLabel">Today</p>
+            <h1 id="userGreeting">Good day, Vaseem</h1>
+            <p class="muted">Here is your clinical wellness summary and active care schedule.</p>
+          </div>
+          <button class="primary" onclick="openAppointmentModal()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Book Appointment
+          </button>
+        </div>
+
+        <div class="hero">
+          <div>
+            <span class="pill light">PREVENTIVE CARE</span>
+            <h2>Take care of yourself,<br><em>every single day.</em></h2>
+            <p>Monitor your daily vitals, manage appointments, and stay connected with verified medical specialists.</p>
+            <button class="white-btn" onclick="showPage('tracking')">
+              <span>View Health Tracking</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </button>
+          </div>
+          <div class="hero-art">
+            <svg width="130" height="130" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+          </div>
+        </div>
+
+        <!-- Metric Stat Cards -->
+        <div class="stats">
+          <div class="stat">
+            <div class="stat-header">
+              <small>HEART RATE</small>
+              <div class="stat-icon red">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+              </div>
+            </div>
+            <strong>72 <i>BPM</i></strong>
+            <div class="trend up">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+              Optimal resting rate
+            </div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-header">
+              <small>BODY WEIGHT</small>
+              <div class="stat-icon blue">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="12" cy="10" r="3"/><line x1="12" y1="10" x2="14" y2="8"/></svg>
+              </div>
+            </div>
+            <strong>68.4 <i>kg</i></strong>
+            <div class="trend up">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              -0.6 kg this month
+            </div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-header">
+              <small>DAILY HYDRATION</small>
+              <div class="stat-icon emerald">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+              </div>
+            </div>
+            <strong>5.2 <i>/ 8 glasses</i></strong>
+            <div class="progress"><b style="width: 65%;"></b></div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-header">
+              <small>SLEEP DURATION</small>
+              <div class="stat-icon purple">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+              </div>
+            </div>
+            <strong>7h 24m</strong>
+            <div class="trend up">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+              92% Sleep quality
+            </div>
+          </div>
+        </div>
+
+        <!-- Dashboard Two-Column Grid -->
+        <div class="grid two">
+          <div class="card">
+            <div class="card-head">
+              <h3>Upcoming Appointment</h3>
+              <button class="link" onclick="showPage('appointments')">View all</button>
+            </div>
+            <div id="dashNextAppointment">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <h3>Today's Medication Schedule</h3>
+              <button class="link" onclick="showPage('medicines')">Manage</button>
+            </div>
+            <div id="dashMedicationList">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Health Activity Chart -->
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <h3>Health Activity & Steps</h3>
+              <p class="muted">Daily movement & active calorie expenditure</p>
+            </div>
+            <select id="activityRangeSelect" onchange="updateActivityChart(this.value)">
+              <option value="7">Last 7 days</option>
+              <option value="30">Last 30 days</option>
+              <option value="90">Last 90 days</option>
+            </select>
+          </div>
+          <div class="chart-container">
+            <div class="chart">
+              <div class="ylabels">
+                <span>10k</span>
+                <span>7.5k</span>
+                <span>5k</span>
+                <span>2.5k</span>
+                <span>0</span>
+              </div>
+              <div class="bars" id="activityBars">
+                <!-- Rendered by JS -->
+              </div>
+            </div>
+            <div class="days" id="activityDays">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. DOCTORS PAGE -->
+      <section id="doctors" class="page">
+        <div class="page-head">
+          <div>
+            <h1>Find a Doctor</h1>
+            <p class="muted">Connect with verified healthcare specialists and book consultations.</p>
+          </div>
+          <button class="primary" onclick="openAppointmentModal()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Book Appointment
+          </button>
+        </div>
+
+        <div class="toolbar">
+          <div class="search-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input id="doctorSearch" oninput="filterDoctors()" placeholder="Search doctors by name, specialty, or clinic...">
+          </div>
+          <select id="specialtyFilter" onchange="filterDoctors()">
+            <option value="">All Specialties</option>
+            <option value="Cardiologist">Cardiology</option>
+            <option value="Dermatologist">Dermatology</option>
+            <option value="Neurologist">Neurology</option>
+            <option value="Pediatrician">Pediatrics</option>
+            <option value="Orthopedic Surgeon">Orthopedics</option>
+            <option value="General Physician">General Medicine</option>
+            <option value="Gastroenterologist">Gastroenterology</option>
+            <option value="Ophthalmologist">Ophthalmology</option>
+          </select>
+          <select id="sortDoctorSelect" onchange="filterDoctors()">
+            <option value="rating">Sort: Highest Rated</option>
+            <option value="experience">Sort: Most Experienced</option>
+            <option value="fee">Sort: Consultation Fee (Low to High)</option>
+          </select>
+        </div>
+
+        <div class="doctor-grid" id="doctorGrid">
+          <!-- Rendered by JS -->
+        </div>
+      </section>
+
+      <!-- 3. APPOINTMENTS PAGE -->
+      <section id="appointments" class="page">
+        <div class="page-head">
+          <div>
+            <h1>Appointments</h1>
+            <p class="muted">Manage and reschedule upcoming clinical visits and consultation history.</p>
+          </div>
+          <div style="display:flex;gap:10px;">
+            <button class="btn-secondary" onclick="exportAppointments()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Export Schedule
+            </button>
+            <button class="primary" onclick="openAppointmentModal()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              New Appointment
+            </button>
+          </div>
+        </div>
+
+        <div class="tabs" id="appointmentTabs">
+          <button class="tab active" onclick="setAppointmentTab('all', this)">All</button>
+          <button class="tab" onclick="setAppointmentTab('Confirmed', this)">Upcoming</button>
+          <button class="tab" onclick="setAppointmentTab('Completed', this)">Completed</button>
+          <button class="tab" onclick="setAppointmentTab('Cancelled', this)">Cancelled</button>
+        </div>
+
+        <div class="card table-card">
+          <table>
+            <thead>
+              <tr>
+                <th>Doctor & Clinic</th>
+                <th>Specialty</th>
+                <th>Date & Time</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th style="text-align:right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="appointmentRows">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 4. HEALTH RECORDS PAGE -->
+      <section id="records" class="page">
+        <div class="page-head">
+          <div>
+            <h1>Health Records</h1>
+            <p class="muted">Access and download verified laboratory reports, diagnostic scans, and prescriptions.</p>
+          </div>
+          <button class="primary" onclick="openUploadRecordModal()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Upload Record
+          </button>
+        </div>
+
+        <div class="tabs" id="recordTabs">
+          <button class="tab active" onclick="filterRecordCategory('all', this)">All Records</button>
+          <button class="tab" onclick="filterRecordCategory('Lab Report', this)">Lab Reports</button>
+          <button class="tab" onclick="filterRecordCategory('Radiology & Imaging', this)">Scans & Imaging</button>
+          <button class="tab" onclick="filterRecordCategory('Prescription', this)">Prescriptions</button>
+        </div>
+
+        <div class="record-grid" id="recordGrid">
+          <!-- Rendered by JS -->
+        </div>
+      </section>
+
+      <!-- 5. MEDICINES PAGE -->
+      <section id="medicines" class="page">
+        <div class="page-head">
+          <div>
+            <h1>Medications</h1>
+            <p class="muted">Track active prescriptions, set intake schedules, and log daily doses.</p>
+          </div>
+          <button class="primary" onclick="openAddMedicineModal()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Medicine
+          </button>
+        </div>
+
+        <div class="card table-card">
+          <table>
+            <thead>
+              <tr>
+                <th>Medicine Name</th>
+                <th>Dosage</th>
+                <th>Schedule</th>
+                <th>Start Date</th>
+                <th>Instructions</th>
+                <th>Today's Status</th>
+                <th style="text-align:right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="medicineRows">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 6. LAB TESTS PAGE -->
+      <section id="labs" class="page">
+        <div class="page-head">
+          <div>
+            <h1>Diagnostic Lab Tests</h1>
+            <p class="muted">Book comprehensive health checkup packages and accredited diagnostic tests.</p>
+          </div>
+          <button class="primary" onclick="openLabBookingModal()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Book Lab Test
+          </button>
+        </div>
+
+        <div class="toolbar">
+          <div class="search-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input id="labSearchInput" oninput="filterLabTests()" placeholder="Search diagnostic tests or health packages...">
+          </div>
+          <select id="labCategorySelect" onchange="filterLabTests()">
+            <option value="">All Test Categories</option>
+            <option value="Blood">Blood & Pathology</option>
+            <option value="Organ Profile">Organ Profiles</option>
+            <option value="Vitamins & Minerals">Vitamins & Minerals</option>
+            <option value="Diabetes">Diabetes Monitoring</option>
+          </select>
+        </div>
+
+        <div class="lab-grid" id="labGrid">
+          <!-- Rendered by JS -->
+        </div>
+      </section>
+
+      <!-- 7. HEALTH TRACKING PAGE -->
+      <section id="tracking" class="page">
+        <div class="page-head">
+          <div>
+            <h1>Health Metrics & Tracking</h1>
+            <p class="muted">Record and monitor your daily biometric readings and health indicators.</p>
+          </div>
+          <button class="primary" onclick="openAddMetricModal()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Metric Reading
+          </button>
+        </div>
+
+        <div class="tracking-grid" id="trackingGrid">
+          <!-- Rendered by JS -->
+        </div>
+
+        <div class="card" style="margin-top:24px;">
+          <div class="card-head">
+            <h3>Recent Biometric Logs</h3>
+            <button class="btn-secondary" onclick="exportMetrics()">Download Log</button>
+          </div>
+          <div class="table-card">
+            <table>
+              <thead>
+                <tr>
+                  <th>Metric Indicator</th>
+                  <th>Recorded Value</th>
+                  <th>Date & Time</th>
+                  <th>Clinical Status</th>
+                  <th style="text-align:right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="metricHistoryRows">
+                <!-- Rendered by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8. HEALTH ARTICLES PAGE -->
+      <section id="articles" class="page">
+        <div class="page-head">
+          <div>
+            <h1>Health & Wellness Library</h1>
+            <p class="muted">Evidence-based clinical guides, wellness advice, and preventive care tips.</p>
+          </div>
+        </div>
+
+        <div class="tabs" id="articleTabs">
+          <button class="tab active" onclick="filterArticles('all', this)">All Topics</button>
+          <button class="tab" onclick="filterArticles('Nutrition', this)">Nutrition</button>
+          <button class="tab" onclick="filterArticles('Sleep', this)">Sleep Science</button>
+          <button class="tab" onclick="filterArticles('Fitness', this)">Physical Activity</button>
+          <button class="tab" onclick="filterArticles('Mental Health', this)">Mental Wellness</button>
+          <button class="tab" onclick="filterArticles('Heart Health', this)">Heart Care</button>
+        </div>
+
+        <div class="article-grid" id="articleGrid">
+          <!-- Rendered by JS -->
+        </div>
+      </section>
+
+      <!-- 9. EMERGENCY PAGE -->
+      <section id="emergency" class="page">
+        <div class="emergency-box">
+          <div class="emergency-icon">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <h1>Emergency Medical Assistance</h1>
+          <p class="muted" style="max-width:540px;margin:8px auto 20px;">
+            If you are experiencing severe chest pain, shortness of breath, heavy bleeding, or any acute life-threatening symptoms, contact emergency services immediately.
+          </p>
+          <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+            <button class="danger" onclick="callEmergency('112')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              Call National Emergency (112)
+            </button>
+            <button class="btn-primary" onclick="callEmergency('108')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+              Call Ambulance (108)
+            </button>
+            <button class="btn-secondary" onclick="downloadEmergencyCard()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download Medical Card
+            </button>
+          </div>
+
+          <div class="em-numbers">
+            <div class="em-card" onclick="callEmergency('108')">
+              <strong>108</strong>
+              <span>Emergency Ambulance Service</span>
+            </div>
+            <div class="em-card" onclick="callEmergency('112')">
+              <strong>112</strong>
+              <span>National Unified Emergency Helpline</span>
+            </div>
+            <div class="em-card" onclick="callEmergency('102')">
+              <strong>102</strong>
+              <span>Maternity & Infant Emergency Care</span>
+            </div>
+            <div class="em-card" onclick="callEmergency('1075')">
+              <strong>1075</strong>
+              <span>National Health Advisory Line</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:24px;">
+          <div class="card-head">
+            <h3>Nearest 24/7 Trauma & Emergency Hospitals</h3>
+            <span class="pill">VERIFIED NETWORK</span>
+          </div>
+          <div class="table-card">
+            <table>
+              <thead>
+                <tr>
+                  <th>Hospital Name</th>
+                  <th>Distance</th>
+                  <th>Trauma Center</th>
+                  <th>Direct Hotline</th>
+                  <th style="text-align:right;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="emergencyHospitalRows">
+                <!-- Rendered by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 10. PROFILE PAGE -->
+      <section id="profile" class="page">
+        <div class="page-head">
+          <div>
+            <h1>Patient Profile</h1>
+            <p class="muted">Manage your personal identification, demographics, and clinical preferences.</p>
+          </div>
+          <button class="primary" onclick="openEditProfileModal()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+            Edit Profile
+          </button>
+        </div>
+
+        <div class="card profile-card">
+          <div class="big-avatar" id="profileBigAvatar">VB</div>
+          <div class="profile-info">
+            <h2 id="profileName">Vaseem Basha</h2>
+            <p class="muted" id="profileId">Patient ID: CP-2026-1048</p>
+
+            <div class="profile-fields">
+              <div class="profile-field">
+                <small>EMAIL ADDRESS</small>
+                <strong id="profileEmail">vaseem@example.com</strong>
+              </div>
+              <div class="profile-field">
+                <small>PHONE NUMBER</small>
+                <strong id="profilePhone">+91 98765 43210</strong>
+              </div>
+              <div class="profile-field">
+                <small>DATE OF BIRTH</small>
+                <strong id="profileDob">Oct 14, 1994 (31 yrs)</strong>
+              </div>
+              <div class="profile-field">
+                <small>GENDER & BLOOD GROUP</small>
+                <strong id="profileGender">Male · O Positive (O+)</strong>
+              </div>
+              <div class="profile-field">
+                <small>EMERGENCY CONTACT</small>
+                <strong id="profileEmergencyContact">Farhana Basha (+91 98765 11223)</strong>
+              </div>
+              <div class="profile-field">
+                <small>RESIDENTIAL ADDRESS</small>
+                <strong id="profileAddress">Indiranagar 100ft Rd, Bengaluru, Karnataka</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 11. NOTIFICATIONS PAGE -->
+      <section id="notifications" class="page">
+        <div class="page-head">
+          <div>
+            <h1>Notifications & Alerts</h1>
+            <p class="muted">Stay informed about appointment schedules, lab results, and medication reminders.</p>
+          </div>
+          <div style="display:flex;gap:10px;">
+            <button class="btn-secondary" onclick="clearAllNotifications()">Clear All</button>
+            <button class="primary" onclick="markAllNotificationsRead()">Mark All Read</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="notification-list" id="notificationContainer">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- 12. SETTINGS PAGE -->
+      <section id="settings" class="page">
+        <div class="page-head">
+          <div>
+            <h1>System Settings</h1>
+            <p class="muted">Configure appearance, notification delivery, privacy, and data export.</p>
+          </div>
+        </div>
+
+        <div class="card settings-list">
+          <div class="setting-item">
+            <div>
+              <h4>Color Theme & Appearance</h4>
+              <p>Choose your preferred interface contrast and appearance.</p>
+            </div>
+            <select id="appearanceSelect" onchange="handleAppearanceChange(this.value)">
+              <option value="system">System Default</option>
+              <option value="light">Light Mode</option>
+              <option value="dark">Dark Mode</option>
+            </select>
+          </div>
+
+          <div class="setting-item">
+            <div>
+              <h4>Appointment Reminders</h4>
+              <p>Receive alerts 24 hours and 2 hours prior to scheduled visits.</p>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="setReminders" checked onchange="saveSettingToggle('reminders', this.checked)">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <div>
+              <h4>Medication Alerts</h4>
+              <p>Daily push reminders for your morning and evening prescriptions.</p>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="setMedAlerts" checked onchange="saveSettingToggle('medAlerts', this.checked)">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <div>
+              <h4>Email Health Summaries</h4>
+              <p>Weekly digest of health tracking trends and diagnostic reports.</p>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="setEmailAlerts" checked onchange="saveSettingToggle('emailAlerts', this.checked)">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <div>
+              <h4>Privacy Shield Mode</h4>
+              <p>Mask sensitive clinical names and IDs when displaying dashboard in public.</p>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="setPrivacy" onchange="saveSettingToggle('privacy', this.checked)">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <div>
+              <h4>Export Health Data</h4>
+              <p>Download a secure JSON backup of your entire clinical portal data.</p>
+            </div>
+            <button class="btn-secondary" onclick="exportFullHealthData()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Export All Data
+            </button>
+          </div>
+
+          <div class="setting-item">
+            <div>
+              <h4>Reset Demo Data</h4>
+              <p>Restore the application to the original clean sample dataset.</p>
+            </div>
+            <button class="btn-danger" onclick="confirmResetData()">Reset Application Data</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Reusable Modal Window -->
+  <div class="modal" id="modal">
+    <div class="modal-box">
+      <button class="close" onclick="closeModal()" aria-label="Close modal">×</button>
+      <div id="modalContent"></div>
     </div>
   </div>
-  <div class="card"><div class="card-head"><h3>Health Activity</h3><select onchange="toast('Chart range changed')"><option>Last 7 days</option><option>Last 30 days</option></select></div><div class="chart"><div class="ylabels"><span>10k</span><span>7.5k</span><span>5k</span><span>2.5k</span><span>0</span></div><div class="bars"><i style="height:45%"></i><i style="height:63%"></i><i style="height:51%"></i><i style="height:80%"></i><i style="height:70%"></i><i style="height:92%"></i><i style="height:66%"></i></div></div><div class="days"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div></div>
-</section>
 
-<section id="doctors" class="page"><div class="page-head"><div><h1>Find a Doctor</h1><p class="muted">Connect with trusted healthcare professionals.</p></div><button class="primary" onclick="openAppointment()">+ Book Appointment</button></div>
-<div class="toolbar"><input id="doctorSearch" oninput="filterDoctors()" placeholder="🔍 Search doctors by name or specialty"><select id="specialty" onchange="filterDoctors()"><option value="">All specialties</option><option>Cardiologist</option><option>Dermatologist</option><option>Neurologist</option><option>Pediatrician</option></select></div>
-<div class="doctor-grid" id="doctorGrid"></div></section>
-
-<section id="appointments" class="page"><div class="page-head"><div><h1>Appointments</h1><p class="muted">Manage your upcoming and past visits.</p></div><button class="primary" onclick="openAppointment()">+ New Appointment</button></div>
-<div class="tabs"><button class="tab active">Upcoming</button><button class="tab">Completed</button><button class="tab">Cancelled</button></div><div class="card table-card"><table><thead><tr><th>Doctor</th><th>Specialty</th><th>Date & Time</th><th>Type</th><th>Status</th><th></th></tr></thead><tbody id="appointmentRows"></tbody></table></div></section>
-
-<section id="records" class="page"><div class="page-head"><div><h1>Health Records</h1><p class="muted">Your medical documents in one secure place.</p></div><button class="primary" onclick="uploadRecord()">↑ Upload Record</button></div><div class="record-grid">
-<div class="record card"><span>🧪</span><h3>Blood Test Report</h3><p>Aug 14, 2026 · City Diagnostics</p><button onclick="viewRecord('Blood Test Report')">View</button><button onclick="downloadRecord()">Download</button></div>
-<div class="record card"><span>🩻</span><h3>Chest X-Ray</h3><p>Jul 28, 2026 · General Hospital</p><button onclick="viewRecord('Chest X-Ray')">View</button><button onclick="downloadRecord()">Download</button></div>
-<div class="record card"><span>📄</span><h3>Prescription</h3><p>Jun 20, 2026 · Dr. Arjun Rao</p><button onclick="viewRecord('Prescription')">View</button><button onclick="downloadRecord()">Download</button></div>
-</div></section>
-
-<section id="medicines" class="page"><div class="page-head"><div><h1>Medicines</h1><p class="muted">Track prescriptions and medication schedules.</p></div><button class="primary" onclick="openMedicine()">+ Add Medicine</button></div><div class="card"><table><thead><tr><th>Medicine</th><th>Dosage</th><th>Schedule</th><th>Start</th><th>Action</th></tr></thead><tbody id="medicineRows"></tbody></table></div></section>
-
-<section id="labs" class="page"><div class="page-head"><div><h1>Lab Tests</h1><p class="muted">Book tests and review your results.</p></div><button class="primary" onclick="bookLab()">+ Book Test</button></div><div class="lab-grid">
-<div class="card lab"><span>🩸</span><h3>Complete Blood Count</h3><p>₹450 · Results in 24 hours</p><button onclick="bookLab('Complete Blood Count')">Book Now</button></div>
-<div class="card lab"><span>🧬</span><h3>Thyroid Profile</h3><p>₹700 · Results in 24 hours</p><button onclick="bookLab('Thyroid Profile')">Book Now</button></div>
-<div class="card lab"><span>🧪</span><h3>Lipid Profile</h3><p>₹650 · Results in 24 hours</p><button onclick="bookLab('Lipid Profile')">Book Now</button></div>
-</div></section>
-
-<section id="tracking" class="page"><div class="page-head"><div><h1>Health Tracking</h1><p class="muted">Monitor your daily wellness metrics.</p></div><button class="primary" onclick="addMetric()">+ Add Metric</button></div><div class="tracking-grid">
-<div class="card metric"><span>❤️</span><small>HEART RATE</small><strong>72 BPM</strong><div class="mini-chart"></div><button onclick="addMetric('Heart Rate')">Add Reading</button></div>
-<div class="card metric"><span>🩸</span><small>BLOOD PRESSURE</small><strong>118/76</strong><div class="trend up">Normal range</div><button onclick="addMetric('Blood Pressure')">Add Reading</button></div>
-<div class="card metric"><span>⚖️</span><small>WEIGHT</small><strong>68.4 KG</strong><div class="trend up">↓ 0.6 kg this month</div><button onclick="addMetric('Weight')">Add Reading</button></div>
-<div class="card metric"><span>🚶</span><small>STEPS</small><strong>7,842</strong><div class="progress"><b style="width:78%"></b></div><button onclick="addMetric('Steps')">Add Reading</button></div>
-</div></section>
-
-<section id="articles" class="page"><div class="page-head"><div><h1>Health & Wellness</h1><p class="muted">Evidence-based tips for a healthier life.</p></div></div><div class="article-grid">
-<div class="article card"><div class="article-img">🥗</div><div><span class="pill">NUTRITION</span><h3>Simple ways to build a balanced plate</h3><p>Practical ideas for adding variety and nutrients to everyday meals.</p><button onclick="readArticle()">Read article →</button></div></div>
-<div class="article card"><div class="article-img">😴</div><div><span class="pill">SLEEP</span><h3>How to create a better sleep routine</h3><p>Small habits that can help support consistent, restorative sleep.</p><button onclick="readArticle()">Read article →</button></div></div>
-<div class="article card"><div class="article-img">🏃</div><div><span class="pill">FITNESS</span><h3>Making movement part of your day</h3><p>Easy ways to add more activity without complicated workouts.</p><button onclick="readArticle()">Read article →</button></div></div>
-</div></section>
-
-<section id="emergency" class="page"><div class="emergency"><div class="em-icon">🚑</div><h1>Emergency Assistance</h1><p>If you are experiencing a life-threatening emergency, contact your local emergency services immediately.</p><button class="danger" onclick="confirmEmergency()">Call Emergency Services</button><div class="em-cards"><div><strong>108</strong><span>Emergency ambulance (India)</span></div><div><strong>112</strong><span>National emergency number</span></div></div></div></section>
-
-<section id="profile" class="page"><div class="page-head"><div><h1>My Profile</h1><p class="muted">Manage your personal information.</p></div><button class="primary" onclick="editProfile()">Edit Profile</button></div><div class="profile-card card"><div class="big-avatar">VB</div><div class="profile-info"><h2>Vaseem Basha</h2><p>Patient ID: CP-2026-1048</p><div class="profile-fields"><div><small>EMAIL</small><strong>vaseem@example.com</strong></div><div><small>PHONE</small><strong>+91 ••••• •••••</strong></div><div><small>DATE OF BIRTH</small><strong>Not provided</strong></div><div><small>GENDER</small><strong>Not provided</strong></div></div></div></div></section>
-
-<section id="notifications" class="page"><div class="page-head"><div><h1>Notifications</h1><p class="muted">Stay updated about your care.</p></div><button class="link" onclick="toast('All notifications marked as read')">Mark all read</button></div><div class="card notification-list"><div>🔔 <div><strong>Appointment reminder</strong><p>Your appointment with Dr. Arjun Rao is on Sep 2 at 10:30 AM.</p></div></div><div>💊 <div><strong>Medication reminder</strong><p>It’s time for your evening Omega 3.</p></div></div><div>🧪 <div><strong>Lab result available</strong><p>Your Blood Test Report is ready to view.</p></div></div></div></section>
-
-<section id="settings" class="page"><div class="page-head"><div><h1>Settings</h1><p class="muted">Customize your CarePlus experience.</p></div></div><div class="settings card">
-<label>Appearance <span><select onchange="setAppearance(this.value)"><option>System</option><option>Light</option><option>Dark</option></select></span></label>
-<label>Appointment reminders <input type="checkbox" checked onchange="toast('Reminder preference updated')"></label>
-<label>Medication reminders <input type="checkbox" checked onchange="toast('Medication preference updated')"></label>
-<label>Email notifications <input type="checkbox" checked onchange="toast('Email preference updated')"></label>
-<label>Privacy mode <input type="checkbox" onchange="toast('Privacy mode updated')"></label>
-</div></section>
-</main></div>
-
-<div class="modal" id="modal"><div class="modal-box"><button class="close" onclick="closeModal()">×</button><div id="modalContent"></div></div></div>
-<script src="script.js"></script>
+  <!-- Application Script -->
+  <script src="script.js"></script>
 </body>
 </html>
