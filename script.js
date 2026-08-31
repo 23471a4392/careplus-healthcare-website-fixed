@@ -59,4 +59,4 @@ function setAppearance(v){if(v==='Dark')document.documentElement.classList.add('
 function toggleTheme(){document.documentElement.classList.toggle('dark');toast('Theme changed')}
 function confirmEmergency(){if(confirm('For a real emergency, call your local emergency service. Continue to the phone dialer?'))window.location.href='tel:112'}
 document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});
-renderDoctors();renderAppointments();renderMedicines();
+renderDoctors();renderAppointments();renderMedicines();// appointment flow note
