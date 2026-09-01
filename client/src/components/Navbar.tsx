@@ -44,27 +44,27 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigateProfile, onNavigateTab
   };
 
   return (
-    <header className="h-14 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 flex items-center justify-between sticky top-9 z-40">
-      {/* Clean Brand & Date - NO [+] symbol! */}
+    <header className="h-14 bg-white dark:bg-slate-900 border-b border-[#d6ebe7] dark:border-slate-800 px-6 flex items-center justify-between sticky top-9 z-40">
+      {/* Brand & Date - White & Pastry Green Theme */}
       <div className="flex items-center gap-3">
-        <span className="font-semibold text-base tracking-tight text-slate-900 dark:text-white">
+        <span className="font-bold text-base tracking-tight text-[#0c756e] dark:text-teal-400">
           CarePlus
         </span>
-        <span className="text-xs text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded font-medium">
+        <span className="text-xs text-[#0c756e] dark:text-teal-300 bg-[#e6f5f2] dark:bg-slate-800 border border-[#cbe7e2] dark:border-slate-700 px-2 py-0.5 rounded font-medium">
           {user?.role ? user.role.replace('_', ' ') : 'Portal'}
         </span>
-        <span className="hidden sm:inline text-xs text-slate-400 pl-3 border-l border-slate-200 dark:border-slate-800 font-normal">
+        <span className="hidden sm:inline text-xs text-[#527d77] dark:text-slate-400 pl-3 border-l border-[#d6ebe7] dark:border-slate-800 font-normal">
           {todayStr}
         </span>
       </div>
 
-      {/* Clean Right Actions - NO Emergency 108 in navbar! */}
+      {/* Right Actions */}
       <div className="flex items-center gap-2">
         {/* Theme Toggle */}
         <button
           onClick={toggleTheme}
-          className="w-8 h-8 rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center transition"
-          title="Toggle theme"
+          className="w-8 h-8 rounded-lg text-[#3d6e67] hover:text-[#0c756e] dark:text-slate-400 dark:hover:text-slate-200 hover:bg-[#e6f5f2] dark:hover:bg-slate-800 flex items-center justify-center transition"
+          title="Toggle light/dark theme"
           aria-label="Toggle theme"
         >
           {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
@@ -74,13 +74,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigateProfile, onNavigateTab
         <div className="relative">
           <button
             onClick={() => setIsNotifOpen(!isNotifOpen)}
-            className="w-8 h-8 rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center transition relative"
+            className="w-8 h-8 rounded-lg text-[#3d6e67] hover:text-[#0c756e] dark:text-slate-400 dark:hover:text-slate-200 hover:bg-[#e6f5f2] dark:hover:bg-slate-800 flex items-center justify-center transition relative"
             title="Notifications"
             aria-label="Notifications"
           >
             <Bell className="w-4 h-4" />
             {unreadCount > 0 && (
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-teal-600" />
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#0c756e]" />
             )}
           </button>
 
@@ -95,10 +95,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigateProfile, onNavigateTab
         {/* User Profile Avatar */}
         <button
           onClick={onNavigateProfile}
-          className="flex items-center gap-2.5 pl-2 py-1 pr-1.5 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition cursor-pointer border border-transparent hover:border-slate-200 dark:hover:border-slate-700"
+          className="flex items-center gap-2.5 pl-2 py-1 pr-2 rounded-lg hover:bg-[#e6f5f2] dark:hover:bg-slate-800 transition cursor-pointer border border-transparent hover:border-[#cbe7e2]"
           title="View profile"
         >
-          <div className="w-7 h-7 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 flex items-center justify-center font-medium text-xs overflow-hidden">
+          <div className="w-7 h-7 rounded-full bg-[#e6f5f2] dark:bg-slate-800 border border-[#0c756e] text-[#0c756e] dark:text-teal-300 flex items-center justify-center font-semibold text-xs overflow-hidden">
             {user?.avatarUrl ? (
               <img src={user.avatarUrl} alt={user.name} className="w-full h-full object-cover" />
             ) : (
@@ -106,7 +106,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigateProfile, onNavigateTab
             )}
           </div>
           <div className="hidden sm:block text-left">
-            <div className="text-xs font-medium text-slate-900 dark:text-slate-100 leading-none">{user?.name}</div>
+            <div className="text-xs font-semibold text-[#132e2b] dark:text-slate-100 leading-none">{user?.name}</div>
           </div>
         </button>
       </div>

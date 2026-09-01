@@ -46,12 +46,12 @@ export const LabDashboard: React.FC = () => {
 
   return (
     <div className="p-6 max-w-6xl mx-auto space-y-6">
-      <div className="pb-4 border-b border-slate-200 dark:border-slate-800">
+      <div className="pb-4 border-b border-[#d6ebe7] dark:border-slate-800">
         <h1 className="text-xl font-semibold text-slate-900 dark:text-white">{user?.name}</h1>
         <p className="text-xs text-slate-500">Clinical Pathology Laboratory · Specimen Processing</p>
       </div>
 
-      <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800">
+      <div className="bg-white dark:bg-[#0c756e] p-5 rounded-xl border border-[#d6ebe7] dark:border-slate-800">
         <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-3">
           Diagnostic Orders Queue ({orders.length})
         </h3>
@@ -84,7 +84,7 @@ export const LabDashboard: React.FC = () => {
                   {o.status !== 'COMPLETED' && (
                     <button
                       onClick={() => setSelectedOrder(o)}
-                      className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-medium"
+                      className="px-3 py-1.5 bg-[#0c756e] hover:bg-[#095e58] text-white rounded-lg text-xs font-medium"
                     >
                       Finalize Report
                     </button>
@@ -109,7 +109,7 @@ export const LabDashboard: React.FC = () => {
           </div>
           <div className="flex justify-end gap-2 pt-2">
             <button onClick={() => setSelectedOrder(null)} className="px-3 py-1.5 text-slate-500">Cancel</button>
-            <button onClick={() => handleUpdateStatus(selectedOrder.id, 'COMPLETED', resultSummary)} className="px-4 py-1.5 bg-slate-900 text-white rounded-lg font-medium">
+            <button onClick={() => handleUpdateStatus(selectedOrder.id, 'COMPLETED', resultSummary)} className="px-4 py-1.5 bg-[#0c756e] text-white rounded-lg font-medium">
               Save & Finalize
             </button>
           </div>

@@ -199,17 +199,17 @@ export const DoctorDashboard: React.FC<DoctorDashboardProps> = ({ activeTab = 'o
   return (
     <div className="p-6 max-w-6xl mx-auto space-y-6">
       {/* Calm Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200 dark:border-slate-800">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#d6ebe7] dark:border-slate-800">
         <div>
-          <h1 className="text-xl font-semibold text-slate-900 dark:text-white">{user?.name}</h1>
-          <p className="text-xs text-slate-500">Department of {user?.department || 'Cardiology'} · Physician Schedule</p>
+          <h1 className="text-xl font-semibold text-[#132e2b] dark:text-white">{user?.name}</h1>
+          <p className="text-xs text-[#4d7872]">Department of {user?.department || 'Cardiology'} · Physician Schedule</p>
         </div>
         <button
           onClick={handleToggleAvailability}
           className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition ${
             isAvailable
-              ? 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-teal-800 dark:text-teal-300'
-              : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-400'
+              ? 'bg-white dark:bg-[#0c756e] border-[#d6ebe7] dark:border-slate-700 text-teal-800 dark:text-teal-300'
+              : 'bg-white dark:bg-[#0c756e] border-[#d6ebe7] dark:border-slate-700 text-[#6b9690]'
           }`}
         >
           {isAvailable ? '● Available for Consultations' : '○ Unavailable'}
@@ -218,41 +218,41 @@ export const DoctorDashboard: React.FC<DoctorDashboardProps> = ({ activeTab = 'o
 
       {/* 1. APPOINTMENT REQUESTS (Shown on 'overview' or 'requests') */}
       {(activeTab === 'overview' || activeTab === 'requests') && (
-        <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800">
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-3">
+        <div className="bg-white dark:bg-[#0c756e] p-5 rounded-xl border border-[#d6ebe7] dark:border-slate-800">
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-[#234c47] dark:text-slate-300 mb-3">
             Appointment Requests ({pendingRequests.length})
           </h3>
 
           {pendingRequests.length === 0 ? (
-            <p className="text-xs text-slate-400 py-3">No pending appointment requests.</p>
+            <p className="text-xs text-[#6b9690] py-3">No pending appointment requests.</p>
           ) : (
             <div className="divide-y divide-slate-100 dark:divide-slate-800">
               {pendingRequests.map((apt) => (
                 <div key={apt.id} className="py-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="font-medium text-sm text-slate-900 dark:text-white">{apt.patient}</span>
+                      <span className="font-medium text-sm text-[#132e2b] dark:text-white">{apt.patient}</span>
                       <button
                         onClick={() => handleOpenPatientProfile(apt.patientId, apt.patient)}
-                        className="text-[11px] text-teal-700 dark:text-teal-400 hover:underline font-medium"
+                        className="text-[11px] text-[#0c756e] dark:text-teal-400 hover:underline font-medium"
                       >
                         (View Patient Profile)
                       </button>
                     </div>
-                    <div className="text-xs text-slate-500 mt-0.5">{apt.date} at {apt.time} ({apt.type})</div>
-                    {apt.reason && <p className="text-xs text-slate-400 mt-0.5 italic">"{apt.reason}"</p>}
+                    <div className="text-xs text-[#4d7872] mt-0.5">{apt.date} at {apt.time} ({apt.type})</div>
+                    {apt.reason && <p className="text-xs text-[#6b9690] mt-0.5 italic">"{apt.reason}"</p>}
                   </div>
 
                   <div className="flex gap-2">
                     <button
                       onClick={() => handleUpdateStatus(apt.id, 'CONFIRMED')}
-                      className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-medium"
+                      className="px-3 py-1.5 bg-[#0c756e] hover:bg-[#095e58] text-white rounded-lg text-xs font-medium"
                     >
                       Accept
                     </button>
                     <button
                       onClick={() => handleUpdateStatus(apt.id, 'REJECTED')}
-                      className="px-3 py-1.5 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 text-slate-600 rounded-lg text-xs font-medium"
+                      className="px-3 py-1.5 border border-[#d6ebe7] dark:border-slate-700 hover:bg-[#f8fbfb] text-[#36615b] rounded-lg text-xs font-medium"
                     >
                       Decline
                     </button>
@@ -266,28 +266,28 @@ export const DoctorDashboard: React.FC<DoctorDashboardProps> = ({ activeTab = 'o
 
       {/* 2. CONFIRMED VISITS (Shown on 'overview') */}
       {activeTab === 'overview' && (
-        <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800">
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-3">
+        <div className="bg-white dark:bg-[#0c756e] p-5 rounded-xl border border-[#d6ebe7] dark:border-slate-800">
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-[#234c47] dark:text-slate-300 mb-3">
             Confirmed Patient Visits ({activeVisits.length})
           </h3>
 
           {activeVisits.length === 0 ? (
-            <p className="text-xs text-slate-400 py-3">No confirmed visits on the schedule.</p>
+            <p className="text-xs text-[#6b9690] py-3">No confirmed visits on the schedule.</p>
           ) : (
             <div className="divide-y divide-slate-100 dark:divide-slate-800">
               {activeVisits.map((apt) => (
                 <div key={apt.id} className="py-3 flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="font-medium text-sm text-slate-900 dark:text-white">{apt.patient}</span>
+                      <span className="font-medium text-sm text-[#132e2b] dark:text-white">{apt.patient}</span>
                       <button
                         onClick={() => handleOpenPatientProfile(apt.patientId, apt.patient)}
-                        className="text-[11px] text-teal-700 dark:text-teal-400 hover:underline font-medium"
+                        className="text-[11px] text-[#0c756e] dark:text-teal-400 hover:underline font-medium"
                       >
                         (Profile)
                       </button>
                     </div>
-                    <div className="text-xs text-slate-500 mt-0.5">{apt.date} at {apt.time} ({apt.type})</div>
+                    <div className="text-xs text-[#4d7872] mt-0.5">{apt.date} at {apt.time} ({apt.type})</div>
                   </div>
 
                   <div className="flex flex-wrap gap-2 text-xs">
@@ -296,7 +296,7 @@ export const DoctorDashboard: React.FC<DoctorDashboardProps> = ({ activeTab = 'o
                         setSelectedAppointment(apt);
                         setIsRxOpen(true);
                       }}
-                      className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-md font-medium"
+                      className="px-2.5 py-1 bg-[#e6f5f2] hover:bg-[#d8efe9] dark:bg-slate-800 text-[#234c47] dark:text-slate-200 rounded-md font-medium"
                     >
                       Prescription
                     </button>
@@ -306,7 +306,7 @@ export const DoctorDashboard: React.FC<DoctorDashboardProps> = ({ activeTab = 'o
                         setSelectedAppointment(apt);
                         setIsLabOpen(true);
                       }}
-                      className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-md font-medium"
+                      className="px-2.5 py-1 bg-[#e6f5f2] hover:bg-[#d8efe9] dark:bg-slate-800 text-[#234c47] dark:text-slate-200 rounded-md font-medium"
                     >
                       Order Lab
                     </button>
@@ -316,14 +316,14 @@ export const DoctorDashboard: React.FC<DoctorDashboardProps> = ({ activeTab = 'o
                         setSelectedAppointment(apt);
                         setIsPlanOpen(true);
                       }}
-                      className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-md font-medium"
+                      className="px-2.5 py-1 bg-[#e6f5f2] hover:bg-[#d8efe9] dark:bg-slate-800 text-[#234c47] dark:text-slate-200 rounded-md font-medium"
                     >
                       Senior Review
                     </button>
 
                     <button
                       onClick={() => handleUpdateStatus(apt.id, 'COMPLETED')}
-                      className="px-2.5 py-1 text-slate-500 hover:text-slate-800 font-medium"
+                      className="px-2.5 py-1 text-[#4d7872] hover:text-[#1a3d39] font-medium"
                     >
                       Complete
                     </button>
@@ -337,22 +337,22 @@ export const DoctorDashboard: React.FC<DoctorDashboardProps> = ({ activeTab = 'o
 
       {/* 3. ASSIGNED PATIENTS TAB */}
       {activeTab === 'patients' && (
-        <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800">
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-3">
+        <div className="bg-white dark:bg-[#0c756e] p-5 rounded-xl border border-[#d6ebe7] dark:border-slate-800">
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-[#234c47] dark:text-slate-300 mb-3">
             Assigned Patients Directory ({assignedPatients.length})
           </h3>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {assignedPatients.map((p) => (
-              <div key={p.id} className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 flex justify-between items-center">
+              <div key={p.id} className="p-4 rounded-xl border border-[#d6ebe7] dark:border-slate-800 bg-[#f8fbfb] dark:bg-slate-800/40 flex justify-between items-center">
                 <div>
-                  <h4 className="font-semibold text-sm text-slate-900 dark:text-white">{p.name}</h4>
-                  <p className="text-xs text-slate-500">{p.phone || p.email || 'Verified Patient'}</p>
-                  <p className="text-[11px] text-slate-400 mt-1">Last consultation: {p.lastVisit}</p>
+                  <h4 className="font-semibold text-sm text-[#132e2b] dark:text-white">{p.name}</h4>
+                  <p className="text-xs text-[#4d7872]">{p.phone || p.email || 'Verified Patient'}</p>
+                  <p className="text-[11px] text-[#6b9690] mt-1">Last consultation: {p.lastVisit}</p>
                 </div>
                 <button
                   onClick={() => handleOpenPatientProfile(p.id, p.name)}
-                  className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-medium"
+                  className="px-3 py-1.5 bg-[#0c756e] hover:bg-[#095e58] text-white rounded-lg text-xs font-medium"
                 >
                   View Profile
                 </button>
@@ -369,36 +369,36 @@ export const DoctorDashboard: React.FC<DoctorDashboardProps> = ({ activeTab = 'o
         title={`Patient Profile - ${selectedPatientProfile?.name}`}
       >
         <div className="space-y-3 text-xs">
-          <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
-            <div className="font-medium text-slate-900 dark:text-white">{selectedPatientProfile?.name}</div>
-            <div className="text-slate-500 mt-0.5">
+          <div className="p-3 bg-[#f8fbfb] dark:bg-slate-800 rounded-lg">
+            <div className="font-medium text-[#132e2b] dark:text-white">{selectedPatientProfile?.name}</div>
+            <div className="text-[#4d7872] mt-0.5">
               Demographics: {selectedPatientProfile?.gender || 'Male'} · Blood Group: {selectedPatientProfile?.bloodGroup || 'O+'}
             </div>
             {selectedPatientProfile?.phone && (
-              <div className="text-slate-400 text-[11px] mt-0.5">Contact: {selectedPatientProfile?.phone}</div>
+              <div className="text-[#6b9690] text-[11px] mt-0.5">Contact: {selectedPatientProfile?.phone}</div>
             )}
           </div>
 
           <div>
-            <div className="text-slate-500 font-medium text-[11px]">Medical History & Records</div>
+            <div className="text-[#4d7872] font-medium text-[11px]">Medical History & Records</div>
             {selectedPatientProfile?.medicalRecords && selectedPatientProfile.medicalRecords.length > 0 ? (
               <div className="divide-y divide-slate-100 dark:divide-slate-800 mt-1">
                 {selectedPatientProfile.medicalRecords.map((r: any) => (
                   <div key={r.id} className="py-2">
-                    <div className="font-medium text-slate-800 dark:text-slate-200">{r.title} ({r.category})</div>
-                    <p className="text-slate-500 mt-0.5 text-[11px]">{r.summary}</p>
+                    <div className="font-medium text-[#1a3d39] dark:text-slate-200">{r.title} ({r.category})</div>
+                    <p className="text-[#4d7872] mt-0.5 text-[11px]">{r.summary}</p>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+              <p className="text-[#36615b] dark:text-[#6b9690] mt-1 leading-relaxed">
                 Essential Cardiovascular Monitoring. Normal resting ECG rhythm. No active contraindications.
               </p>
             )}
           </div>
 
           <div className="flex justify-end pt-2">
-            <button onClick={() => setSelectedPatientProfile(null)} className="px-4 py-1.5 bg-slate-900 text-white rounded-lg font-medium">
+            <button onClick={() => setSelectedPatientProfile(null)} className="px-4 py-1.5 bg-[#0c756e] text-white rounded-lg font-medium">
               Close
             </button>
           </div>
@@ -409,16 +409,16 @@ export const DoctorDashboard: React.FC<DoctorDashboardProps> = ({ activeTab = 'o
       <Modal isOpen={isRxOpen} onClose={() => setIsRxOpen(false)} title={`Prescription - ${selectedAppointment?.patient}`}>
         <div className="space-y-3 text-xs">
           <div>
-            <label className="text-slate-500 font-medium">Medicine & Strength</label>
+            <label className="text-[#4d7872] font-medium">Medicine & Strength</label>
             <input value={medName} onChange={(e) => setMedName(e.target.value)} className="w-full p-2 rounded-lg border mt-1 font-medium" />
           </div>
           <div>
-            <label className="text-slate-500 font-medium">Dosage & Instructions</label>
+            <label className="text-[#4d7872] font-medium">Dosage & Instructions</label>
             <input value={medDose} onChange={(e) => setMedDose(e.target.value)} className="w-full p-2 rounded-lg border mt-1 font-medium" />
           </div>
           <div className="flex justify-end gap-2 pt-2">
-            <button onClick={() => setIsRxOpen(false)} className="px-3 py-1.5 text-slate-500">Cancel</button>
-            <button onClick={handleCreatePrescription} className="px-4 py-1.5 bg-slate-900 text-white rounded-lg font-medium">
+            <button onClick={() => setIsRxOpen(false)} className="px-3 py-1.5 text-[#4d7872]">Cancel</button>
+            <button onClick={handleCreatePrescription} className="px-4 py-1.5 bg-[#0c756e] text-white rounded-lg font-medium">
               Send to Pharmacy
             </button>
           </div>
@@ -429,7 +429,7 @@ export const DoctorDashboard: React.FC<DoctorDashboardProps> = ({ activeTab = 'o
       <Modal isOpen={isLabOpen} onClose={() => setIsLabOpen(false)} title={`Order Lab Test - ${selectedAppointment?.patient}`}>
         <div className="space-y-3 text-xs">
           <div>
-            <label className="text-slate-500 font-medium">Select Diagnostic Test</label>
+            <label className="text-[#4d7872] font-medium">Select Diagnostic Test</label>
             <select
               value={selectedLabTestId}
               onChange={(e) => setSelectedLabTestId(e.target.value)}
@@ -441,8 +441,8 @@ export const DoctorDashboard: React.FC<DoctorDashboardProps> = ({ activeTab = 'o
             </select>
           </div>
           <div className="flex justify-end gap-2 pt-2">
-            <button onClick={() => setIsLabOpen(false)} className="px-3 py-1.5 text-slate-500">Cancel</button>
-            <button onClick={handleOrderLabTest} className="px-4 py-1.5 bg-slate-900 text-white rounded-lg font-medium">
+            <button onClick={() => setIsLabOpen(false)} className="px-3 py-1.5 text-[#4d7872]">Cancel</button>
+            <button onClick={handleOrderLabTest} className="px-4 py-1.5 bg-[#0c756e] text-white rounded-lg font-medium">
               Dispatch to Lab
             </button>
           </div>
@@ -453,16 +453,16 @@ export const DoctorDashboard: React.FC<DoctorDashboardProps> = ({ activeTab = 'o
       <Modal isOpen={isPlanOpen} onClose={() => setIsPlanOpen(false)} title={`Treatment Plan - ${selectedAppointment?.patient}`}>
         <div className="space-y-3 text-xs">
           <div>
-            <label className="text-slate-500 font-medium">Protocol Title</label>
+            <label className="text-[#4d7872] font-medium">Protocol Title</label>
             <input value={planTitle} onChange={(e) => setPlanTitle(e.target.value)} className="w-full p-2 rounded-lg border mt-1 font-medium" />
           </div>
           <div>
-            <label className="text-slate-500 font-medium">Protocol Details</label>
+            <label className="text-[#4d7872] font-medium">Protocol Details</label>
             <textarea rows={3} value={planDetails} onChange={(e) => setPlanDetails(e.target.value)} className="w-full p-2 rounded-lg border mt-1 font-medium" />
           </div>
           <div className="flex justify-end gap-2 pt-2">
-            <button onClick={() => setIsPlanOpen(false)} className="px-3 py-1.5 text-slate-500">Cancel</button>
-            <button onClick={handleSubmitTreatmentPlan} className="px-4 py-1.5 bg-slate-900 text-white rounded-lg font-medium">
+            <button onClick={() => setIsPlanOpen(false)} className="px-3 py-1.5 text-[#4d7872]">Cancel</button>
+            <button onClick={handleSubmitTreatmentPlan} className="px-4 py-1.5 bg-[#0c756e] text-white rounded-lg font-medium">
               Submit for Senior Review
             </button>
           </div>

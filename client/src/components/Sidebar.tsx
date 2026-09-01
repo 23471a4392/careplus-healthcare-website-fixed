@@ -111,10 +111,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ activePage, onSelectPage }) =>
   const navItems = getNavItems();
 
   return (
-    <aside className="w-56 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col justify-between shrink-0 min-h-[calc(100vh-5rem)]">
+    <aside className="w-56 bg-white dark:bg-slate-900 border-r border-[#d6ebe7] dark:border-slate-800 flex flex-col justify-between shrink-0 min-h-[calc(100vh-5rem)]">
       <div className="p-3 space-y-0.5">
-        <div className="px-3 py-2 text-[11px] font-medium uppercase tracking-wider text-slate-400">
-          Menu
+        <div className="px-3 py-2 text-[11px] font-semibold uppercase tracking-wider text-[#527d77] dark:text-slate-400">
+          Navigation
         </div>
 
         {navItems.map((item) => {
@@ -126,23 +126,23 @@ export const Sidebar: React.FC<SidebarProps> = ({ activePage, onSelectPage }) =>
               onClick={() => onSelectPage(item.id)}
               className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium transition text-left ${
                 isActive
-                  ? 'bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-white font-semibold'
-                  : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-slate-200'
+                  ? 'bg-[#e6f5f2] text-[#0c756e] dark:bg-slate-800 dark:text-teal-300 font-semibold border-r-2 border-[#0c756e]'
+                  : 'text-[#3d6e67] dark:text-slate-400 hover:bg-[#f0f7f6] dark:hover:bg-slate-800/60 hover:text-[#0c756e] dark:hover:text-slate-200'
               }`}
             >
-              <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-teal-700 dark:text-teal-400' : 'text-slate-400'}`} />
+              <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-[#0c756e] dark:text-teal-300' : 'text-[#628f89]'}`} />
               <span>{item.label}</span>
             </button>
           );
         })}
       </div>
 
-      <div className="p-3 border-t border-slate-100 dark:border-slate-800">
+      <div className="p-3 border-t border-[#d6ebe7] dark:border-slate-800">
         <button
           onClick={logout}
-          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-600 hover:text-red-600 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-800 transition"
+          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-[#3d6e67] hover:text-red-600 hover:bg-red-50 dark:text-slate-400 dark:hover:bg-slate-800 transition"
         >
-          <LogOut className="w-4 h-4 text-slate-400" />
+          <LogOut className="w-4 h-4 text-[#628f89]" />
           <span>Sign Out</span>
         </button>
       </div>

@@ -43,7 +43,7 @@ export const HospitalAdminDashboard: React.FC = () => {
 
   return (
     <div className="p-6 max-w-6xl mx-auto space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-slate-200 dark:border-slate-800">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-[#d6ebe7] dark:border-slate-800">
         <div>
           <h1 className="text-xl font-semibold text-slate-900 dark:text-white">{user?.name}</h1>
           <p className="text-xs text-slate-500">Hospital Administration & Operations</p>
@@ -57,32 +57,32 @@ export const HospitalAdminDashboard: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+        <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-[#d6ebe7] dark:border-slate-800">
           <span className="text-xs text-slate-400">Inpatients</span>
           <div className="text-xl font-semibold text-slate-900 dark:text-white mt-1">{stats?.patients || 1}</div>
         </div>
-        <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+        <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-[#d6ebe7] dark:border-slate-800">
           <span className="text-xs text-slate-400">On-Duty Doctors</span>
           <div className="text-xl font-semibold text-slate-900 dark:text-white mt-1">{stats?.doctors || 6}</div>
         </div>
-        <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+        <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-[#d6ebe7] dark:border-slate-800">
           <span className="text-xs text-slate-400">Bed Occupancy</span>
           <div className="text-xl font-semibold text-slate-900 dark:text-white mt-1">{stats?.occupiedBeds || 1} / {stats?.totalBeds || 4}</div>
         </div>
-        <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+        <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-[#d6ebe7] dark:border-slate-800">
           <span className="text-xs text-slate-400">Total Visits</span>
           <div className="text-xl font-semibold text-slate-900 dark:text-white mt-1">{stats?.appointments || 4}</div>
         </div>
       </div>
 
-      <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800">
+      <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-[#d6ebe7] dark:border-slate-800">
         <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-3">
           Bed Availability
         </h3>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {beds.map((b) => (
-            <div key={b.id} className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-100 dark:border-slate-800">
+            <div key={b.id} className="p-3 bg-[#f8fbfb] dark:bg-slate-800/50 rounded-lg border border-[#eef6f5] dark:border-slate-800">
               <span className="text-[10px] text-slate-400">Room {b.room.roomNumber} · Bed {b.bedNumber}</span>
               <div className="font-medium text-xs text-slate-900 dark:text-white mt-0.5">{b.status}</div>
               <div className="text-[10px] text-slate-400 mt-1">{b.room.department.name}</div>

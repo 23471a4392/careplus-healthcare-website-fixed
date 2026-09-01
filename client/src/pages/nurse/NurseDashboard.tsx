@@ -49,19 +49,19 @@ export const NurseDashboard: React.FC = () => {
 
   return (
     <div className="p-6 max-w-6xl mx-auto space-y-6">
-      <div className="pb-4 border-b border-slate-200 dark:border-slate-800">
+      <div className="pb-4 border-b border-[#d6ebe7] dark:border-slate-800">
         <h1 className="text-xl font-semibold text-slate-900 dark:text-white">{user?.name}</h1>
         <p className="text-xs text-slate-500">Inpatient Nursing Station · Ward 101-104</p>
       </div>
 
-      <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800">
+      <div className="bg-white dark:bg-[#0c756e] p-5 rounded-xl border border-[#d6ebe7] dark:border-slate-800">
         <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-3">
           Assigned Inpatient Roster ({inpatients.length})
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {inpatients.map((pat) => (
-            <div key={pat.admissionId} className="p-3.5 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-100 dark:border-slate-800 flex justify-between items-center">
+            <div key={pat.admissionId} className="p-3.5 bg-[#f8fbfb] dark:bg-slate-800/50 rounded-lg border border-[#eef6f5] dark:border-slate-800 flex justify-between items-center">
               <div>
                 <span className="text-[10px] text-slate-400 font-medium">Room {pat.roomNumber} · Bed {pat.bedNumber}</span>
                 <div className="font-medium text-sm text-slate-900 dark:text-white mt-0.5">{pat.patientName}</div>
@@ -69,7 +69,7 @@ export const NurseDashboard: React.FC = () => {
               </div>
               <button
                 onClick={() => setSelectedPatient(pat)}
-                className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-medium"
+                className="px-3 py-1.5 bg-[#0c756e] hover:bg-[#095e58] text-white rounded-lg text-xs font-medium"
               >
                 Record Vitals
               </button>
@@ -100,7 +100,7 @@ export const NurseDashboard: React.FC = () => {
           </div>
           <div className="flex justify-end gap-2 pt-2">
             <button onClick={() => setSelectedPatient(null)} className="px-3 py-1.5 text-slate-500">Cancel</button>
-            <button onClick={handleRecordVitals} className="px-4 py-1.5 bg-slate-900 text-white rounded-lg font-medium">
+            <button onClick={handleRecordVitals} className="px-4 py-1.5 bg-[#0c756e] text-white rounded-lg font-medium">
               Save Vitals
             </button>
           </div>

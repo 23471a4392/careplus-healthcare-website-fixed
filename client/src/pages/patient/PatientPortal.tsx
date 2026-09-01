@@ -489,21 +489,21 @@ Trauma Desk: +91 80 2345 6789`;
       {activeTab === 'dashboard' && (
         <div className="space-y-6">
           {/* Calm Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-slate-800">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#d6ebe7] dark:border-slate-800">
             <div>
-              <h1 className="text-xl font-semibold text-slate-900 dark:text-white">Good morning, {user?.firstName}</h1>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Overview of your upcoming visits, medication schedule, and recent metrics.</p>
+              <h1 className="text-xl font-semibold text-[#132e2b] dark:text-white">Good morning, {user?.firstName}</h1>
+              <p className="text-xs text-[#4d7872] dark:text-[#6b9690] mt-0.5">Overview of your upcoming visits, medication schedule, and recent metrics.</p>
             </div>
             <div className="flex items-center gap-2">
               <button
                 onClick={() => onNavigateTab('doctors')}
-                className="px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-medium transition"
+                className="px-3.5 py-1.5 bg-[#0c756e] hover:bg-[#095e58] text-white rounded-lg text-xs font-medium transition"
               >
                 Book Appointment
               </button>
               <button
                 onClick={() => onNavigateTab('records')}
-                className="px-3.5 py-1.5 bg-white hover:bg-slate-50 text-slate-700 dark:bg-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 rounded-lg text-xs font-medium transition"
+                className="px-3.5 py-1.5 bg-white hover:bg-[#f8fbfb] text-[#234c47] dark:bg-slate-800 dark:text-slate-200 border border-[#d6ebe7] dark:border-slate-700 rounded-lg text-xs font-medium transition"
               >
                 View Records
               </button>
@@ -512,79 +512,79 @@ Trauma Desk: +91 80 2345 6789`;
 
           {/* Simple Vitals Summary Cards */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
-              <div className="text-xs text-slate-500 font-medium">Heart Rate</div>
-              <div className="text-xl font-semibold text-slate-900 dark:text-white mt-1">72 <span className="text-xs font-normal text-slate-400">BPM</span></div>
-              <div className="text-[11px] text-slate-400 mt-1">Normal resting rhythm</div>
+            <div className="bg-white dark:bg-[#0c756e] p-4 rounded-xl border border-[#d6ebe7] dark:border-slate-800">
+              <div className="text-xs text-[#4d7872] font-medium">Heart Rate</div>
+              <div className="text-xl font-semibold text-[#132e2b] dark:text-white mt-1">72 <span className="text-xs font-normal text-[#6b9690]">BPM</span></div>
+              <div className="text-[11px] text-[#6b9690] mt-1">Normal resting rhythm</div>
             </div>
 
-            <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
-              <div className="text-xs text-slate-500 font-medium">Blood Pressure</div>
-              <div className="text-xl font-semibold text-slate-900 dark:text-white mt-1">118/76 <span className="text-xs font-normal text-slate-400">mmHg</span></div>
-              <div className="text-[11px] text-slate-400 mt-1">Optimal range</div>
+            <div className="bg-white dark:bg-[#0c756e] p-4 rounded-xl border border-[#d6ebe7] dark:border-slate-800">
+              <div className="text-xs text-[#4d7872] font-medium">Blood Pressure</div>
+              <div className="text-xl font-semibold text-[#132e2b] dark:text-white mt-1">118/76 <span className="text-xs font-normal text-[#6b9690]">mmHg</span></div>
+              <div className="text-[11px] text-[#6b9690] mt-1">Optimal range</div>
             </div>
 
-            <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
-              <div className="text-xs text-slate-500 font-medium">Body Weight</div>
-              <div className="text-xl font-semibold text-slate-900 dark:text-white mt-1">68.4 <span className="text-xs font-normal text-slate-400">kg</span></div>
-              <div className="text-[11px] text-slate-400 mt-1">Target range</div>
+            <div className="bg-white dark:bg-[#0c756e] p-4 rounded-xl border border-[#d6ebe7] dark:border-slate-800">
+              <div className="text-xs text-[#4d7872] font-medium">Body Weight</div>
+              <div className="text-xl font-semibold text-[#132e2b] dark:text-white mt-1">68.4 <span className="text-xs font-normal text-[#6b9690]">kg</span></div>
+              <div className="text-[11px] text-[#6b9690] mt-1">Target range</div>
             </div>
 
-            <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
-              <div className="text-xs text-slate-500 font-medium">Fasting Glucose</div>
-              <div className="text-xl font-semibold text-slate-900 dark:text-white mt-1">92 <span className="text-xs font-normal text-slate-400">mg/dL</span></div>
-              <div className="text-[11px] text-slate-400 mt-1">Normal fasting</div>
+            <div className="bg-white dark:bg-[#0c756e] p-4 rounded-xl border border-[#d6ebe7] dark:border-slate-800">
+              <div className="text-xs text-[#4d7872] font-medium">Fasting Glucose</div>
+              <div className="text-xl font-semibold text-[#132e2b] dark:text-white mt-1">92 <span className="text-xs font-normal text-[#6b9690]">mg/dL</span></div>
+              <div className="text-[11px] text-[#6b9690] mt-1">Normal fasting</div>
             </div>
           </div>
 
           {/* Next Visit & Medications Row */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800">
+            <div className="bg-white dark:bg-[#0c756e] p-5 rounded-xl border border-[#d6ebe7] dark:border-slate-800">
               <div className="flex justify-between items-center mb-3">
-                <h3 className="font-semibold text-xs text-slate-700 dark:text-slate-300 uppercase tracking-wider">Next Appointment</h3>
-                <button onClick={() => onNavigateTab('appointments')} className="text-xs text-teal-700 dark:text-teal-400 hover:underline">View all</button>
+                <h3 className="font-semibold text-xs text-[#234c47] dark:text-slate-300 uppercase tracking-wider">Next Appointment</h3>
+                <button onClick={() => onNavigateTab('appointments')} className="text-xs text-[#0c756e] dark:text-teal-400 hover:underline">View all</button>
               </div>
 
               {nextApt ? (
-                <div className="p-3.5 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                <div className="p-3.5 bg-[#f8fbfb] dark:bg-slate-800/50 rounded-lg border border-[#eef6f5] dark:border-slate-800 flex items-center justify-between">
                   <div>
-                    <div className="font-medium text-sm text-slate-900 dark:text-white">{nextApt.doctor}</div>
-                    <div className="text-xs text-slate-500">{nextApt.specialty} · {nextApt.hospital}</div>
-                    <div className="text-xs text-slate-600 dark:text-slate-400 mt-1">
+                    <div className="font-medium text-sm text-[#132e2b] dark:text-white">{nextApt.doctor}</div>
+                    <div className="text-xs text-[#4d7872]">{nextApt.specialty} · {nextApt.hospital}</div>
+                    <div className="text-xs text-[#36615b] dark:text-[#6b9690] mt-1">
                       {nextApt.date} at {nextApt.time} ({nextApt.type})
                     </div>
                   </div>
                   <button
                     onClick={() => setSelectedAppointmentDetails(nextApt)}
-                    className="px-3 py-1 text-xs font-medium bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-md hover:bg-slate-50"
+                    className="px-3 py-1 text-xs font-medium bg-white dark:bg-slate-800 border border-[#d6ebe7] dark:border-slate-700 rounded-md hover:bg-[#f8fbfb]"
                   >
                     Details
                   </button>
                 </div>
               ) : (
-                <p className="text-xs text-slate-400 py-4">No upcoming appointments scheduled.</p>
+                <p className="text-xs text-[#6b9690] py-4">No upcoming appointments scheduled.</p>
               )}
             </div>
 
-            <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800">
+            <div className="bg-white dark:bg-[#0c756e] p-5 rounded-xl border border-[#d6ebe7] dark:border-slate-800">
               <div className="flex justify-between items-center mb-3">
-                <h3 className="font-semibold text-xs text-slate-700 dark:text-slate-300 uppercase tracking-wider">Today's Medications</h3>
-                <button onClick={() => onNavigateTab('medicines')} className="text-xs text-teal-700 dark:text-teal-400 hover:underline">Manage</button>
+                <h3 className="font-semibold text-xs text-[#234c47] dark:text-slate-300 uppercase tracking-wider">Today's Medications</h3>
+                <button onClick={() => onNavigateTab('medicines')} className="text-xs text-[#0c756e] dark:text-teal-400 hover:underline">Manage</button>
               </div>
 
               <div className="space-y-2">
                 {medicines.slice(0, 3).map((m) => (
-                  <div key={m.id} className="p-2.5 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                  <div key={m.id} className="p-2.5 bg-[#f8fbfb] dark:bg-slate-800/50 rounded-lg border border-[#eef6f5] dark:border-slate-800 flex items-center justify-between">
                     <div>
-                      <div className="text-xs font-medium text-slate-900 dark:text-white">{m.name} {m.dosage}</div>
-                      <div className="text-[11px] text-slate-500">{m.timing}</div>
+                      <div className="text-xs font-medium text-[#132e2b] dark:text-white">{m.name} {m.dosage}</div>
+                      <div className="text-[11px] text-[#4d7872]">{m.timing}</div>
                     </div>
                     <button
                       onClick={() => toggleMedTaken(m.id)}
                       className={`text-xs font-medium px-2.5 py-1 rounded transition ${
                         m.takenToday
-                          ? 'bg-teal-50 text-teal-800 dark:bg-teal-950 dark:text-teal-300'
-                          : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600'
+                          ? 'bg-[#e6f5f2] text-[#0c756e] dark:bg-teal-950 dark:text-teal-300'
+                          : 'bg-white dark:bg-slate-800 border border-[#d6ebe7] dark:border-slate-700 text-[#36615b]'
                       }`}
                     >
                       {m.takenToday ? '✓ Taken' : 'Mark done'}
@@ -602,8 +602,8 @@ Trauma Desk: +91 80 2345 6789`;
         <div className="space-y-4">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
             <div>
-              <h1 className="text-lg font-semibold text-slate-900 dark:text-white">Medical Specialists</h1>
-              <p className="text-xs text-slate-500">Consult licensed physicians and clinical specialists.</p>
+              <h1 className="text-lg font-semibold text-[#132e2b] dark:text-white">Medical Specialists</h1>
+              <p className="text-xs text-[#4d7872]">Consult licensed physicians and clinical specialists.</p>
             </div>
 
             <div className="flex items-center gap-2 w-full sm:w-auto">
@@ -612,12 +612,12 @@ Trauma Desk: +91 80 2345 6789`;
                 placeholder="Search physician..."
                 value={searchDoc}
                 onChange={(e) => setSearchDoc(e.target.value)}
-                className="px-3 py-1.5 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 w-full sm:w-48"
+                className="px-3 py-1.5 text-xs rounded-lg border border-[#d6ebe7] dark:border-slate-700 bg-white dark:bg-slate-800 w-full sm:w-48"
               />
               <select
                 value={selectedSpec}
                 onChange={(e) => setSelectedSpec(e.target.value)}
-                className="px-3 py-1.5 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800"
+                className="px-3 py-1.5 text-xs rounded-lg border border-[#d6ebe7] dark:border-slate-700 bg-white dark:bg-slate-800"
               >
                 <option value="">All Specialties</option>
                 <option value="Cardiologist">Cardiology</option>
@@ -634,10 +634,10 @@ Trauma Desk: +91 80 2345 6789`;
             {doctors
               .filter(d => (!searchDoc || (d.name + d.specialty).toLowerCase().includes(searchDoc.toLowerCase())) && (!selectedSpec || d.specialty === selectedSpec))
               .map((doc) => (
-                <div key={doc.id} className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
+                <div key={doc.id} className="bg-white dark:bg-[#0c756e] p-4 rounded-xl border border-[#d6ebe7] dark:border-slate-800 flex flex-col justify-between">
                   <div>
                     <div className="flex items-center gap-3 mb-3">
-                      <div className="w-12 h-12 rounded-full overflow-hidden border border-slate-200 dark:border-slate-700 shrink-0 bg-slate-100 flex items-center justify-center font-medium text-sm text-slate-700">
+                      <div className="w-12 h-12 rounded-full overflow-hidden border border-[#d6ebe7] dark:border-slate-700 shrink-0 bg-[#e6f5f2] flex items-center justify-center font-medium text-sm text-[#234c47]">
                         {doc.photo ? (
                           <img src={doc.photo} alt={doc.name} className="w-full h-full object-cover" />
                         ) : (
@@ -645,32 +645,32 @@ Trauma Desk: +91 80 2345 6789`;
                         )}
                       </div>
                       <div>
-                        <h3 className="font-semibold text-sm text-slate-900 dark:text-white">{doc.name}</h3>
-                        <p className="text-xs text-teal-700 dark:text-teal-400 font-medium">{doc.specialty}</p>
-                        <p className="text-[11px] text-slate-400 mt-0.5">★ {doc.rating} · {doc.experience}</p>
+                        <h3 className="font-semibold text-sm text-[#132e2b] dark:text-white">{doc.name}</h3>
+                        <p className="text-xs text-[#0c756e] dark:text-teal-400 font-medium">{doc.specialty}</p>
+                        <p className="text-[11px] text-[#6b9690] mt-0.5">★ {doc.rating} · {doc.experience}</p>
                       </div>
                     </div>
 
-                    <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed mb-3">
+                    <p className="text-xs text-[#36615b] dark:text-[#6b9690] line-clamp-2 leading-relaxed mb-3">
                       {doc.bio}
                     </p>
 
-                    <div className="flex justify-between items-center text-xs py-1.5 px-2.5 bg-slate-50 dark:bg-slate-800 rounded-lg mb-3">
-                      <span className="text-slate-500">Consultation Fee</span>
-                      <span className="font-semibold text-slate-900 dark:text-white">₹{doc.fee}</span>
+                    <div className="flex justify-between items-center text-xs py-1.5 px-2.5 bg-[#f8fbfb] dark:bg-slate-800 rounded-lg mb-3">
+                      <span className="text-[#4d7872]">Consultation Fee</span>
+                      <span className="font-semibold text-[#132e2b] dark:text-white">₹{doc.fee}</span>
                     </div>
                   </div>
 
                   <div className="flex gap-2">
                     <button
                       onClick={() => setSelectedDoctorProfile(doc)}
-                      className="flex-1 py-1.5 text-xs font-medium bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-lg transition"
+                      className="flex-1 py-1.5 text-xs font-medium bg-[#e6f5f2] hover:bg-[#d8efe9] dark:bg-slate-800 text-[#234c47] dark:text-slate-200 rounded-lg transition"
                     >
                       Profile
                     </button>
                     <button
                       onClick={() => setBookingDoctor(doc)}
-                      className="flex-1 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-medium text-xs transition"
+                      className="flex-1 py-1.5 bg-[#0c756e] hover:bg-[#095e58] text-white rounded-lg font-medium text-xs transition"
                     >
                       Book Visit
                     </button>
@@ -686,20 +686,20 @@ Trauma Desk: +91 80 2345 6789`;
         <div className="space-y-4">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
             <div>
-              <h1 className="text-lg font-semibold text-slate-900 dark:text-white">Appointments</h1>
-              <p className="text-xs text-slate-500">Scheduled, pending, and past visits.</p>
+              <h1 className="text-lg font-semibold text-[#132e2b] dark:text-white">Appointments</h1>
+              <p className="text-xs text-[#4d7872]">Scheduled, pending, and past visits.</p>
             </div>
             <div className="flex gap-2">
               <button
                 onClick={exportAppointmentsCsv}
-                className="px-3 py-1.5 text-xs font-medium bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 flex items-center gap-1.5"
+                className="px-3 py-1.5 text-xs font-medium bg-white dark:bg-[#0c756e] border border-[#d6ebe7] dark:border-slate-700 rounded-lg hover:bg-[#f8fbfb] flex items-center gap-1.5"
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>Export CSV</span>
               </button>
               <button
                 onClick={() => onNavigateTab('doctors')}
-                className="px-3 py-1.5 text-xs font-medium bg-slate-900 hover:bg-slate-800 text-white rounded-lg flex items-center gap-1.5"
+                className="px-3 py-1.5 text-xs font-medium bg-[#0c756e] hover:bg-[#095e58] text-white rounded-lg flex items-center gap-1.5"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>New Appointment</span>
@@ -707,15 +707,15 @@ Trauma Desk: +91 80 2345 6789`;
             </div>
           </div>
 
-          <div className="flex gap-1 border-b border-slate-200 dark:border-slate-800 pb-2 text-xs font-medium">
+          <div className="flex gap-1 border-b border-[#d6ebe7] dark:border-slate-800 pb-2 text-xs font-medium">
             {['ALL', 'CONFIRMED', 'PENDING', 'COMPLETED', 'CANCELLED'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setAppointmentFilter(tab)}
                 className={`px-3 py-1 rounded-md transition ${
                   appointmentFilter === tab
-                    ? 'bg-slate-900 text-white'
-                    : 'text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800'
+                    ? 'bg-[#0c756e] text-white'
+                    : 'text-[#4d7872] hover:bg-[#e6f5f2] dark:hover:bg-[#095e58]'
                 }`}
               >
                 {tab}
@@ -723,9 +723,9 @@ Trauma Desk: +91 80 2345 6789`;
             ))}
           </div>
 
-          <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+          <div className="bg-white dark:bg-[#0c756e] rounded-xl border border-[#d6ebe7] dark:border-slate-800 overflow-hidden">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-500 font-medium uppercase text-[11px] border-b border-slate-200 dark:border-slate-800">
+              <thead className="bg-[#f8fbfb] dark:bg-slate-800/50 text-[#4d7872] font-medium uppercase text-[11px] border-b border-[#d6ebe7] dark:border-slate-800">
                 <tr>
                   <th className="p-3.5">Doctor</th>
                   <th className="p-3.5">Specialty</th>
@@ -739,20 +739,20 @@ Trauma Desk: +91 80 2345 6789`;
                 {appointments
                   .filter(a => appointmentFilter === 'ALL' || a.status === appointmentFilter)
                   .map((a) => (
-                    <tr key={a.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
-                      <td className="p-3.5 font-medium text-slate-900 dark:text-white">{a.doctor}</td>
-                      <td className="p-3.5 text-slate-500">{a.specialty}</td>
-                      <td className="p-3.5 text-slate-700 dark:text-slate-300">{a.date} at {a.time}</td>
-                      <td className="p-3.5 text-slate-500">{a.type}</td>
+                    <tr key={a.id} className="hover:bg-[#f8fbfb]/50 dark:hover:bg-[#095e58]/40 transition">
+                      <td className="p-3.5 font-medium text-[#132e2b] dark:text-white">{a.doctor}</td>
+                      <td className="p-3.5 text-[#4d7872]">{a.specialty}</td>
+                      <td className="p-3.5 text-[#234c47] dark:text-slate-300">{a.date} at {a.time}</td>
+                      <td className="p-3.5 text-[#4d7872]">{a.type}</td>
                       <td className="p-3.5">
-                        <span className="px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                        <span className="px-2 py-0.5 rounded text-[11px] font-medium bg-[#e6f5f2] dark:bg-slate-800 text-[#234c47] dark:text-slate-300">
                           {a.status}
                         </span>
                       </td>
                       <td className="p-3.5 text-right space-x-2">
                         <button
                           onClick={() => setSelectedAppointmentDetails(a)}
-                          className="text-slate-600 hover:text-slate-900 dark:text-slate-300 font-medium"
+                          className="text-[#36615b] hover:text-[#132e2b] dark:text-slate-300 font-medium"
                         >
                           Details
                         </button>
@@ -763,7 +763,7 @@ Trauma Desk: +91 80 2345 6789`;
                                 setReschedulingAppointment(a);
                                 setReschedDate(a.date);
                               }}
-                              className="text-teal-700 hover:text-teal-900 dark:text-teal-400 font-medium"
+                              className="text-[#0c756e] hover:text-teal-900 dark:text-teal-400 font-medium"
                             >
                               Reschedule
                             </button>
@@ -789,12 +789,12 @@ Trauma Desk: +91 80 2345 6789`;
         <div className="space-y-4">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
             <div>
-              <h1 className="text-lg font-semibold text-slate-900 dark:text-white">Health Records</h1>
-              <p className="text-xs text-slate-500">Diagnostic reports, discharge documents, and prescriptions.</p>
+              <h1 className="text-lg font-semibold text-[#132e2b] dark:text-white">Health Records</h1>
+              <p className="text-xs text-[#4d7872]">Diagnostic reports, discharge documents, and prescriptions.</p>
             </div>
             <button
               onClick={() => setIsUploadRecordOpen(true)}
-              className="px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-medium flex items-center gap-1.5"
+              className="px-3.5 py-1.5 bg-[#0c756e] hover:bg-[#095e58] text-white rounded-lg text-xs font-medium flex items-center gap-1.5"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Upload Document</span>
@@ -805,20 +805,20 @@ Trauma Desk: +91 80 2345 6789`;
             {records
               .filter(r => recordCategoryFilter === 'ALL' || r.category.toLowerCase().includes(recordCategoryFilter.toLowerCase()))
               .map((r) => (
-                <div key={r.id} className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
+                <div key={r.id} className="bg-white dark:bg-[#0c756e] p-4 rounded-xl border border-[#d6ebe7] dark:border-slate-800 flex flex-col justify-between">
                   <div>
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium">
+                    <span className="text-[10px] px-2 py-0.5 rounded bg-[#e6f5f2] dark:bg-slate-800 text-[#36615b] dark:text-[#6b9690] font-medium">
                       {r.category}
                     </span>
-                    <h3 className="font-semibold text-sm text-slate-900 dark:text-white mt-2">{r.title}</h3>
-                    <p className="text-xs text-slate-400 mt-0.5">{r.date} · {r.facility}</p>
-                    <p className="text-xs text-slate-600 dark:text-slate-400 mt-2 line-clamp-2 leading-relaxed">{r.summary}</p>
+                    <h3 className="font-semibold text-sm text-[#132e2b] dark:text-white mt-2">{r.title}</h3>
+                    <p className="text-xs text-[#6b9690] mt-0.5">{r.date} · {r.facility}</p>
+                    <p className="text-xs text-[#36615b] dark:text-[#6b9690] mt-2 line-clamp-2 leading-relaxed">{r.summary}</p>
                   </div>
 
-                  <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex gap-2">
+                  <div className="mt-4 pt-3 border-t border-[#eef6f5] dark:border-slate-800 flex gap-2">
                     <button
                       onClick={() => setSelectedRecord(r)}
-                      className="flex-1 py-1.5 text-xs font-medium bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-lg"
+                      className="flex-1 py-1.5 text-xs font-medium bg-[#e6f5f2] hover:bg-[#d8efe9] dark:bg-slate-800 text-[#234c47] dark:text-slate-200 rounded-lg"
                     >
                       Details
                     </button>
@@ -832,7 +832,7 @@ Trauma Desk: +91 80 2345 6789`;
                         link.click();
                         showToast('Downloaded', `Saved ${r.title}.txt`, 'success');
                       }}
-                      className="px-2.5 py-1.5 text-xs font-medium border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg text-slate-600"
+                      className="px-2.5 py-1.5 text-xs font-medium border border-[#d6ebe7] dark:border-slate-700 hover:bg-[#f8fbfb] dark:hover:bg-[#095e58] rounded-lg text-[#36615b]"
                       title="Download text"
                     >
                       <Download className="w-3.5 h-3.5" />
@@ -856,8 +856,8 @@ Trauma Desk: +91 80 2345 6789`;
         <div className="space-y-4">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-lg font-semibold text-slate-900 dark:text-white">Active Medications</h1>
-              <p className="text-xs text-slate-500">Prescription doses and daily adherence checklist.</p>
+              <h1 className="text-lg font-semibold text-[#132e2b] dark:text-white">Active Medications</h1>
+              <p className="text-xs text-[#4d7872]">Prescription doses and daily adherence checklist.</p>
             </div>
             <button
               onClick={() => {
@@ -867,7 +867,7 @@ Trauma Desk: +91 80 2345 6789`;
                 setMedTiming('');
                 setIsAddMedOpen(true);
               }}
-              className="px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-medium flex items-center gap-1.5"
+              className="px-3.5 py-1.5 bg-[#0c756e] hover:bg-[#095e58] text-white rounded-lg text-xs font-medium flex items-center gap-1.5"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Add Medicine</span>
@@ -876,26 +876,26 @@ Trauma Desk: +91 80 2345 6789`;
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {medicines.map((m) => (
-              <div key={m.id} className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
+              <div key={m.id} className="bg-white dark:bg-[#0c756e] p-4 rounded-xl border border-[#d6ebe7] dark:border-slate-800 flex flex-col justify-between">
                 <div className="flex items-start justify-between">
                   <div>
-                    <span className="text-[10px] font-medium text-slate-400 uppercase">{m.frequency}</span>
-                    <h3 className="font-semibold text-sm text-slate-900 dark:text-white mt-1">{m.name} {m.dosage}</h3>
-                    <p className="text-xs text-slate-500 mt-0.5">{m.timing}</p>
+                    <span className="text-[10px] font-medium text-[#6b9690] uppercase">{m.frequency}</span>
+                    <h3 className="font-semibold text-sm text-[#132e2b] dark:text-white mt-1">{m.name} {m.dosage}</h3>
+                    <p className="text-xs text-[#4d7872] mt-0.5">{m.timing}</p>
                   </div>
                   <button
                     onClick={() => toggleMedTaken(m.id)}
                     className={`text-xs font-medium px-2.5 py-1 rounded transition ${
                       m.takenToday
-                        ? 'bg-teal-50 text-teal-800 dark:bg-teal-950 dark:text-teal-300'
-                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800'
+                        ? 'bg-[#e6f5f2] text-[#0c756e] dark:bg-teal-950 dark:text-teal-300'
+                        : 'bg-[#e6f5f2] text-[#36615b] hover:bg-[#d8efe9] dark:bg-slate-800'
                     }`}
                   >
                     {m.takenToday ? '✓ Taken' : 'Mark done'}
                   </button>
                 </div>
 
-                <div className="flex justify-end gap-2 mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-800 text-xs">
+                <div className="flex justify-end gap-2 mt-3 pt-2.5 border-t border-[#eef6f5] dark:border-slate-800 text-xs">
                   <button
                     onClick={() => {
                       setEditingMed(m);
@@ -905,7 +905,7 @@ Trauma Desk: +91 80 2345 6789`;
                       setMedFreq(m.frequency);
                       setIsAddMedOpen(true);
                     }}
-                    className="text-slate-600 hover:text-slate-900 dark:text-slate-300 font-medium"
+                    className="text-[#36615b] hover:text-[#132e2b] dark:text-slate-300 font-medium"
                   >
                     Edit
                   </button>
@@ -926,30 +926,30 @@ Trauma Desk: +91 80 2345 6789`;
       {activeTab === 'labs' && (
         <div className="space-y-4">
           <div>
-            <h1 className="text-lg font-semibold text-slate-900 dark:text-white">Diagnostic Lab Tests</h1>
-            <p className="text-xs text-slate-500">Certified clinical pathology panels and health checks.</p>
+            <h1 className="text-lg font-semibold text-[#132e2b] dark:text-white">Diagnostic Lab Tests</h1>
+            <p className="text-xs text-[#4d7872]">Certified clinical pathology panels and health checks.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {labCatalog.map((t) => (
-              <div key={t.id} className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
+              <div key={t.id} className="bg-white dark:bg-[#0c756e] p-4 rounded-xl border border-[#d6ebe7] dark:border-slate-800 flex flex-col justify-between">
                 <div>
-                  <span className="text-[10px] text-slate-400 uppercase font-medium">{t.category}</span>
-                  <h3 className="font-semibold text-sm text-slate-900 dark:text-white mt-1">{t.name}</h3>
-                  <p className="text-xs text-slate-500 mt-1 line-clamp-2">{t.description}</p>
-                  <div className="mt-3 text-xs font-semibold text-slate-900 dark:text-white">₹{t.price}</div>
+                  <span className="text-[10px] text-[#6b9690] uppercase font-medium">{t.category}</span>
+                  <h3 className="font-semibold text-sm text-[#132e2b] dark:text-white mt-1">{t.name}</h3>
+                  <p className="text-xs text-[#4d7872] mt-1 line-clamp-2">{t.description}</p>
+                  <div className="mt-3 text-xs font-semibold text-[#132e2b] dark:text-white">₹{t.price}</div>
                 </div>
 
                 <div className="flex gap-2 mt-3">
                   <button
                     onClick={() => setSelectedLabTestDetails(t)}
-                    className="flex-1 py-1.5 text-xs font-medium bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 rounded-lg text-slate-700 dark:text-slate-200"
+                    className="flex-1 py-1.5 text-xs font-medium bg-[#e6f5f2] hover:bg-[#d8efe9] dark:bg-slate-800 rounded-lg text-[#234c47] dark:text-slate-200"
                   >
                     Details
                   </button>
                   <button
                     onClick={() => setBookingLabTest(t)}
-                    className="flex-1 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-medium text-xs rounded-lg"
+                    className="flex-1 py-1.5 bg-[#0c756e] hover:bg-[#095e58] text-white font-medium text-xs rounded-lg"
                   >
                     Book
                   </button>
@@ -965,28 +965,28 @@ Trauma Desk: +91 80 2345 6789`;
         <div className="space-y-4">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-lg font-semibold text-slate-900 dark:text-white">Vitals Tracking</h1>
-              <p className="text-xs text-slate-500">Longitudinal biometrics, blood pressure, and glucose history.</p>
+              <h1 className="text-lg font-semibold text-[#132e2b] dark:text-white">Vitals Tracking</h1>
+              <p className="text-xs text-[#4d7872]">Longitudinal biometrics, blood pressure, and glucose history.</p>
             </div>
             <div className="flex gap-2">
               <button
                 onClick={exportVitalsCsv}
-                className="px-3 py-1.5 text-xs font-medium bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50"
+                className="px-3 py-1.5 text-xs font-medium bg-white dark:bg-[#0c756e] border border-[#d6ebe7] dark:border-slate-700 rounded-lg hover:bg-[#f8fbfb]"
               >
                 Export CSV
               </button>
               <button
                 onClick={() => setIsAddVitalOpen(true)}
-                className="px-3 py-1.5 text-xs font-medium bg-slate-900 hover:bg-slate-800 text-white rounded-lg"
+                className="px-3 py-1.5 text-xs font-medium bg-[#0c756e] hover:bg-[#095e58] text-white rounded-lg"
               >
                 + Log Reading
               </button>
             </div>
           </div>
 
-          <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+          <div className="bg-white dark:bg-[#0c756e] rounded-xl border border-[#d6ebe7] dark:border-slate-800 overflow-hidden">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-500 font-medium uppercase text-[11px] border-b border-slate-200 dark:border-slate-800">
+              <thead className="bg-[#f8fbfb] dark:bg-slate-800/50 text-[#4d7872] font-medium uppercase text-[11px] border-b border-[#d6ebe7] dark:border-slate-800">
                 <tr>
                   <th className="p-3">Timestamp</th>
                   <th className="p-3">Metric</th>
@@ -998,12 +998,12 @@ Trauma Desk: +91 80 2345 6789`;
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800 font-normal">
                 {vitalsList.map((v) => (
-                  <tr key={v.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/40">
-                    <td className="p-3 text-slate-500">{v.date}</td>
-                    <td className="p-3 font-medium text-slate-900 dark:text-white">{v.metric}</td>
-                    <td className="p-3 font-semibold text-slate-900 dark:text-white">{v.value} {v.unit}</td>
-                    <td className="p-3 text-slate-500">{v.status}</td>
-                    <td className="p-3 text-slate-400">{v.notes}</td>
+                  <tr key={v.id} className="hover:bg-[#f8fbfb]/50 dark:hover:bg-[#095e58]/40">
+                    <td className="p-3 text-[#4d7872]">{v.date}</td>
+                    <td className="p-3 font-medium text-[#132e2b] dark:text-white">{v.metric}</td>
+                    <td className="p-3 font-semibold text-[#132e2b] dark:text-white">{v.value} {v.unit}</td>
+                    <td className="p-3 text-[#4d7872]">{v.status}</td>
+                    <td className="p-3 text-[#6b9690]">{v.notes}</td>
                     <td className="p-3 text-right">
                       <button onClick={() => handleDeleteVital(v.id)} className="text-red-500 hover:text-red-700">
                         <Trash2 className="w-3.5 h-3.5" />
@@ -1021,28 +1021,28 @@ Trauma Desk: +91 80 2345 6789`;
       {activeTab === 'articles' && (
         <div className="space-y-4">
           <div>
-            <h1 className="text-lg font-semibold text-slate-900 dark:text-white">Health Articles</h1>
-            <p className="text-xs text-slate-500">Clinical guides authored by licensed physicians.</p>
+            <h1 className="text-lg font-semibold text-[#132e2b] dark:text-white">Health Articles</h1>
+            <p className="text-xs text-[#4d7872]">Clinical guides authored by licensed physicians.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {articles.map((art) => (
-              <div key={art.id} className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col justify-between">
+              <div key={art.id} className="bg-white dark:bg-[#0c756e] rounded-xl border border-[#d6ebe7] dark:border-slate-800 overflow-hidden flex flex-col justify-between">
                 <div>
                   <div className="h-40 overflow-hidden">
                     <img src={art.image} alt={art.title} className="w-full h-full object-cover" />
                   </div>
                   <div className="p-4">
-                    <span className="text-[10px] text-slate-400">{art.category} · {art.author}</span>
-                    <h3 className="font-semibold text-sm text-slate-900 dark:text-white mt-1">{art.title}</h3>
-                    <p className="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed">{art.summary}</p>
+                    <span className="text-[10px] text-[#6b9690]">{art.category} · {art.author}</span>
+                    <h3 className="font-semibold text-sm text-[#132e2b] dark:text-white mt-1">{art.title}</h3>
+                    <p className="text-xs text-[#4d7872] mt-1 line-clamp-2 leading-relaxed">{art.summary}</p>
                   </div>
                 </div>
 
                 <div className="p-4 pt-0 flex items-center justify-between gap-2">
                   <button
                     onClick={() => setSelectedArticle(art)}
-                    className="flex-1 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-medium text-xs rounded-lg transition"
+                    className="flex-1 py-1.5 bg-[#0c756e] hover:bg-[#095e58] text-white font-medium text-xs rounded-lg transition"
                   >
                     Read Article
                   </button>
@@ -1052,7 +1052,7 @@ Trauma Desk: +91 80 2345 6789`;
                       showToast(bookmarkedArticles[art.id] ? 'Bookmark Removed' : 'Saved to Bookmarks', art.title, 'info');
                     }}
                     className={`p-1.5 rounded-lg border text-xs ${
-                      bookmarkedArticles[art.id] ? 'border-teal-400 text-teal-700 bg-teal-50' : 'border-slate-200 text-slate-400'
+                      bookmarkedArticles[art.id] ? 'border-teal-400 text-[#0c756e] bg-[#e6f5f2]' : 'border-[#d6ebe7] text-[#6b9690]'
                     }`}
                   >
                     <Bookmark className="w-3.5 h-3.5" />
@@ -1068,35 +1068,35 @@ Trauma Desk: +91 80 2345 6789`;
       {activeTab === 'emergency' && (
         <div className="space-y-4 max-w-xl">
           <div>
-            <h1 className="text-lg font-semibold text-slate-900 dark:text-white">Emergency Contacts</h1>
-            <p className="text-xs text-slate-500">24/7 direct hotlines and medical summary card.</p>
+            <h1 className="text-lg font-semibold text-[#132e2b] dark:text-white">Emergency Contacts</h1>
+            <p className="text-xs text-[#4d7872]">24/7 direct hotlines and medical summary card.</p>
           </div>
 
           <div className="space-y-3">
-            <a href="tel:108" className="p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-between hover:bg-slate-50 transition block">
+            <a href="tel:108" className="p-4 bg-white dark:bg-[#0c756e] rounded-xl border border-[#d6ebe7] dark:border-slate-800 flex items-center justify-between hover:bg-[#f8fbfb] transition block">
               <div>
-                <div className="text-xs text-slate-500">National Emergency Response</div>
-                <div className="text-lg font-semibold text-slate-900 dark:text-white">108 (Ambulance)</div>
+                <div className="text-xs text-[#4d7872]">National Emergency Response</div>
+                <div className="text-lg font-semibold text-[#132e2b] dark:text-white">108 (Ambulance)</div>
               </div>
-              <span className="text-xs font-medium text-teal-700">Tap to call</span>
+              <span className="text-xs font-medium text-[#0c756e]">Tap to call</span>
             </a>
 
-            <a href="tel:102" className="p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-between hover:bg-slate-50 transition block">
+            <a href="tel:102" className="p-4 bg-white dark:bg-[#0c756e] rounded-xl border border-[#d6ebe7] dark:border-slate-800 flex items-center justify-between hover:bg-[#f8fbfb] transition block">
               <div>
-                <div className="text-xs text-slate-500">Maternity & Pediatric Transport</div>
-                <div className="text-lg font-semibold text-slate-900 dark:text-white">102 (Free Helpline)</div>
+                <div className="text-xs text-[#4d7872]">Maternity & Pediatric Transport</div>
+                <div className="text-lg font-semibold text-[#132e2b] dark:text-white">102 (Free Helpline)</div>
               </div>
-              <span className="text-xs font-medium text-teal-700">Tap to call</span>
+              <span className="text-xs font-medium text-[#0c756e]">Tap to call</span>
             </a>
 
-            <div className="p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-between">
+            <div className="p-4 bg-white dark:bg-[#0c756e] rounded-xl border border-[#d6ebe7] dark:border-slate-800 flex items-center justify-between">
               <div>
-                <div className="text-xs text-slate-500">CarePlus Trauma Desk</div>
-                <div className="text-base font-semibold text-slate-900 dark:text-white">+91 80 2345 6789</div>
+                <div className="text-xs text-[#4d7872]">CarePlus Trauma Desk</div>
+                <div className="text-base font-semibold text-[#132e2b] dark:text-white">+91 80 2345 6789</div>
               </div>
               <button
                 onClick={downloadEmergencyCard}
-                className="px-3 py-1.5 bg-slate-900 text-white rounded-lg text-xs font-medium"
+                className="px-3 py-1.5 bg-[#0c756e] text-white rounded-lg text-xs font-medium"
               >
                 Download Card
               </button>
@@ -1109,13 +1109,13 @@ Trauma Desk: +91 80 2345 6789`;
       {activeTab === 'profile' && (
         <div className="space-y-4 max-w-xl">
           <div>
-            <h1 className="text-lg font-semibold text-slate-900 dark:text-white">Patient Profile</h1>
-            <p className="text-xs text-slate-500">Manage contact information and avatar photo.</p>
+            <h1 className="text-lg font-semibold text-[#132e2b] dark:text-white">Patient Profile</h1>
+            <p className="text-xs text-[#4d7872]">Manage contact information and avatar photo.</p>
           </div>
 
-          <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-4">
-            <div className="flex items-center gap-4 pb-4 border-b border-slate-100 dark:border-slate-800">
-              <div className="w-14 h-14 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 text-slate-700 flex items-center justify-center font-semibold text-base overflow-hidden">
+          <div className="bg-white dark:bg-[#0c756e] p-5 rounded-xl border border-[#d6ebe7] dark:border-slate-800 space-y-4">
+            <div className="flex items-center gap-4 pb-4 border-b border-[#eef6f5] dark:border-slate-800">
+              <div className="w-14 h-14 rounded-full border border-[#d6ebe7] dark:border-slate-700 bg-[#e6f5f2] text-[#234c47] flex items-center justify-center font-semibold text-base overflow-hidden">
                 {user?.avatarUrl ? (
                   <img src={user.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
                 ) : (
@@ -1123,15 +1123,15 @@ Trauma Desk: +91 80 2345 6789`;
                 )}
               </div>
               <div>
-                <div className="text-xs font-medium text-slate-900 dark:text-white">Profile Photo</div>
+                <div className="text-xs font-medium text-[#132e2b] dark:text-white">Profile Photo</div>
                 <div className="flex gap-2 mt-2">
-                  <label className="px-3 py-1 bg-slate-900 hover:bg-slate-800 text-white text-xs font-medium rounded-md cursor-pointer transition">
+                  <label className="px-3 py-1 bg-[#0c756e] hover:bg-[#095e58] text-white text-xs font-medium rounded-md cursor-pointer transition">
                     Upload Photo
                     <input type="file" accept="image/*" className="hidden" onChange={handlePhotoUpload} />
                   </label>
                   <button
                     onClick={handleRemovePhoto}
-                    className="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium rounded-md transition"
+                    className="px-3 py-1 bg-[#e6f5f2] hover:bg-[#d8efe9] text-[#234c47] text-xs font-medium rounded-md transition"
                   >
                     Remove Photo
                   </button>
@@ -1141,22 +1141,22 @@ Trauma Desk: +91 80 2345 6789`;
 
             <div className="space-y-3 text-xs">
               <div>
-                <label className="text-slate-500 font-medium">Full Name</label>
+                <label className="text-[#4d7872] font-medium">Full Name</label>
                 <input value={profileName} onChange={(e) => setProfileName(e.target.value)} className="w-full p-2 rounded-lg border mt-1 font-medium" />
               </div>
               <div>
-                <label className="text-slate-500 font-medium">Phone Number</label>
+                <label className="text-[#4d7872] font-medium">Phone Number</label>
                 <input value={profilePhone} onChange={(e) => setProfilePhone(e.target.value)} className="w-full p-2 rounded-lg border mt-1 font-medium" />
               </div>
               <div>
-                <label className="text-slate-500 font-medium">Residential Address</label>
+                <label className="text-[#4d7872] font-medium">Residential Address</label>
                 <input value={profileAddress} onChange={(e) => setProfileAddress(e.target.value)} className="w-full p-2 rounded-lg border mt-1 font-medium" />
               </div>
             </div>
 
             <button
               onClick={handleSaveProfile}
-              className="px-4 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-medium transition"
+              className="px-4 py-1.5 bg-[#0c756e] hover:bg-[#095e58] text-white rounded-lg text-xs font-medium transition"
             >
               Save Profile
             </button>
@@ -1168,14 +1168,14 @@ Trauma Desk: +91 80 2345 6789`;
       {activeTab === 'settings' && (
         <div className="space-y-4 max-w-xl">
           <div>
-            <h1 className="text-lg font-semibold text-slate-900 dark:text-white">Settings & Data</h1>
-            <p className="text-xs text-slate-500">Data export and local session preferences.</p>
+            <h1 className="text-lg font-semibold text-[#132e2b] dark:text-white">Settings & Data</h1>
+            <p className="text-xs text-[#4d7872]">Data export and local session preferences.</p>
           </div>
 
-          <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-4">
+          <div className="bg-white dark:bg-[#0c756e] p-5 rounded-xl border border-[#d6ebe7] dark:border-slate-800 space-y-4">
             <div>
-              <h4 className="text-xs font-semibold text-slate-900 dark:text-white">Export Health Archive</h4>
-              <p className="text-xs text-slate-500 mt-0.5">Download complete JSON archive of all your clinical records.</p>
+              <h4 className="text-xs font-semibold text-[#132e2b] dark:text-white">Export Health Archive</h4>
+              <p className="text-xs text-[#4d7872] mt-0.5">Download complete JSON archive of all your clinical records.</p>
               <button
                 onClick={() => {
                   const backup = { patient: user, appointments, records, medicines, vitals: vitalsList, exportedAt: new Date().toISOString() };
@@ -1186,7 +1186,7 @@ Trauma Desk: +91 80 2345 6789`;
                   link.click();
                   showToast('Downloaded', 'JSON archive downloaded.', 'success');
                 }}
-                className="mt-2.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-medium rounded-lg"
+                className="mt-2.5 px-3 py-1.5 bg-[#0c756e] hover:bg-[#095e58] text-white text-xs font-medium rounded-lg"
               >
                 Export JSON Archive
               </button>
@@ -1206,8 +1206,8 @@ Trauma Desk: +91 80 2345 6789`;
         title={selectedDoctorProfile?.name || 'Physician Profile'}
       >
         <div className="space-y-3 text-xs">
-          <div className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
-            <div className="w-12 h-12 rounded-full overflow-hidden border border-slate-200 dark:border-slate-700 shrink-0 bg-slate-100 flex items-center justify-center font-medium text-sm">
+          <div className="flex items-center gap-3 p-3 bg-[#f8fbfb] dark:bg-slate-800 rounded-lg">
+            <div className="w-12 h-12 rounded-full overflow-hidden border border-[#d6ebe7] dark:border-slate-700 shrink-0 bg-[#e6f5f2] flex items-center justify-center font-medium text-sm">
               {selectedDoctorProfile?.photo ? (
                 <img src={selectedDoctorProfile.photo} alt="Doctor" className="w-full h-full object-cover" />
               ) : (
@@ -1215,30 +1215,30 @@ Trauma Desk: +91 80 2345 6789`;
               )}
             </div>
             <div>
-              <div className="text-sm font-semibold text-slate-900 dark:text-white">{selectedDoctorProfile?.name}</div>
-              <div className="text-teal-700 dark:text-teal-400 font-medium">{selectedDoctorProfile?.specialty}</div>
-              <div className="text-slate-400 text-[11px]">{selectedDoctorProfile?.department} · {selectedDoctorProfile?.hospital}</div>
+              <div className="text-sm font-semibold text-[#132e2b] dark:text-white">{selectedDoctorProfile?.name}</div>
+              <div className="text-[#0c756e] dark:text-teal-400 font-medium">{selectedDoctorProfile?.specialty}</div>
+              <div className="text-[#6b9690] text-[11px]">{selectedDoctorProfile?.department} · {selectedDoctorProfile?.hospital}</div>
             </div>
           </div>
 
           <div>
-            <div className="text-slate-500 font-medium text-[11px]">Clinical Bio</div>
-            <p className="text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">{selectedDoctorProfile?.bio}</p>
+            <div className="text-[#4d7872] font-medium text-[11px]">Clinical Bio</div>
+            <p className="text-[#36615b] dark:text-[#6b9690] mt-1 leading-relaxed">{selectedDoctorProfile?.bio}</p>
           </div>
 
           <div className="flex justify-between items-center py-2 border-t text-xs">
-            <span className="text-slate-500">Consultation Fee</span>
-            <span className="font-semibold text-slate-900 dark:text-white">₹{selectedDoctorProfile?.fee}</span>
+            <span className="text-[#4d7872]">Consultation Fee</span>
+            <span className="font-semibold text-[#132e2b] dark:text-white">₹{selectedDoctorProfile?.fee}</span>
           </div>
 
           <div className="flex justify-end gap-2 pt-2">
-            <button onClick={() => setSelectedDoctorProfile(null)} className="px-3 py-1.5 text-slate-500 hover:bg-slate-100 rounded-lg">Close</button>
+            <button onClick={() => setSelectedDoctorProfile(null)} className="px-3 py-1.5 text-[#4d7872] hover:bg-[#e6f5f2] rounded-lg">Close</button>
             <button
               onClick={() => {
                 setBookingDoctor(selectedDoctorProfile);
                 setSelectedDoctorProfile(null);
               }}
-              className="px-4 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-medium"
+              className="px-4 py-1.5 bg-[#0c756e] hover:bg-[#095e58] text-white rounded-lg font-medium"
             >
               Book Appointment
             </button>
@@ -1253,28 +1253,28 @@ Trauma Desk: +91 80 2345 6789`;
         title={`Appointment Details - ${selectedAppointmentDetails?.appointmentCode}`}
       >
         <div className="space-y-3 text-xs">
-          <div className="grid grid-cols-2 gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
+          <div className="grid grid-cols-2 gap-3 p-3 bg-[#f8fbfb] dark:bg-slate-800 rounded-lg">
             <div>
-              <span className="text-[10px] text-slate-400 uppercase">Doctor</span>
-              <div className="font-medium text-slate-900 dark:text-white">{selectedAppointmentDetails?.doctor}</div>
-              <div className="text-slate-500">{selectedAppointmentDetails?.specialty}</div>
+              <span className="text-[10px] text-[#6b9690] uppercase">Doctor</span>
+              <div className="font-medium text-[#132e2b] dark:text-white">{selectedAppointmentDetails?.doctor}</div>
+              <div className="text-[#4d7872]">{selectedAppointmentDetails?.specialty}</div>
             </div>
             <div>
-              <span className="text-[10px] text-slate-400 uppercase">Scheduled Time</span>
-              <div className="font-medium text-slate-900 dark:text-white">{selectedAppointmentDetails?.date}</div>
-              <div className="text-slate-500">{selectedAppointmentDetails?.time} ({selectedAppointmentDetails?.type})</div>
+              <span className="text-[10px] text-[#6b9690] uppercase">Scheduled Time</span>
+              <div className="font-medium text-[#132e2b] dark:text-white">{selectedAppointmentDetails?.date}</div>
+              <div className="text-[#4d7872]">{selectedAppointmentDetails?.time} ({selectedAppointmentDetails?.type})</div>
             </div>
           </div>
 
           {selectedAppointmentDetails?.reason && (
             <div>
-              <span className="text-[10px] text-slate-400 uppercase">Reason</span>
-              <p className="text-slate-600 dark:text-slate-400 mt-1">{selectedAppointmentDetails.reason}</p>
+              <span className="text-[10px] text-[#6b9690] uppercase">Reason</span>
+              <p className="text-[#36615b] dark:text-[#6b9690] mt-1">{selectedAppointmentDetails.reason}</p>
             </div>
           )}
 
           <div className="flex justify-end pt-2">
-            <button onClick={() => setSelectedAppointmentDetails(null)} className="px-4 py-1.5 bg-slate-900 text-white rounded-lg font-medium">
+            <button onClick={() => setSelectedAppointmentDetails(null)} className="px-4 py-1.5 bg-[#0c756e] text-white rounded-lg font-medium">
               Close
             </button>
           </div>
@@ -1288,9 +1288,9 @@ Trauma Desk: +91 80 2345 6789`;
         title="Reschedule Appointment"
       >
         <div className="space-y-3 text-xs">
-          <p className="text-slate-500">Rescheduling visit with <strong>{reschedulingAppointment?.doctor}</strong></p>
+          <p className="text-[#4d7872]">Rescheduling visit with <strong>{reschedulingAppointment?.doctor}</strong></p>
           <div>
-            <label className="text-slate-500 font-medium">New Date</label>
+            <label className="text-[#4d7872] font-medium">New Date</label>
             <input
               type="date"
               min={new Date().toISOString().split('T')[0]}
@@ -1301,7 +1301,7 @@ Trauma Desk: +91 80 2345 6789`;
           </div>
 
           <div>
-            <label className="text-slate-500 font-medium">Available Slot</label>
+            <label className="text-[#4d7872] font-medium">Available Slot</label>
             <div className="grid grid-cols-3 gap-2 mt-1.5 max-h-32 overflow-y-auto">
               {reschedSlots.map((slot) => (
                 <button
@@ -1310,10 +1310,10 @@ Trauma Desk: +91 80 2345 6789`;
                   onClick={() => setSelectedReschedSlot(slot.time)}
                   className={`p-1.5 rounded-lg text-center font-medium text-xs border transition ${
                     slot.isBooked
-                      ? 'bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed'
+                      ? 'bg-[#e6f5f2] text-[#6b9690] border-[#d6ebe7] cursor-not-allowed'
                       : selectedReschedSlot === slot.time
-                      ? 'bg-slate-900 text-white border-slate-900'
-                      : 'bg-white text-slate-700 hover:border-slate-400 border-slate-200'
+                      ? 'bg-[#0c756e] text-white border-slate-900'
+                      : 'bg-white text-[#234c47] hover:border-slate-400 border-[#d6ebe7]'
                   }`}
                 >
                   {slot.time}
@@ -1323,8 +1323,8 @@ Trauma Desk: +91 80 2345 6789`;
           </div>
 
           <div className="flex justify-end gap-2 pt-2">
-            <button onClick={() => setReschedulingAppointment(null)} className="px-3 py-1.5 text-slate-500">Cancel</button>
-            <button onClick={handleConfirmReschedule} className="px-4 py-1.5 bg-slate-900 text-white rounded-lg font-medium">
+            <button onClick={() => setReschedulingAppointment(null)} className="px-3 py-1.5 text-[#4d7872]">Cancel</button>
+            <button onClick={handleConfirmReschedule} className="px-4 py-1.5 bg-[#0c756e] text-white rounded-lg font-medium">
               Confirm
             </button>
           </div>
@@ -1338,24 +1338,24 @@ Trauma Desk: +91 80 2345 6789`;
         title={selectedRecord?.title || 'Document Details'}
       >
         <div className="space-y-3 text-xs">
-          <div className="flex justify-between p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
+          <div className="flex justify-between p-3 bg-[#f8fbfb] dark:bg-slate-800 rounded-lg">
             <div>
-              <span className="text-[10px] text-slate-400 uppercase">Facility</span>
-              <div className="font-medium text-slate-900 dark:text-white">{selectedRecord?.facility}</div>
+              <span className="text-[10px] text-[#6b9690] uppercase">Facility</span>
+              <div className="font-medium text-[#132e2b] dark:text-white">{selectedRecord?.facility}</div>
             </div>
             <div>
-              <span className="text-[10px] text-slate-400 uppercase">Date</span>
-              <div className="font-medium text-slate-900 dark:text-white">{selectedRecord?.date}</div>
+              <span className="text-[10px] text-[#6b9690] uppercase">Date</span>
+              <div className="font-medium text-[#132e2b] dark:text-white">{selectedRecord?.date}</div>
             </div>
           </div>
 
           <div>
-            <span className="text-[10px] text-slate-400 uppercase">Clinical Observations</span>
-            <p className="text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">{selectedRecord?.summary}</p>
+            <span className="text-[10px] text-[#6b9690] uppercase">Clinical Observations</span>
+            <p className="text-[#36615b] dark:text-[#6b9690] mt-1 leading-relaxed">{selectedRecord?.summary}</p>
           </div>
 
           <div className="flex justify-end pt-2">
-            <button onClick={() => setSelectedRecord(null)} className="px-4 py-1.5 bg-slate-900 text-white rounded-lg font-medium">
+            <button onClick={() => setSelectedRecord(null)} className="px-4 py-1.5 bg-[#0c756e] text-white rounded-lg font-medium">
               Close
             </button>
           </div>
@@ -1370,7 +1370,7 @@ Trauma Desk: +91 80 2345 6789`;
       >
         <div className="space-y-3 text-xs">
           <div>
-            <label className="text-slate-500 font-medium">Document Title</label>
+            <label className="text-[#4d7872] font-medium">Document Title</label>
             <input
               placeholder="e.g. Annual Blood Panel"
               value={newRecordTitle}
@@ -1381,7 +1381,7 @@ Trauma Desk: +91 80 2345 6789`;
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-slate-500 font-medium">Category</label>
+              <label className="text-[#4d7872] font-medium">Category</label>
               <select
                 value={newRecordCategory}
                 onChange={(e) => setNewRecordCategory(e.target.value)}
@@ -1394,7 +1394,7 @@ Trauma Desk: +91 80 2345 6789`;
               </select>
             </div>
             <div>
-              <label className="text-slate-500 font-medium">Facility</label>
+              <label className="text-[#4d7872] font-medium">Facility</label>
               <input
                 value={newRecordFacility}
                 onChange={(e) => setNewRecordFacility(e.target.value)}
@@ -1404,7 +1404,7 @@ Trauma Desk: +91 80 2345 6789`;
           </div>
 
           <div>
-            <label className="text-slate-500 font-medium">Summary & Findings</label>
+            <label className="text-[#4d7872] font-medium">Summary & Findings</label>
             <textarea
               rows={3}
               value={newRecordSummary}
@@ -1414,8 +1414,8 @@ Trauma Desk: +91 80 2345 6789`;
           </div>
 
           <div className="flex justify-end gap-2 pt-2">
-            <button onClick={() => setIsUploadRecordOpen(false)} className="px-3 py-1.5 text-slate-500">Cancel</button>
-            <button onClick={handleUploadRecord} className="px-4 py-1.5 bg-slate-900 text-white rounded-lg font-medium">
+            <button onClick={() => setIsUploadRecordOpen(false)} className="px-3 py-1.5 text-[#4d7872]">Cancel</button>
+            <button onClick={handleUploadRecord} className="px-4 py-1.5 bg-[#0c756e] text-white rounded-lg font-medium">
               Save Record
             </button>
           </div>
@@ -1430,7 +1430,7 @@ Trauma Desk: +91 80 2345 6789`;
       >
         <div className="space-y-3 text-xs">
           <div>
-            <label className="text-slate-500 font-medium">Medicine Name</label>
+            <label className="text-[#4d7872] font-medium">Medicine Name</label>
             <input
               placeholder="e.g. Rosuvastatin"
               value={medName}
@@ -1441,7 +1441,7 @@ Trauma Desk: +91 80 2345 6789`;
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-slate-500 font-medium">Dosage</label>
+              <label className="text-[#4d7872] font-medium">Dosage</label>
               <input
                 placeholder="e.g. 10mg"
                 value={medDose}
@@ -1450,7 +1450,7 @@ Trauma Desk: +91 80 2345 6789`;
               />
             </div>
             <div>
-              <label className="text-slate-500 font-medium">Timing</label>
+              <label className="text-[#4d7872] font-medium">Timing</label>
               <input
                 placeholder="e.g. After dinner"
                 value={medTiming}
@@ -1461,8 +1461,8 @@ Trauma Desk: +91 80 2345 6789`;
           </div>
 
           <div className="flex justify-end gap-2 pt-2">
-            <button onClick={() => setIsAddMedOpen(false)} className="px-3 py-1.5 text-slate-500">Cancel</button>
-            <button onClick={handleSaveMedicine} className="px-4 py-1.5 bg-slate-900 text-white rounded-lg font-medium">
+            <button onClick={() => setIsAddMedOpen(false)} className="px-3 py-1.5 text-[#4d7872]">Cancel</button>
+            <button onClick={handleSaveMedicine} className="px-4 py-1.5 bg-[#0c756e] text-white rounded-lg font-medium">
               Save
             </button>
           </div>
@@ -1477,7 +1477,7 @@ Trauma Desk: +91 80 2345 6789`;
       >
         <div className="space-y-3 text-xs">
           <div>
-            <label className="text-slate-500 font-medium">Metric Indicator</label>
+            <label className="text-[#4d7872] font-medium">Metric Indicator</label>
             <select
               value={vitalMetric}
               onChange={(e) => setVitalMetric(e.target.value)}
@@ -1491,7 +1491,7 @@ Trauma Desk: +91 80 2345 6789`;
           </div>
 
           <div>
-            <label className="text-slate-500 font-medium">Value</label>
+            <label className="text-[#4d7872] font-medium">Value</label>
             <input
               placeholder="e.g. 120/80 or 72"
               value={vitalValue}
@@ -1501,7 +1501,7 @@ Trauma Desk: +91 80 2345 6789`;
           </div>
 
           <div>
-            <label className="text-slate-500 font-medium">Notes</label>
+            <label className="text-[#4d7872] font-medium">Notes</label>
             <input
               placeholder="e.g. Resting check"
               value={vitalNotes}
@@ -1511,8 +1511,8 @@ Trauma Desk: +91 80 2345 6789`;
           </div>
 
           <div className="flex justify-end gap-2 pt-2">
-            <button onClick={() => setIsAddVitalOpen(false)} className="px-3 py-1.5 text-slate-500">Cancel</button>
-            <button onClick={handleSaveVital} className="px-4 py-1.5 bg-slate-900 text-white rounded-lg font-medium">
+            <button onClick={() => setIsAddVitalOpen(false)} className="px-3 py-1.5 text-[#4d7872]">Cancel</button>
+            <button onClick={handleSaveVital} className="px-4 py-1.5 bg-[#0c756e] text-white rounded-lg font-medium">
               Save
             </button>
           </div>
@@ -1526,18 +1526,18 @@ Trauma Desk: +91 80 2345 6789`;
         title={selectedArticle?.title || 'Health Article'}
       >
         <div className="space-y-3 text-xs">
-          <div className="flex items-center justify-between text-slate-400 pb-2 border-b">
+          <div className="flex items-center justify-between text-[#6b9690] pb-2 border-b">
             <span>By {selectedArticle?.author}</span>
             <span>{selectedArticle?.readTime}</span>
           </div>
 
-          <p className="text-slate-700 dark:text-slate-300 leading-relaxed text-sm">
+          <p className="text-[#234c47] dark:text-slate-300 leading-relaxed text-sm">
             {selectedArticle?.fullText}
           </p>
 
-          <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
-            <h5 className="font-semibold text-slate-900 dark:text-white text-xs mb-1.5">Key Clinical Takeaways:</h5>
-            <ul className="space-y-1 list-disc list-inside text-slate-600 dark:text-slate-300">
+          <div className="p-3 bg-[#f8fbfb] dark:bg-slate-800 rounded-lg border border-[#d6ebe7] dark:border-slate-700">
+            <h5 className="font-semibold text-[#132e2b] dark:text-white text-xs mb-1.5">Key Clinical Takeaways:</h5>
+            <ul className="space-y-1 list-disc list-inside text-[#36615b] dark:text-slate-300">
               {selectedArticle?.takeaways?.map((t: string, idx: number) => (
                 <li key={idx}>{t}</li>
               ))}
@@ -1545,7 +1545,7 @@ Trauma Desk: +91 80 2345 6789`;
           </div>
 
           <div className="flex justify-end pt-2">
-            <button onClick={() => setSelectedArticle(null)} className="px-4 py-1.5 bg-slate-900 text-white rounded-lg font-medium">
+            <button onClick={() => setSelectedArticle(null)} className="px-4 py-1.5 bg-[#0c756e] text-white rounded-lg font-medium">
               Done
             </button>
           </div>
@@ -1559,13 +1559,13 @@ Trauma Desk: +91 80 2345 6789`;
         title={`Book Consultation - ${bookingDoctor?.name}`}
       >
         <div className="space-y-3 text-xs">
-          <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-lg font-medium text-slate-800 dark:text-white">
+          <div className="p-3 bg-[#f8fbfb] dark:bg-slate-800 rounded-lg font-medium text-[#1a3d39] dark:text-white">
             {bookingDoctor?.name} ({bookingDoctor?.specialty}) · ₹{bookingDoctor?.fee}
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-slate-500 font-medium">Date</label>
+              <label className="text-[#4d7872] font-medium">Date</label>
               <input
                 type="date"
                 min={new Date().toISOString().split('T')[0]}
@@ -1575,7 +1575,7 @@ Trauma Desk: +91 80 2345 6789`;
               />
             </div>
             <div>
-              <label className="text-slate-500 font-medium">Format</label>
+              <label className="text-[#4d7872] font-medium">Format</label>
               <select
                 value={consultType}
                 onChange={(e) => setConsultType(e.target.value)}
@@ -1588,7 +1588,7 @@ Trauma Desk: +91 80 2345 6789`;
           </div>
 
           <div>
-            <label className="text-slate-500 font-medium">Available Slot</label>
+            <label className="text-[#4d7872] font-medium">Available Slot</label>
             <div className="grid grid-cols-3 gap-2 mt-1.5 max-h-32 overflow-y-auto">
               {bookingSlots.map((slot) => (
                 <button
@@ -1597,10 +1597,10 @@ Trauma Desk: +91 80 2345 6789`;
                   onClick={() => setSelectedSlot(slot.time)}
                   className={`p-1.5 rounded-lg text-center font-medium text-xs border transition ${
                     slot.isBooked
-                      ? 'bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed'
+                      ? 'bg-[#e6f5f2] text-[#6b9690] border-[#d6ebe7] cursor-not-allowed'
                       : selectedSlot === slot.time
-                      ? 'bg-slate-900 text-white border-slate-900'
-                      : 'bg-white text-slate-700 hover:border-slate-400 border-slate-200'
+                      ? 'bg-[#0c756e] text-white border-slate-900'
+                      : 'bg-white text-[#234c47] hover:border-slate-400 border-[#d6ebe7]'
                   }`}
                 >
                   {slot.time}
@@ -1610,7 +1610,7 @@ Trauma Desk: +91 80 2345 6789`;
           </div>
 
           <div>
-            <label className="text-slate-500 font-medium">Symptoms / Reason</label>
+            <label className="text-[#4d7872] font-medium">Symptoms / Reason</label>
             <input
               value={bookingReason}
               onChange={(e) => setBookingReason(e.target.value)}
@@ -1620,8 +1620,8 @@ Trauma Desk: +91 80 2345 6789`;
           </div>
 
           <div className="flex justify-end gap-2 pt-2">
-            <button onClick={() => setBookingDoctor(null)} className="px-3 py-1.5 text-slate-500">Cancel</button>
-            <button onClick={handleConfirmBooking} className="px-4 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-medium">
+            <button onClick={() => setBookingDoctor(null)} className="px-3 py-1.5 text-[#4d7872]">Cancel</button>
+            <button onClick={handleConfirmBooking} className="px-4 py-1.5 bg-[#0c756e] hover:bg-[#095e58] text-white rounded-lg font-medium">
               Confirm Booking
             </button>
           </div>
@@ -1635,20 +1635,20 @@ Trauma Desk: +91 80 2345 6789`;
         title={selectedLabTestDetails?.name || 'Test Details'}
       >
         <div className="space-y-3 text-xs">
-          <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
-            <div className="text-[10px] text-slate-400 uppercase">Category</div>
-            <div className="font-semibold text-slate-900 dark:text-white">{selectedLabTestDetails?.category}</div>
+          <div className="p-3 bg-[#f8fbfb] dark:bg-slate-800 rounded-lg">
+            <div className="text-[10px] text-[#6b9690] uppercase">Category</div>
+            <div className="font-semibold text-[#132e2b] dark:text-white">{selectedLabTestDetails?.category}</div>
           </div>
-          <p className="text-slate-600 dark:text-slate-400 leading-relaxed">{selectedLabTestDetails?.description}</p>
-          <div className="text-xs font-semibold text-slate-900 dark:text-white">Fee: ₹{selectedLabTestDetails?.price}</div>
+          <p className="text-[#36615b] dark:text-[#6b9690] leading-relaxed">{selectedLabTestDetails?.description}</p>
+          <div className="text-xs font-semibold text-[#132e2b] dark:text-white">Fee: ₹{selectedLabTestDetails?.price}</div>
           <div className="flex justify-end gap-2 pt-2">
-            <button onClick={() => setSelectedLabTestDetails(null)} className="px-3 py-1.5 text-slate-500">Close</button>
+            <button onClick={() => setSelectedLabTestDetails(null)} className="px-3 py-1.5 text-[#4d7872]">Close</button>
             <button
               onClick={() => {
                 setBookingLabTest(selectedLabTestDetails);
                 setSelectedLabTestDetails(null);
               }}
-              className="px-4 py-1.5 bg-slate-900 text-white rounded-lg font-medium"
+              className="px-4 py-1.5 bg-[#0c756e] text-white rounded-lg font-medium"
             >
               Book Test
             </button>
@@ -1663,16 +1663,16 @@ Trauma Desk: +91 80 2345 6789`;
         title={`Book Test - ${bookingLabTest?.name}`}
       >
         <div className="space-y-3 text-xs">
-          <p className="text-slate-500">Test: <strong>{bookingLabTest?.name}</strong> · Fee: ₹{bookingLabTest?.price}</p>
+          <p className="text-[#4d7872]">Test: <strong>{bookingLabTest?.name}</strong> · Fee: ₹{bookingLabTest?.price}</p>
           <div>
-            <label className="text-slate-500 font-medium">Collection Mode</label>
+            <label className="text-[#4d7872] font-medium">Collection Mode</label>
             <select className="w-full p-2 rounded-lg border mt-1 font-medium">
               <option value="Home Collection">Home Sample Collection</option>
               <option value="Hospital Walk-in">Hospital Laboratory Visit</option>
             </select>
           </div>
           <div className="flex justify-end gap-2 pt-2">
-            <button onClick={() => setBookingLabTest(null)} className="px-3 py-1.5 text-slate-500">Cancel</button>
+            <button onClick={() => setBookingLabTest(null)} className="px-3 py-1.5 text-[#4d7872]">Cancel</button>
             <button
               onClick={async () => {
                 try {
@@ -1691,7 +1691,7 @@ Trauma Desk: +91 80 2345 6789`;
                   showToast('Error', err.message, 'alert');
                 }
               }}
-              className="px-4 py-1.5 bg-slate-900 text-white rounded-lg font-medium"
+              className="px-4 py-1.5 bg-[#0c756e] text-white rounded-lg font-medium"
             >
               Confirm Order
             </button>

@@ -3,24 +3,28 @@
 @tailwind utilities;
 
 :root {
-  --primary: #0f766e;
-  --primary-hover: #0d655e;
+  --primary: #0c756e;
+  --primary-hover: #095e58;
+  --pastry-bg: #f3f8f7;
+  --pastry-light: #e6f5f2;
+  --pastry-border: #cbe7e2;
+  --pastry-text: #0c756e;
 }
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   letter-spacing: -0.011em;
-  background-color: #f8fafc;
-  color: #0f172a;
+  background-color: #f3f8f7;
+  color: #132e2b;
 }
 
-/* Clean, standard focus ring */
+/* Crisp focus ring */
 button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
-  outline: 2px solid #0f766e;
+  outline: 2px solid #0c756e;
   outline-offset: 1px;
 }
 
-/* Subtle, standard scrollbars */
+/* Pastry green subtle scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -29,9 +33,9 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #c0ded9;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #9fcac3;
 }

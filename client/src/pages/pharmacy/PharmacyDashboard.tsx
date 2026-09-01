@@ -43,12 +43,12 @@ export const PharmacyDashboard: React.FC = () => {
 
   return (
     <div className="p-6 max-w-6xl mx-auto space-y-6">
-      <div className="pb-4 border-b border-slate-200 dark:border-slate-800">
+      <div className="pb-4 border-b border-[#d6ebe7] dark:border-slate-800">
         <h1 className="text-xl font-semibold text-slate-900 dark:text-white">{user?.name}</h1>
         <p className="text-xs text-slate-500">Hospital Pharmacy Dispensary & Inventory</p>
       </div>
 
-      <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800">
+      <div className="bg-white dark:bg-[#0c756e] p-5 rounded-xl border border-[#d6ebe7] dark:border-slate-800">
         <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-3">
           Prescriptions Queue ({prescriptions.length})
         </h3>
@@ -69,7 +69,7 @@ export const PharmacyDashboard: React.FC = () => {
                 {rx.status !== 'DISPENSED' && (
                   <button
                     onClick={() => handleDispense(rx.id, rx.patientName)}
-                    className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-medium"
+                    className="px-3 py-1.5 bg-[#0c756e] hover:bg-[#095e58] text-white rounded-lg text-xs font-medium"
                   >
                     Dispense
                   </button>
@@ -80,14 +80,14 @@ export const PharmacyDashboard: React.FC = () => {
         )}
       </div>
 
-      <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800">
+      <div className="bg-white dark:bg-[#0c756e] p-5 rounded-xl border border-[#d6ebe7] dark:border-slate-800">
         <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-3">
           Inventory Levels
         </h3>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
           {inventory.map((item) => (
-            <div key={item.id} className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-100 dark:border-slate-800">
+            <div key={item.id} className="p-3 bg-[#f8fbfb] dark:bg-slate-800/50 rounded-lg border border-[#eef6f5] dark:border-slate-800">
               <span className="text-[10px] text-slate-400 uppercase">{item.category}</span>
               <div className="font-medium text-slate-900 dark:text-white mt-0.5">{item.name}</div>
               <div className="mt-1.5 flex justify-between">
