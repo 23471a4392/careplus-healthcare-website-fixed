@@ -5,5 +5,8 @@ dist
 *.log
 coverage
 .system_generated
-server/careplus.db-journal
+*.db
+*.db-journal
+server/prisma/*.db
+server/*.db
 client/dist
