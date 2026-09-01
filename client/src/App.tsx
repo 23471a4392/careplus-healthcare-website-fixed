@@ -17,6 +17,23 @@ import { AccountantDashboard } from './pages/accountant/AccountantDashboard.tsx'
 export const App: React.FC = () => {
   const { user, isLoading } = useAuth();
   const [activePage, setActivePage] = useState('dashboard');
+  // Automatically synchronize active navigation tab with user role
+  React.useEffect(() => {
+    if (user?.role === 'PATIENT') {
+      setActivePage('dashboard');
+    } else if (user?.role === 'DOCTOR' || user?.role === 'SENIOR_DOCTOR') {
+      setActivePage('overview');
+    } else if (user?.role === 'NURSE') {
+      setActivePage('inpatient');
+    } else if (user?.role === 'LAB_TECHNICIAN') {
+      setActivePage('lab_queue');
+    } else if (user?.role === 'PHARMACIST') {
+      setActivePage('pharmacy_queue');
+    } else if (user?.role === 'HOSPITAL_ADMIN' || user?.role === 'SUPER_ADMIN') {
+      setActivePage('admin_overview');
+    }
+  }, [user?.role]);
+
 
   if (isLoading && !user) {
     return (
