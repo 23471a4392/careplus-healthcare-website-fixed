@@ -13,20 +13,20 @@ import {
   Settings,
   ClipboardList,
   CheckCircle,
-  Package,
   Bed,
   Stethoscope,
-  BarChart3,
-  LogOut
+  LogOut,
+  ExternalLink
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.tsx';
 
 interface SidebarProps {
   activePage: string;
   onSelectPage: (page: string) => void;
+  portalKey?: string;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ activePage, onSelectPage }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ activePage, onSelectPage, portalKey }) => {
   const { user, logout } = useAuth();
 
   const getNavItems = () => {
@@ -38,7 +38,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activePage, onSelectPage }) =>
         { id: 'records', label: 'Health Records', icon: FileText },
         { id: 'medicines', label: 'Medicines', icon: Pill },
         { id: 'labs', label: 'Lab Tests', icon: TestTube },
-        { id: 'tracking', label: 'Vitals Tracking', icon: Activity },
+        { id: 'tracking', label: 'Health Tracking', icon: Activity },
         { id: 'articles', label: 'Health Articles', icon: BookOpen },
         { id: 'emergency', label: 'Emergency', icon: PhoneCall },
         { id: 'profile', label: 'Profile', icon: User },
@@ -74,49 +74,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ activePage, onSelectPage }) =>
       ];
     }
 
-    if (user?.role === 'PHARMACIST') {
-      return [
-        { id: 'pharmacy_queue', label: 'Prescription Queue', icon: Pill },
-        { id: 'inventory', label: 'Medicine Inventory', icon: Package }
-      ];
-    }
-
-    if (user?.role === 'HOSPITAL_ADMIN' || user?.role === 'SUPER_ADMIN') {
-      return [
-        { id: 'admin_overview', label: 'Hospital Overview', icon: BarChart3 },
-        { id: 'bed_management', label: 'Bed Management', icon: Bed },
-        { id: 'staff_directory', label: 'Staff Directory', icon: Users },
-        { id: 'audit_logs', label: 'System Audit Logs', icon: FileText }
-      ];
-    }
-
-    if (user?.role === 'RECEPTIONIST') {
-      return [
-        { id: 'reception_intake', label: 'Patient Check-In', icon: Users },
-        { id: 'walkin_booking', label: 'Walk-in Booking', icon: Calendar },
-        { id: 'bed_status', label: 'Bed Availability', icon: Bed }
-      ];
-    }
-
-    if (user?.role === 'ACCOUNTANT') {
-      return [
-        { id: 'billing_invoices', label: 'Billing Invoices', icon: FileText },
-        { id: 'insurance_claims', label: 'Insurance Claims', icon: BarChart3 }
-      ];
-    }
-
     return [{ id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard }];
   };
 
   const navItems = getNavItems();
 
   return (
-    <aside className="w-56 bg-white dark:bg-slate-900 border-r border-[#d6ebe7] dark:border-slate-800 flex flex-col justify-between shrink-0 min-h-[calc(100vh-5rem)]">
-      <div className="p-3 space-y-0.5">
-        <div className="px-3 py-2 text-[11px] font-semibold uppercase tracking-wider text-[#527d77] dark:text-slate-400">
-          Navigation
-        </div>
-
+    <aside className="w-56 bg-white dark:bg-slate-900 border-r border-slate-100 dark:border-slate-800 flex flex-col justify-between shrink-0 min-h-[calc(100vh-4rem)]">
+      <div className="py-4 pr-3 space-y-1">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = activePage === item.id;
@@ -124,25 +89,32 @@ export const Sidebar: React.FC<SidebarProps> = ({ activePage, onSelectPage }) =>
             <button
               key={item.id}
               onClick={() => onSelectPage(item.id)}
-              className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium transition text-left ${
+              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-r-xl text-xs transition text-left ${
                 isActive
-                  ? 'bg-[#e6f5f2] text-[#0c756e] dark:bg-slate-800 dark:text-teal-300 font-semibold border-r-2 border-[#0c756e]'
-                  : 'text-[#3d6e67] dark:text-slate-400 hover:bg-[#f0f7f6] dark:hover:bg-slate-800/60 hover:text-[#0c756e] dark:hover:text-slate-200'
+                  ? 'bg-[#e6f5f2] text-[#0c756e] dark:bg-slate-800 dark:text-teal-300 font-bold'
+                  : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-slate-200 font-medium'
               }`}
             >
-              <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-[#0c756e] dark:text-teal-300' : 'text-[#628f89]'}`} />
+              <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-[#0c756e] dark:text-teal-300' : 'text-slate-400'}`} />
               <span>{item.label}</span>
             </button>
           );
         })}
       </div>
 
-      <div className="p-3 border-t border-[#d6ebe7] dark:border-slate-800">
+      <div className="p-3 border-t border-slate-100 dark:border-slate-800 space-y-1">
+        <a
+          href="/"
+          className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-teal-700 bg-teal-50 hover:bg-teal-100 transition"
+        >
+          <ExternalLink className="w-3.5 h-3.5" />
+          <span>Switch Portal Hub</span>
+        </a>
         <button
           onClick={logout}
-          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-[#3d6e67] hover:text-red-600 hover:bg-red-50 dark:text-slate-400 dark:hover:bg-slate-800 transition"
+          className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium text-slate-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-slate-800 transition"
         >
-          <LogOut className="w-4 h-4 text-[#628f89]" />
+          <LogOut className="w-3.5 h-3.5 text-slate-400" />
           <span>Sign Out</span>
         </button>
       </div>

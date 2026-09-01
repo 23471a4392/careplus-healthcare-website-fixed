@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from './context/AuthContext.tsx';
-import { RoleSwitcher } from './components/RoleSwitcher.tsx';
 import { Navbar } from './components/Navbar.tsx';
 import { Sidebar } from './components/Sidebar.tsx';
 import { PatientPortal } from './pages/patient/PatientPortal.tsx';
@@ -8,50 +7,61 @@ import { DoctorDashboard } from './pages/doctor/DoctorDashboard.tsx';
 import { SeniorDoctorDashboard } from './pages/senior-doctor/SeniorDoctorDashboard.tsx';
 import { NurseDashboard } from './pages/nurse/NurseDashboard.tsx';
 import { LabDashboard } from './pages/lab/LabDashboard.tsx';
-import { PharmacyDashboard } from './pages/pharmacy/PharmacyDashboard.tsx';
-import { HospitalAdminDashboard } from './pages/hospital-admin/HospitalAdminDashboard.tsx';
-import { SuperAdminDashboard } from './pages/super-admin/SuperAdminDashboard.tsx';
-import { ReceptionistDashboard } from './pages/receptionist/ReceptionistDashboard.tsx';
-import { AccountantDashboard } from './pages/accountant/AccountantDashboard.tsx';
+import { PortalHub } from './pages/hub/PortalHub.tsx';
 
 export const App: React.FC = () => {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, portalKey } = useAuth();
   const [activePage, setActivePage] = useState('dashboard');
-  // Automatically synchronize active navigation tab with user role
-  React.useEffect(() => {
-    if (user?.role === 'PATIENT') {
-      setActivePage('dashboard');
-    } else if (user?.role === 'DOCTOR' || user?.role === 'SENIOR_DOCTOR') {
-      setActivePage('overview');
-    } else if (user?.role === 'NURSE') {
-      setActivePage('inpatient');
-    } else if (user?.role === 'LAB_TECHNICIAN') {
-      setActivePage('lab_queue');
-    } else if (user?.role === 'PHARMACIST') {
-      setActivePage('pharmacy_queue');
-    } else if (user?.role === 'HOSPITAL_ADMIN' || user?.role === 'SUPER_ADMIN') {
-      setActivePage('admin_overview');
-    }
-  }, [user?.role]);
 
+  const pathname = window.location.pathname.toLowerCase();
+
+  // Route check
+  const isHub = pathname === '/' || pathname === '';
+  const isPatient = pathname.startsWith('/patient');
+  const isDoctor = pathname.startsWith('/doctor');
+  const isSenior = pathname.startsWith('/senior');
+  const isNurse = pathname.startsWith('/nurse');
+  const isLab = pathname.startsWith('/lab');
+
+  useEffect(() => {
+    if (isPatient || user?.role === 'PATIENT') {
+      setActivePage('dashboard');
+    } else if (isDoctor || isSenior || user?.role === 'DOCTOR' || user?.role === 'SENIOR_DOCTOR') {
+      setActivePage('overview');
+    } else if (isNurse || user?.role === 'NURSE') {
+      setActivePage('inpatient');
+    } else if (isLab || user?.role === 'LAB_TECHNICIAN') {
+      setActivePage('lab_queue');
+    }
+  }, [pathname, user?.role]);
+
+  if (isHub) {
+    return <PortalHub />;
+  }
 
   if (isLoading && !user) {
     return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-white">
-        <div className="w-10 h-10 border-4 border-teal-500 border-t-transparent rounded-full animate-spin mb-4" />
-        <div className="font-semibold text-lg tracking-tight">CarePlus Healthcare System</div>
-        <div className="text-xs text-slate-400 mt-1">Connecting real-time clinical services...</div>
+      <div className="min-h-screen bg-[#f3f8f7] flex flex-col items-center justify-center text-[#132e2b]">
+        <div className="w-10 h-10 border-4 border-[#0c756e] border-t-transparent rounded-full animate-spin mb-4" />
+        <div className="font-bold text-base tracking-tight text-[#0c756e]">CarePlus Portal Loading...</div>
       </div>
     );
   }
 
-  return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col">
-      {/* 1-Click Fast Role Switcher */}
-      <RoleSwitcher />
+  const getPortalLabel = () => {
+    if (isPatient) return 'Patient Portal';
+    if (isDoctor) return 'Doctor Portal';
+    if (isSenior) return 'Senior Doctor Portal';
+    if (isNurse) return 'Nurse Portal';
+    if (isLab) return 'Lab Technician Portal';
+    return user?.role ? user.role.replace('_', ' ') : 'Portal';
+  };
 
-      {/* Main Top Header */}
+  return (
+    <div className="min-h-screen bg-[#f3f8f7] text-[#132e2b] flex flex-col">
+      {/* Top Navbar */}
       <Navbar
+        portalName={getPortalLabel()}
         onOpenEmergencyModal={() => setActivePage('emergency')}
         onNavigateProfile={() => setActivePage('profile')}
         onNavigateTab={(tab) => setActivePage(tab)}
@@ -60,39 +70,25 @@ export const App: React.FC = () => {
       {/* Body Layout */}
       <div className="flex flex-1">
         {/* Sidebar */}
-        <Sidebar activePage={activePage} onSelectPage={setActivePage} />
+        <Sidebar activePage={activePage} onSelectPage={setActivePage} portalKey={portalKey} />
 
         {/* Content Area */}
         <main className="flex-1 min-w-0 overflow-y-auto">
-          {user?.role === 'PATIENT' && (
+          {(isPatient || user?.role === 'PATIENT') && (
             <PatientPortal activeTab={activePage} onNavigateTab={setActivePage} />
           )}
 
-          {user?.role === 'DOCTOR' && (
+          {(isDoctor || user?.role === 'DOCTOR') && (
             <DoctorDashboard activeTab={activePage} onNavigateTab={setActivePage} />
           )}
 
-          {user?.role === 'SENIOR_DOCTOR' && (
+          {(isSenior || user?.role === 'SENIOR_DOCTOR') && (
             <SeniorDoctorDashboard activeTab={activePage} onNavigateTab={setActivePage} />
           )}
 
-          {user?.role === 'NURSE' && <NurseDashboard />}
+          {(isNurse || user?.role === 'NURSE') && <NurseDashboard />}
 
-          {user?.role === 'LAB_TECHNICIAN' && <LabDashboard />}
-
-          {user?.role === 'PHARMACIST' && <PharmacyDashboard />}
-
-          {(user?.role === 'HOSPITAL_ADMIN' || user?.role === 'SUPER_ADMIN') && activePage !== 'audit_logs' && (
-            <HospitalAdminDashboard />
-          )}
-
-          {user?.role === 'SUPER_ADMIN' && activePage === 'audit_logs' && (
-            <SuperAdminDashboard />
-          )}
-
-          {user?.role === 'RECEPTIONIST' && <ReceptionistDashboard />}
-
-          {user?.role === 'ACCOUNTANT' && <AccountantDashboard />}
+          {(isLab || user?.role === 'LAB_TECHNICIAN') && <LabDashboard />}
         </main>
       </div>
     </div>

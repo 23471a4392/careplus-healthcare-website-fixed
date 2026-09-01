@@ -485,107 +485,194 @@ Trauma Desk: +91 80 2345 6789`;
   return (
     <div className="p-6 max-w-6xl mx-auto space-y-6">
 
-      {/* 1. DASHBOARD - Clean, Human, Simple */}
+      {/* 1. DASHBOARD - Screenshot Exact Match (media_1788246425906.png) */}
       {activeTab === 'dashboard' && (
         <div className="space-y-6">
-          {/* Calm Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#d6ebe7] dark:border-slate-800">
+          {/* Top Header */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h1 className="text-xl font-semibold text-[#132e2b] dark:text-white">Good morning, {user?.firstName}</h1>
-              <p className="text-xs text-[#4d7872] dark:text-[#6b9690] mt-0.5">Overview of your upcoming visits, medication schedule, and recent metrics.</p>
+              <div className="text-[11px] font-extrabold uppercase tracking-widest text-[#0c756e]">
+                {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
+              </div>
+              <h1 className="text-2xl font-black text-[#132e2b] tracking-tight mt-0.5">
+                Good morning, {user?.name ? user.name.split(' ')[0] : 'Vaseem'}
+              </h1>
+              <p className="text-xs text-[#527d77] mt-0.5">
+                Here is your clinical wellness summary and active care schedule.
+              </p>
             </div>
-            <div className="flex items-center gap-2">
+            <div>
               <button
                 onClick={() => onNavigateTab('doctors')}
-                className="px-3.5 py-1.5 bg-[#0c756e] hover:bg-[#095e58] text-white rounded-lg text-xs font-medium transition"
+                className="px-4 py-2 bg-[#0c756e] hover:bg-[#095e58] text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition"
               >
-                Book Appointment
-              </button>
-              <button
-                onClick={() => onNavigateTab('records')}
-                className="px-3.5 py-1.5 bg-white hover:bg-[#f8fbfb] text-[#234c47] dark:bg-slate-800 dark:text-slate-200 border border-[#d6ebe7] dark:border-slate-700 rounded-lg text-xs font-medium transition"
-              >
-                View Records
+                <span>+ Book Appointment</span>
               </button>
             </div>
           </div>
 
-          {/* Simple Vitals Summary Cards */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-white dark:bg-[#0c756e] p-4 rounded-xl border border-[#d6ebe7] dark:border-slate-800">
-              <div className="text-xs text-[#4d7872] font-medium">Heart Rate</div>
-              <div className="text-xl font-semibold text-[#132e2b] dark:text-white mt-1">72 <span className="text-xs font-normal text-[#6b9690]">BPM</span></div>
-              <div className="text-[11px] text-[#6b9690] mt-1">Normal resting rhythm</div>
+          {/* Hero Banner (Rich Teal with Outlined Heart & Preventive Care) */}
+          <div className="bg-[#0c756e] text-white rounded-2xl p-7 relative overflow-hidden shadow-sm flex flex-col justify-between min-h-[175px]">
+            {/* Heart Watermark */}
+            <div className="absolute right-8 top-1/2 -translate-y-1/2 pointer-events-none opacity-25">
+              <svg className="w-36 h-36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+              </svg>
             </div>
 
-            <div className="bg-white dark:bg-[#0c756e] p-4 rounded-xl border border-[#d6ebe7] dark:border-slate-800">
-              <div className="text-xs text-[#4d7872] font-medium">Blood Pressure</div>
-              <div className="text-xl font-semibold text-[#132e2b] dark:text-white mt-1">118/76 <span className="text-xs font-normal text-[#6b9690]">mmHg</span></div>
-              <div className="text-[11px] text-[#6b9690] mt-1">Optimal range</div>
+            <div>
+              <span className="bg-white/20 backdrop-blur-sm text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider inline-block">
+                PREVENTIVE CARE
+              </span>
+              <h2 className="text-2xl font-bold leading-tight mt-3 text-white">
+                Take care of yourself,<br />every single day.
+              </h2>
+              <p className="text-xs text-teal-50 max-w-md mt-1.5 leading-relaxed">
+                Monitor your daily vitals, manage appointments, and stay connected with verified medical specialists.
+              </p>
             </div>
 
-            <div className="bg-white dark:bg-[#0c756e] p-4 rounded-xl border border-[#d6ebe7] dark:border-slate-800">
-              <div className="text-xs text-[#4d7872] font-medium">Body Weight</div>
-              <div className="text-xl font-semibold text-[#132e2b] dark:text-white mt-1">68.4 <span className="text-xs font-normal text-[#6b9690]">kg</span></div>
-              <div className="text-[11px] text-[#6b9690] mt-1">Target range</div>
+            <div className="mt-4">
+              <button
+                onClick={() => onNavigateTab('tracking')}
+                className="px-4 py-2 bg-white hover:bg-slate-50 text-[#0c756e] rounded-xl text-xs font-bold inline-flex items-center gap-1.5 shadow-sm transition"
+              >
+                <span>View Health Tracking</span>
+                <span className="text-sm">→</span>
+              </button>
+            </div>
+          </div>
+
+          {/* 4 Biometric Vitals Row (Matching Screenshot Exact Cards) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* 1. Heart Rate */}
+            <div className="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm flex flex-col justify-between">
+              <div className="flex justify-between items-start">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">HEART RATE</span>
+                <div className="w-8 h-8 rounded-xl bg-rose-50 text-rose-500 flex items-center justify-center">
+                  <Activity className="w-4 h-4" />
+                </div>
+              </div>
+              <div className="mt-2">
+                <div className="flex items-baseline">
+                  <span className="text-2xl font-black text-[#132e2b]">72</span>
+                  <span className="text-xs font-bold text-slate-400 ml-1">BPM</span>
+                </div>
+                <div className="text-[11px] font-bold text-emerald-600 mt-2 flex items-center gap-1">
+                  <span>^</span>
+                  <span>Optimal resting rate</span>
+                </div>
+              </div>
             </div>
 
-            <div className="bg-white dark:bg-[#0c756e] p-4 rounded-xl border border-[#d6ebe7] dark:border-slate-800">
-              <div className="text-xs text-[#4d7872] font-medium">Fasting Glucose</div>
-              <div className="text-xl font-semibold text-[#132e2b] dark:text-white mt-1">92 <span className="text-xs font-normal text-[#6b9690]">mg/dL</span></div>
-              <div className="text-[11px] text-[#6b9690] mt-1">Normal fasting</div>
+            {/* 2. Body Weight */}
+            <div className="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm flex flex-col justify-between">
+              <div className="flex justify-between items-start">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">BODY WEIGHT</span>
+                <div className="w-8 h-8 rounded-xl bg-sky-50 text-sky-500 flex items-center justify-center">
+                  <Activity className="w-4 h-4" />
+                </div>
+              </div>
+              <div className="mt-2">
+                <div className="flex items-baseline">
+                  <span className="text-2xl font-black text-[#132e2b]">68.4</span>
+                  <span className="text-xs font-bold text-slate-400 ml-1">kg</span>
+                </div>
+                <div className="text-[11px] font-bold text-emerald-600 mt-2 flex items-center gap-1">
+                  <span>v</span>
+                  <span>-0.6 kg this month</span>
+                </div>
+              </div>
+            </div>
+
+            {/* 3. Daily Hydration */}
+            <div className="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm flex flex-col justify-between">
+              <div className="flex justify-between items-start">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">DAILY HYDRATION</span>
+                <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-500 flex items-center justify-center">
+                  <Activity className="w-4 h-4" />
+                </div>
+              </div>
+              <div className="mt-2">
+                <div className="flex items-baseline">
+                  <span className="text-2xl font-black text-[#132e2b]">5.2</span>
+                  <span className="text-xs font-bold text-slate-400 ml-1">/ 8 glasses</span>
+                </div>
+                <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden mt-3">
+                  <div className="bg-[#0c756e] h-full w-[65%] rounded-full" />
+                </div>
+              </div>
+            </div>
+
+            {/* 4. Sleep Duration */}
+            <div className="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm flex flex-col justify-between">
+              <div className="flex justify-between items-start">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">SLEEP DURATION</span>
+                <div className="w-8 h-8 rounded-xl bg-purple-50 text-purple-500 flex items-center justify-center">
+                  <Activity className="w-4 h-4" />
+                </div>
+              </div>
+              <div className="mt-2">
+                <div className="flex items-baseline">
+                  <span className="text-2xl font-black text-[#132e2b]">7h 24m</span>
+                </div>
+                <div className="text-[11px] font-bold text-emerald-600 mt-2 flex items-center gap-1">
+                  <span>^</span>
+                  <span>92% Sleep quality</span>
+                </div>
+              </div>
             </div>
           </div>
 
           {/* Next Visit & Medications Row */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="bg-white dark:bg-[#0c756e] p-5 rounded-xl border border-[#d6ebe7] dark:border-slate-800">
+            <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
               <div className="flex justify-between items-center mb-3">
-                <h3 className="font-semibold text-xs text-[#234c47] dark:text-slate-300 uppercase tracking-wider">Next Appointment</h3>
-                <button onClick={() => onNavigateTab('appointments')} className="text-xs text-[#0c756e] dark:text-teal-400 hover:underline">View all</button>
+                <h3 className="font-bold text-xs text-[#132e2b] uppercase tracking-wider">Next Appointment</h3>
+                <button onClick={() => onNavigateTab('appointments')} className="text-xs font-bold text-[#0c756e] hover:underline">View all →</button>
               </div>
 
               {nextApt ? (
-                <div className="p-3.5 bg-[#f8fbfb] dark:bg-slate-800/50 rounded-lg border border-[#eef6f5] dark:border-slate-800 flex items-center justify-between">
+                <div className="p-4 bg-[#f8fbfb] rounded-xl border border-[#eef6f5] flex items-center justify-between">
                   <div>
-                    <div className="font-medium text-sm text-[#132e2b] dark:text-white">{nextApt.doctor}</div>
+                    <div className="font-bold text-sm text-[#132e2b]">{nextApt.doctor}</div>
                     <div className="text-xs text-[#4d7872]">{nextApt.specialty} · {nextApt.hospital}</div>
-                    <div className="text-xs text-[#36615b] dark:text-[#6b9690] mt-1">
-                      {nextApt.date} at {nextApt.time} ({nextApt.type})
+                    <div className="text-xs text-[#36615b] mt-1">
+                      📅 {nextApt.date} at ⏰ {nextApt.time} ({nextApt.type})
                     </div>
                   </div>
                   <button
                     onClick={() => setSelectedAppointmentDetails(nextApt)}
-                    className="px-3 py-1 text-xs font-medium bg-white dark:bg-slate-800 border border-[#d6ebe7] dark:border-slate-700 rounded-md hover:bg-[#f8fbfb]"
+                    className="px-3 py-1.5 text-xs font-bold bg-white text-[#0c756e] border border-[#d6ebe7] rounded-lg hover:bg-[#e6f5f2] transition shadow-sm"
                   >
                     Details
                   </button>
                 </div>
               ) : (
-                <p className="text-xs text-[#6b9690] py-4">No upcoming appointments scheduled.</p>
+                <p className="text-xs text-slate-400 py-4">No upcoming appointments scheduled.</p>
               )}
             </div>
 
-            <div className="bg-white dark:bg-[#0c756e] p-5 rounded-xl border border-[#d6ebe7] dark:border-slate-800">
+            <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
               <div className="flex justify-between items-center mb-3">
-                <h3 className="font-semibold text-xs text-[#234c47] dark:text-slate-300 uppercase tracking-wider">Today's Medications</h3>
-                <button onClick={() => onNavigateTab('medicines')} className="text-xs text-[#0c756e] dark:text-teal-400 hover:underline">Manage</button>
+                <h3 className="font-bold text-xs text-[#132e2b] uppercase tracking-wider">Daily Medication Regimen</h3>
+                <button onClick={() => onNavigateTab('medicines')} className="text-xs font-bold text-[#0c756e] hover:underline">Manage →</button>
               </div>
 
-              <div className="space-y-2">
+              <div className="divide-y divide-[#eef6f5]">
                 {medicines.slice(0, 3).map((m) => (
-                  <div key={m.id} className="p-2.5 bg-[#f8fbfb] dark:bg-slate-800/50 rounded-lg border border-[#eef6f5] dark:border-slate-800 flex items-center justify-between">
+                  <div key={m.id} className="py-2.5 flex items-center justify-between">
                     <div>
-                      <div className="text-xs font-medium text-[#132e2b] dark:text-white">{m.name} {m.dosage}</div>
-                      <div className="text-[11px] text-[#4d7872]">{m.timing}</div>
+                      <div className="font-bold text-xs text-[#132e2b]">{m.name}</div>
+                      <div className="text-[11px] text-[#4d7872]">{m.dosage} · {m.timing}</div>
                     </div>
                     <button
                       onClick={() => toggleMedTaken(m.id)}
-                      className={`text-xs font-medium px-2.5 py-1 rounded transition ${
+                      className={
                         m.takenToday
-                          ? 'bg-[#e6f5f2] text-[#0c756e] dark:bg-teal-950 dark:text-teal-300'
-                          : 'bg-white dark:bg-slate-800 border border-[#d6ebe7] dark:border-slate-700 text-[#36615b]'
-                      }`}
+                          ? 'px-3 py-1 rounded-lg text-xs font-bold transition bg-[#e6f5f2] text-[#0c756e] border border-[#cbe7e2]'
+                          : 'px-3 py-1 rounded-lg text-xs font-bold transition bg-[#0c756e] text-white hover:bg-[#095e58]'
+                      }
                     >
                       {m.takenToday ? '✓ Taken' : 'Mark done'}
                     </button>
