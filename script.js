@@ -1,18 +1,115 @@
 /**
  * CarePlus Healthcare Portal - Core Application Script
- * Frontend-only application with complete local state and localStorage persistence.
+ * Frontend-only application with authentic real stock photography,
+ * complete local state and localStorage persistence.
  */
 
-// --- Default Initial Data ---
+// --- Default Initial Data (Using authentic stock photography from verified human photographers) ---
 const DEFAULT_DOCTORS = [
-  { id: 'doc-1', name: 'Dr. Arjun Rao', spec: 'Cardiologist', rating: '4.9', exp: '14 years', fee: 800, hospital: 'CarePlus Heart Center, Indiranagar', initials: 'AR', bio: 'Senior Consultant Cardiologist specializing in preventive cardiology, echocardiography, and lipid disorders.' },
-  { id: 'doc-2', name: 'Dr. Priya Sharma', spec: 'Dermatologist', rating: '4.8', exp: '10 years', fee: 650, hospital: 'Skin & Aesthetics Clinic, Koramangala', initials: 'PS', bio: 'Clinical dermatologist with expertise in allergic skin conditions, acne therapies, and trichology.' },
-  { id: 'doc-3', name: 'Dr. Kiran Kumar', spec: 'Neurologist', rating: '4.9', exp: '16 years', fee: 1000, hospital: 'Apollo Neurosciences, Bannerghatta', initials: 'KK', bio: 'Neurologist focused on migraine management, stroke rehabilitation, and neuro-muscular health.' },
-  { id: 'doc-4', name: 'Dr. Ananya Singh', spec: 'Pediatrician', rating: '4.8', exp: '9 years', fee: 600, hospital: 'Rainbow Childrens Center, Whitefield', initials: 'AS', bio: 'Child health specialist dedicated to neonatal care, developmental milestones, and pediatric vaccinations.' },
-  { id: 'doc-5', name: 'Dr. Rahul Mehta', spec: 'Orthopedic Surgeon', rating: '4.7', exp: '12 years', fee: 750, hospital: 'CarePlus Joint & Spine Clinic, MG Road', initials: 'RM', bio: 'Orthopedic surgeon specializing in sports injuries, arthroscopy, and joint replacement rehabilitation.' },
-  { id: 'doc-6', name: 'Dr. Sneha Reddy', spec: 'General Physician', rating: '4.9', exp: '11 years', fee: 500, hospital: 'City Care Clinic, HSR Layout', initials: 'SR', bio: 'Family physician with deep expertise in metabolic health, hypertension, and holistic primary care.' },
-  { id: 'doc-7', name: 'Dr. Rajesh Nambiar', spec: 'Gastroenterologist', rating: '4.8', exp: '15 years', fee: 900, hospital: 'Manipal Digestive Center, Old Airport Rd', initials: 'RN', bio: 'Consultant gastroenterologist specializing in liver wellness, endoscopy, and inflammatory bowel disease.' },
-  { id: 'doc-8', name: 'Dr. Meera Iyer', spec: 'Ophthalmologist', rating: '4.9', exp: '13 years', fee: 700, hospital: 'Narayana Eye Hospital, Rajajinagar', initials: 'MI', bio: 'Ophthalmic surgeon specializing in refractive laser procedures, glaucoma monitoring, and diabetic retinopathy.' }
+  {
+    id: 'doc-1',
+    name: 'Dr. Arjun Rao',
+    spec: 'Cardiologist',
+    rating: '4.9',
+    exp: '14 years',
+    fee: 800,
+    hospital: 'CarePlus Heart Center, Indiranagar',
+    initials: 'AR',
+    photo: 'assets/images/doctors/dr_arjun_rao.jpg',
+    fallbackPhoto: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=300&q=80',
+    bio: 'Senior Consultant Cardiologist specializing in preventive cardiology, echocardiography, and lipid disorders.'
+  },
+  {
+    id: 'doc-2',
+    name: 'Dr. Priya Sharma',
+    spec: 'Dermatologist',
+    rating: '4.8',
+    exp: '10 years',
+    fee: 650,
+    hospital: 'Skin & Aesthetics Clinic, Koramangala',
+    initials: 'PS',
+    photo: 'assets/images/doctors/dr_priya_sharma.jpg',
+    fallbackPhoto: 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=300&q=80',
+    bio: 'Clinical dermatologist with expertise in allergic skin conditions, acne therapies, and trichology.'
+  },
+  {
+    id: 'doc-3',
+    name: 'Dr. Kiran Kumar',
+    spec: 'Neurologist',
+    rating: '4.9',
+    exp: '16 years',
+    fee: 1000,
+    hospital: 'Apollo Neurosciences, Bannerghatta',
+    initials: 'KK',
+    photo: 'assets/images/doctors/dr_kiran_kumar.jpg',
+    fallbackPhoto: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=300&q=80',
+    bio: 'Neurologist focused on migraine management, stroke rehabilitation, and neuro-muscular health.'
+  },
+  {
+    id: 'doc-4',
+    name: 'Dr. Ananya Singh',
+    spec: 'Pediatrician',
+    rating: '4.8',
+    exp: '9 years',
+    fee: 600,
+    hospital: 'Rainbow Childrens Center, Whitefield',
+    initials: 'AS',
+    photo: 'assets/images/doctors/dr_ananya_singh.jpg',
+    fallbackPhoto: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=300&q=80',
+    bio: 'Child health specialist dedicated to neonatal care, developmental milestones, and pediatric vaccinations.'
+  },
+  {
+    id: 'doc-5',
+    name: 'Dr. Rahul Mehta',
+    spec: 'Orthopedic Surgeon',
+    rating: '4.7',
+    exp: '12 years',
+    fee: 750,
+    hospital: 'CarePlus Joint & Spine Clinic, MG Road',
+    initials: 'RM',
+    photo: 'assets/images/doctors/dr_rahul_mehta.jpg',
+    fallbackPhoto: 'https://images.unsplash.com/photo-1622902046580-2b47f47f5471?auto=format&fit=crop&w=300&q=80',
+    bio: 'Orthopedic surgeon specializing in sports injuries, arthroscopy, and joint replacement rehabilitation.'
+  },
+  {
+    id: 'doc-6',
+    name: 'Dr. Sneha Reddy',
+    spec: 'General Physician',
+    rating: '4.9',
+    exp: '11 years',
+    fee: 500,
+    hospital: 'City Care Clinic, HSR Layout',
+    initials: 'SR',
+    photo: 'assets/images/doctors/dr_sneha_reddy.jpg',
+    fallbackPhoto: 'https://images.unsplash.com/photo-1651008376811-b90baee60c1f?auto=format&fit=crop&w=300&q=80',
+    bio: 'Family physician with deep expertise in metabolic health, hypertension, and holistic primary care.'
+  },
+  {
+    id: 'doc-7',
+    name: 'Dr. Rajesh Nambiar',
+    spec: 'Gastroenterologist',
+    rating: '4.8',
+    exp: '15 years',
+    fee: 900,
+    hospital: 'Manipal Digestive Center, Old Airport Rd',
+    initials: 'RN',
+    photo: 'assets/images/doctors/dr_rajesh_nambiar.jpg',
+    fallbackPhoto: 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&w=300&q=80',
+    bio: 'Consultant gastroenterologist specializing in liver wellness, endoscopy, and inflammatory bowel disease.'
+  },
+  {
+    id: 'doc-8',
+    name: 'Dr. Meera Iyer',
+    spec: 'Ophthalmologist',
+    rating: '4.9',
+    exp: '13 years',
+    fee: 700,
+    hospital: 'Narayana Eye Hospital, Rajajinagar',
+    initials: 'MI',
+    photo: 'assets/images/doctors/dr_meera_iyer.jpg',
+    fallbackPhoto: 'https://images.unsplash.com/photo-1584467735815-f778f274e296?auto=format&fit=crop&w=300&q=80',
+    bio: 'Ophthalmic surgeon specializing in refractive laser procedures, glaucoma monitoring, and diabetic retinopathy.'
+  }
 ];
 
 const DEFAULT_APPOINTMENTS = [
@@ -62,6 +159,8 @@ const DEFAULT_ARTICLES = [
     category: 'Nutrition',
     author: 'Dr. Meenakshi Sundaram, Clinical Nutritionist',
     readMinutes: 5,
+    photo: 'assets/images/articles/nutrition.jpg',
+    fallbackPhoto: 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=600&q=80',
     summary: 'Practical strategies for creating nutrient-dense meals that stabilize blood sugar and fuel sustained energy throughout the day.',
     takeaways: ['Fill half your plate with colorful vegetables', 'Prioritize whole protein sources at each meal', 'Incorporate unsaturated fats like extra virgin olive oil and nuts', 'Maintain hydration of 2.5-3 liters per day'],
     content: 'Evidence-based nutrition begins with foundational dietary diversity. Clinical research consistently shows that a dietary pattern rich in prebiotic soluble fiber, polyphenol-dense vegetables, and essential fatty acids supports optimal lipid homeostasis and gut microbiome resilience.\n\nWhen designing meals, focus on the 50-25-25 plate architecture: 50% non-starchy cruciferous and green vegetables, 25% clean bioavailable protein (lentils, fish, poultry, tofu), and 25% low-glycemic complex carbohydrates (quinoa, millets, brown rice, sweet potatoes).'
@@ -72,6 +171,8 @@ const DEFAULT_ARTICLES = [
     category: 'Sleep',
     author: 'Dr. Kiran Kumar, Neurologist',
     readMinutes: 6,
+    photo: 'assets/images/articles/sleep.jpg',
+    fallbackPhoto: 'https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?auto=format&fit=crop&w=600&q=80',
     summary: 'How consistent circadian timing and bedtime light mitigation dramatically optimize deep slow-wave sleep and cellular repair.',
     takeaways: ['Keep a consistent wake-up time 7 days a week', 'Dim blue light exposure 90 minutes before bedtime', 'Maintain bedroom temperature between 18-20°C', 'Avoid caffeine within 8 hours of sleep'],
     content: 'Sleep architecture is governed by two complementary physiological mechanisms: circadian rhythmicity (Process C) and homeostatic sleep pressure (Process S). Deep non-REM sleep serves as the primary window for glymphatic cerebral toxin clearance and protein synthesis.\n\nTo optimize sleep quality, morning sunlight exposure within 30 minutes of waking sets the master suprachiasmatic nucleus clock, priming melatonin secretion approximately 14 hours later.'
@@ -82,6 +183,8 @@ const DEFAULT_ARTICLES = [
     category: 'Fitness',
     author: 'CarePlus Sports Medicine Advisory',
     readMinutes: 4,
+    photo: 'assets/images/articles/fitness.jpg',
+    fallbackPhoto: 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&w=600&q=80',
     summary: 'Why non-exercise activity thermogenesis (NEAT) and zone 2 aerobic conditioning are crucial for metabolic and vascular longevity.',
     takeaways: ['Aim for 7,500-10,000 functional daily steps', 'Incorporate 150 minutes of conversational Zone 2 cardio weekly', 'Perform compound resistance training twice a week', 'Take 3-minute walking breaks after sitting for 60 minutes'],
     content: 'Sedentary physiology impairs capillary endothelial nitric oxide production and lipoprotein lipase activity. Integrating intermittent movement throughout the workday significantly attenuates postprandial glucose spikes.\n\nCombining moderate aerobic conditioning with progressive resistance exercises preserves lean muscle mass, improves bone mineral density, and supports lifelong mobility.'
@@ -92,6 +195,8 @@ const DEFAULT_ARTICLES = [
     category: 'Mental Health',
     author: 'Dr. Shalini Raman, Clinical Psychologist',
     readMinutes: 5,
+    photo: 'assets/images/articles/mental_health.jpg',
+    fallbackPhoto: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=600&q=80',
     summary: 'Evidence-based cognitive reframing, vagal nerve activation, and physiological sigh breathing to regulate the autonomic nervous system.',
     takeaways: ['Practice 4-7-8 or double-inhale physiological sigh breathing', 'Establish dedicated tech-free mindfulness blocks', 'Maintain social connection and peer dialogue', 'Schedule periodic clinical mental health check-ins'],
     content: 'Chronic sympathetic nervous system overactivation leads to elevated cortisol and inflammatory cytokines. Activating parasympathetic tone via diaphragmatic breathing and structured mindfulness meditation facilitates heart rate variability (HRV) recovery.\n\nRegular cognitive boundary-setting promotes neuroplasticity, mood equilibrium, and executive cognitive resilience.'
@@ -102,6 +207,8 @@ const DEFAULT_ARTICLES = [
     category: 'Heart Health',
     author: 'Dr. Arjun Rao, Consultant Cardiologist',
     readMinutes: 7,
+    photo: 'assets/images/articles/heart_health.jpg',
+    fallbackPhoto: 'https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=600&q=80',
     summary: 'A clinician guide to interpreting systolic/diastolic numbers, ApoB, triglycerides, and lifestyle interventions for arterial health.',
     takeaways: ['Target resting blood pressure below 120/80 mmHg', 'Monitor non-HDL cholesterol and triglyceride-to-HDL ratios', 'Reduce processed sodium and trans-fat consumption', 'Undergo periodic electrocardiogram and screening checkups'],
     content: 'Cardiovascular wellness requires understanding vascular dynamics. Systolic blood pressure measures arterial wall tension during cardiac contraction, while diastolic pressure measures resting arterial resistance.\n\nEarly lifestyle optimization—including dietary potassium intake, regular cardiovascular exercise, and stress management—prevents arterial stiffness and preserves endothelial integrity.'
@@ -125,7 +232,9 @@ const DEFAULT_PROFILE = {
   gender: 'Male',
   bloodGroup: 'O Positive (O+)',
   address: 'Indiranagar 100ft Rd, Bengaluru, Karnataka 560038',
-  emergencyContact: 'Farhana Basha (+91 98765 11223)'
+  emergencyContact: 'Farhana Basha (+91 98765 11223)',
+  photo: 'assets/images/profile/vaseem_basha.jpg',
+  fallbackPhoto: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80'
 };
 
 const DEFAULT_EMERGENCY_HOSPITALS = [
@@ -139,19 +248,41 @@ const DEFAULT_EMERGENCY_HOSPITALS = [
 class StateManager {
   constructor() {
     this.state = {
-      doctors: this.load('doctors', DEFAULT_DOCTORS),
+      doctors: this.migrateDoctors(this.load('doctors', DEFAULT_DOCTORS)),
       appointments: this.load('appointments', DEFAULT_APPOINTMENTS),
       medicines: this.load('medicines', DEFAULT_MEDICINES),
       records: this.load('records', DEFAULT_RECORDS),
       labTests: this.load('labTests', DEFAULT_LAB_TESTS),
       metrics: this.load('metrics', DEFAULT_METRICS),
-      articles: this.load('articles', DEFAULT_ARTICLES),
+      articles: this.migrateArticles(this.load('articles', DEFAULT_ARTICLES)),
       notifications: this.load('notifications', DEFAULT_NOTIFICATIONS),
-      profile: this.load('profile', DEFAULT_PROFILE),
+      profile: this.migrateProfile(this.load('profile', DEFAULT_PROFILE)),
       settings: this.load('settings', { appearance: 'system', reminders: true, medAlerts: true, emailAlerts: true, privacy: false }),
       activeAppointmentTab: 'all',
       activeRecordCategory: 'all',
       activeArticleCategory: 'all'
+    };
+  }
+
+  migrateDoctors(docs) {
+    return docs.map(d => {
+      const match = DEFAULT_DOCTORS.find(def => def.id === d.id);
+      return match ? { ...d, photo: match.photo, fallbackPhoto: match.fallbackPhoto } : d;
+    });
+  }
+
+  migrateArticles(arts) {
+    return arts.map(a => {
+      const match = DEFAULT_ARTICLES.find(def => def.id === a.id);
+      return match ? { ...a, photo: match.photo, fallbackPhoto: match.fallbackPhoto } : a;
+    });
+  }
+
+  migrateProfile(prof) {
+    return {
+      ...prof,
+      photo: prof.photo || DEFAULT_PROFILE.photo,
+      fallbackPhoto: prof.fallbackPhoto || DEFAULT_PROFILE.fallbackPhoto
     };
   }
 
@@ -286,14 +417,22 @@ function renderDashboard() {
     greetEl.textContent = `${timeOfDay}, ${firstName}`;
   }
 
-  // Render Upcoming Appointment on Dashboard
+  // Render Upcoming Appointment on Dashboard with Doctor's authentic photograph
   const nextAppt = App.state.appointments.find(a => a.status === 'Confirmed');
   const apptContainer = document.getElementById('dashNextAppointment');
   if (apptContainer) {
     if (nextAppt) {
+      const matchedDoctor = App.state.doctors.find(d => d.name === nextAppt.doctor);
+      const doctorPhoto = matchedDoctor ? matchedDoctor.photo : '';
+      const doctorFallback = matchedDoctor ? matchedDoctor.fallbackPhoto : '';
+      const initials = nextAppt.doctor.replace('Dr. ', '').split(' ').map(n=>n[0]).join('');
+
       apptContainer.innerHTML = `
         <div class="appointment-item">
-          <div class="doc-badge-avatar">${nextAppt.doctor.replace('Dr. ', '').split(' ').map(n=>n[0]).join('')}</div>
+          <div class="doc-avatar-wrap" style="width:46px;height:46px;">
+            ${doctorPhoto ? `<img src="${doctorPhoto}" alt="${nextAppt.doctor}" class="doc-avatar-img" style="width:46px;height:46px;" onerror="this.onerror=null; if(this.src!=='${doctorFallback}'){this.src='${doctorFallback}'}else{this.style.display='none'; this.nextElementSibling.style.display='grid';}" loading="lazy">` : ''}
+            <div class="doc-badge-avatar" ${doctorPhoto ? 'style="display:none;"' : ''}>${initials}</div>
+          </div>
           <div>
             <strong>${nextAppt.doctor}</strong>
             <p>${nextAppt.spec} · ${nextAppt.hospital || 'Clinical Wing'}</p>
@@ -377,7 +516,7 @@ function updateActivityChart(range) {
   daysContainer.innerHTML = daysHtml;
 }
 
-// --- Doctors Module ---
+// --- Doctors Module (Authentic Physician Photography & Monogram Fallback) ---
 function renderDoctors() {
   const grid = document.getElementById('doctorGrid');
   if (!grid) return;
@@ -410,7 +549,10 @@ function renderDoctors() {
     <div class="card doctor-card">
       <div>
         <div class="doctor-top">
-          <div class="doc-avatar-large">${d.initials}</div>
+          <div class="doc-avatar-wrap">
+            <img src="${d.photo}" alt="${d.name}" class="doc-avatar-img" onerror="this.onerror=null; if(this.src!=='${d.fallbackPhoto}'){this.src='${d.fallbackPhoto}'}else{this.style.display='none'; this.nextElementSibling.style.display='grid';}" loading="lazy">
+            <div class="doc-avatar-large doc-avatar-fallback" style="display:none;">${d.initials}</div>
+          </div>
           <div>
             <h3>${d.name}</h3>
             <p>${d.spec}</p>
@@ -441,7 +583,10 @@ function openDoctorProfile(id) {
 
   openModal(`
     <div style="display:flex;gap:18px;align-items:flex-start;margin-bottom:16px;">
-      <div class="doc-avatar-large" style="width:72px;height:72px;font-size:22px;">${d.initials}</div>
+      <div class="doc-avatar-wrap" style="width:72px;height:72px;">
+        <img src="${d.photo}" alt="${d.name}" class="doc-modal-avatar-img" onerror="this.onerror=null; if(this.src!=='${d.fallbackPhoto}'){this.src='${d.fallbackPhoto}'}else{this.style.display='none'; this.nextElementSibling.style.display='grid';}" loading="lazy">
+        <div class="doc-avatar-large doc-avatar-fallback" style="display:none;width:72px;height:72px;font-size:22px;">${d.initials}</div>
+      </div>
       <div>
         <h2>${d.name}</h2>
         <p class="muted">${d.spec} · ${d.exp} clinical experience</p>
@@ -1462,7 +1607,7 @@ function exportMetrics() {
   toast('Biometric logs exported');
 }
 
-// --- Health Articles Module ---
+// --- Health Articles Module (Authentic Real Photography & Clinical Overviews) ---
 function filterArticles(cat, btn) {
   App.state.activeArticleCategory = cat;
   document.querySelectorAll('#articleTabs .tab').forEach(t => t.classList.remove('active'));
@@ -1483,7 +1628,10 @@ function renderArticles() {
   grid.innerHTML = list.map(a => `
     <div class="card article-card">
       <div class="article-header-banner">
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10M6 10h10M6 14h6"/></svg>
+        <img src="${a.photo}" alt="${a.title}" class="article-img" onerror="this.onerror=null; if(this.src!=='${a.fallbackPhoto}'){this.src='${a.fallbackPhoto}'}else{this.style.display='none'; this.nextElementSibling.style.display='flex';}" loading="lazy">
+        <div class="article-fallback-art" style="display:none;width:100%;height:100%;align-items:center;justify-content:center;background:var(--bg-subtle);">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10M6 10h10M6 14h6"/></svg>
+        </div>
       </div>
       <div class="article-body">
         <div>
@@ -1514,6 +1662,9 @@ function openArticleReader(id) {
   ` : '';
 
   openModal(`
+    <div style="border-radius:var(--radius-md);overflow:hidden;margin-bottom:16px;height:180px;background:var(--bg-subtle);">
+      <img src="${a.photo}" alt="${a.title}" style="width:100%;height:100%;object-fit:cover;" onerror="this.onerror=null; this.src='${a.fallbackPhoto}';">
+    </div>
     <span class="pill" style="margin-bottom:8px;">${a.category} · ${a.readMinutes} MIN READ</span>
     <h2>${a.title}</h2>
     <p class="muted" style="font-size:12px;margin-bottom:14px;">Author: ${a.author}</p>
@@ -1603,14 +1754,28 @@ Please present this medical card to first responders or ER triage.
   toast('Emergency Medical Card downloaded.');
 }
 
-// --- Profile Module ---
+// --- Profile Module (Authentic Portrait & Monogram Fallback) ---
 function renderProfile() {
   const p = App.state.profile;
   const initials = p.name.split(' ').map(n => n[0]).join('');
+  const photoUrl = p.photo || 'assets/images/profile/vaseem_basha.jpg';
+  const photoFallback = p.fallbackPhoto || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80';
 
-  document.querySelectorAll('#topAvatar, #profileBigAvatar').forEach(el => {
-    if (el) el.textContent = initials;
-  });
+  const topAvatarEl = document.getElementById('topAvatar');
+  if (topAvatarEl) {
+    topAvatarEl.innerHTML = `
+      <img src="${photoUrl}" alt="${p.name}" class="avatar-photo" onerror="this.onerror=null; if(this.src!=='${photoFallback}'){this.src='${photoFallback}'}else{this.style.display='none'; this.nextElementSibling.style.display='block';}" loading="lazy">
+      <span class="avatar-initials" style="display:none;">${initials}</span>
+    `;
+  }
+
+  const bigAvatarEl = document.getElementById('profileBigAvatar');
+  if (bigAvatarEl) {
+    bigAvatarEl.innerHTML = `
+      <img src="${photoUrl}" alt="${p.name}" class="big-avatar-photo" onerror="this.onerror=null; if(this.src!=='${photoFallback}'){this.src='${photoFallback}'}else{this.style.display='none'; this.nextElementSibling.style.display='block';}" loading="lazy">
+      <span class="avatar-initials" style="display:none;">${initials}</span>
+    `;
+  }
 
   const nameEl = document.getElementById('profileName');
   if (nameEl) nameEl.textContent = p.name;
