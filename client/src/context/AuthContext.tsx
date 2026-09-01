@@ -28,10 +28,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const portalKey = getPortalKey();
-  const tokenStorageKey = `careplus_token_${portalKey}`;
+  const tokenStorageKey = `careplus_session_${portalKey}`;
 
+  // Session-isolated per tab so every new tab starts at the Login page requiring manual credential entry
   const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(localStorage.getItem(tokenStorageKey));
+  const [token, setToken] = useState<string | null>(sessionStorage.getItem(tokenStorageKey));
   const [demoUsers, setDemoUsers] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -66,17 +67,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (valid) {
           setUser(data.user);
         } else {
-          localStorage.removeItem(tokenStorageKey);
+          sessionStorage.removeItem(tokenStorageKey);
           setUser(null);
           setToken(null);
         }
       } else {
-        localStorage.removeItem(tokenStorageKey);
+        sessionStorage.removeItem(tokenStorageKey);
         setUser(null);
         setToken(null);
       }
     } catch {
-      localStorage.removeItem(tokenStorageKey);
+      sessionStorage.removeItem(tokenStorageKey);
       setUser(null);
       setToken(null);
     } finally {
@@ -93,7 +94,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, [portalKey]);
 
-  // Dynamic Login with user-entered Email & Password
+  // Manual Credentials Login
   const loginWithCredentials = async (email: string, pass: string, targetPortalKey: string): Promise<boolean> => {
     setIsLoading(true);
     try {
@@ -119,7 +120,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         setToken(data.token);
         setUser(data.user);
-        localStorage.setItem(tokenStorageKey, data.token);
+        sessionStorage.setItem(tokenStorageKey, data.token);
         return true;
       } else {
         throw new Error(data.message || 'Invalid email or password.');
@@ -146,7 +147,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (data.success && data.user && data.token) {
         setToken(data.token);
         setUser(data.user);
-        localStorage.setItem(tokenStorageKey, data.token);
+        sessionStorage.setItem(tokenStorageKey, data.token);
         return true;
       } else {
         throw new Error(data.message || 'Registration failed.');
@@ -164,7 +165,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const logout = () => {
-    localStorage.removeItem(tokenStorageKey);
+    sessionStorage.removeItem(tokenStorageKey);
     setUser(null);
     setToken(null);
     setIsLoading(false);
