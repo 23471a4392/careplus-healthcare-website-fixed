@@ -259,7 +259,8 @@ router.post('/treatment-plans', authMiddleware, async (req: AuthRequest, res: Re
       include: { doctor: { include: { user: true } } }
     });
 
-    const status = requestSeniorReview ? 'PENDING_APPROVAL' : 'APPROVED';
+    const isSeniorReview = requestSeniorReview || req.body.status === 'PENDING_APPROVAL';
+    const status = isSeniorReview ? 'PENDING_APPROVAL' : 'APPROVED';
 
     const plan = await prisma.treatmentPlan.create({
       data: {
@@ -272,7 +273,7 @@ router.post('/treatment-plans', authMiddleware, async (req: AuthRequest, res: Re
       }
     });
 
-    if (requestSeniorReview && seniorDoc) {
+    if (isSeniorReview && seniorDoc) {
       await sendNotification({
         recipientId: seniorDoc.doctor.user.id,
         senderId: req.user!.id,

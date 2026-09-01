@@ -8,7 +8,9 @@ const router = Router();
 // GET /api/labs/catalog
 router.get('/catalog', async (_req, res) => {
   try {
-    const tests = await prisma.labTest.findMany();
+    const tests = await prisma.labTest.findMany({
+      orderBy: { name: 'asc' }
+    });
     res.json({ success: true, tests });
   } catch (err: any) {
     res.status(500).json({ success: false, message: err.message });
@@ -38,17 +40,26 @@ router.get('/orders', authMiddleware, async (req: AuthRequest, res: Response) =>
       success: true,
       orders: orders.map(o => ({
         id: o.id,
+        testId: o.testId,
+        testCode: o.test.code,
         testName: o.test.name,
         category: o.test.category,
+        price: o.test.price,
+        patientId: o.patientId,
+        patientCode: o.patient.patientCode,
         patientName: `${o.patient.user.firstName} ${o.patient.user.lastName}`,
         patientUserId: o.patient.user.id,
+        doctorId: o.doctorId,
         doctorName: `Dr. ${o.doctor.user.firstName} ${o.doctor.user.lastName}`,
         doctorUserId: o.doctor.user.id,
         status: o.status,
         collectionDate: o.collectionDate,
         sampleMode: o.sampleMode,
+        priority: o.test.category === 'Critical' ? 'Urgent' : 'Normal',
         resultSummary: o.resultSummary,
-        createdAt: o.createdAt
+        completedAt: o.completedAt,
+        createdAt: o.createdAt,
+        updatedAt: o.updatedAt
       }))
     });
   } catch (err: any) {
@@ -59,7 +70,7 @@ router.get('/orders', authMiddleware, async (req: AuthRequest, res: Response) =>
 // POST /api/labs/orders
 router.post('/orders', authMiddleware, async (req: AuthRequest, res: Response) => {
   try {
-    const { testId, patientId, sampleMode, collectionDate } = req.body;
+    const { testId, patientId, sampleMode, collectionDate, appointmentId } = req.body;
     let effectiveDoctorId = req.user?.doctorId;
 
     if (!effectiveDoctorId) {
@@ -91,16 +102,23 @@ router.post('/orders', authMiddleware, async (req: AuthRequest, res: Response) =
         testId: test.id,
         patientId: patient.id,
         doctorId: effectiveDoctorId!,
-        sampleMode: sampleMode || 'Home Collection',
+        sampleMode: sampleMode || 'Hospital Walk-in',
         collectionDate: collectionDate || new Date().toISOString().split('T')[0],
-        status: 'REQUESTED'
+        status: 'PENDING'
+      },
+      include: {
+        test: true,
+        patient: { include: { user: true } },
+        doctor: { include: { user: true } }
       }
     });
 
+    // Real-time socket notification to Lab Technicians
     emitToRole('LAB_TECHNICIAN', 'new_lab_request', {
       orderId: order.id,
       testName: test.name,
-      patientName: `${patient.user.firstName} ${patient.user.lastName}`
+      patientName: `${patient.user.firstName} ${patient.user.lastName}`,
+      doctorName: `Dr. ${order.doctor.user.firstName} ${order.doctor.user.lastName}`
     });
 
     res.status(201).json({ success: true, order });
@@ -109,7 +127,7 @@ router.post('/orders', authMiddleware, async (req: AuthRequest, res: Response) =
   }
 });
 
-// PATCH /api/labs/orders/:id/status
+// PATCH /api/labs/orders/:id/status (Full lifecycle transitions)
 router.patch('/orders/:id/status', authMiddleware, async (req: AuthRequest, res: Response) => {
   try {
     const { status, resultSummary } = req.body;
@@ -130,29 +148,49 @@ router.patch('/orders/:id/status', authMiddleware, async (req: AuthRequest, res:
       where: { id: req.params.id },
       data: {
         status,
-        resultSummary: resultSummary || order.resultSummary,
+        resultSummary: resultSummary !== undefined ? resultSummary : order.resultSummary,
         completedAt: status === 'COMPLETED' ? new Date() : undefined
+      },
+      include: {
+        test: true,
+        patient: { include: { user: true } },
+        doctor: { include: { user: true } }
       }
     });
 
+    // 1. When Lab Technician accepts request -> Alert Doctor
+    if (status === 'ACCEPTED') {
+      await sendNotification({
+        recipientId: order.doctor.user.id,
+        senderId: req.user!.id,
+        type: 'LAB_ACCEPTED',
+        title: 'Lab Request Accepted',
+        message: `Diagnostic order ${order.test.name} for ${order.patient.user.firstName} ${order.patient.user.lastName} has been accepted by Pathology.`,
+        entityType: 'lab_order',
+        entityId: updated.id
+      });
+    }
+
+    // 2. When Lab Report is completed -> Alert Doctor AND Patient
     if (status === 'COMPLETED') {
-      const msg = `Lab results for ${order.test.name} have been processed and uploaded.`;
+      const patientMsg = `Your ${order.test.name} laboratory diagnostic report is ready to view.`;
       await sendNotification({
         recipientId: order.patient.user.id,
         senderId: req.user!.id,
         type: 'LAB_REPORT_READY',
         title: 'Diagnostic Lab Report Ready',
-        message: msg,
+        message: patientMsg,
         entityType: 'lab_result',
         entityId: updated.id
       });
 
+      const doctorMsg = `Diagnostic results for ${order.patient.user.firstName} ${order.patient.user.lastName} (${order.test.name}) have been verified.`;
       await sendNotification({
         recipientId: order.doctor.user.id,
         senderId: req.user!.id,
         type: 'LAB_REPORT_READY',
-        title: 'Patient Lab Report Completed',
-        message: `Results for patient ${order.patient.user.firstName} ${order.patient.user.lastName} are ready.`,
+        title: 'Patient Lab Report Verified',
+        message: doctorMsg,
         entityType: 'lab_result',
         entityId: updated.id
       });

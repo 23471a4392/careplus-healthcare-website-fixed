@@ -8,7 +8,7 @@ import { DoctorDashboard } from './pages/doctor/DoctorDashboard.tsx';
 import { SeniorDoctorDashboard } from './pages/senior-doctor/SeniorDoctorDashboard.tsx';
 import { NurseDashboard } from './pages/nurse/NurseDashboard.tsx';
 import { LabDashboard } from './pages/lab/LabDashboard.tsx';
-import { PortalHub } from './pages/hub/PortalHub.tsx';
+import { HospitalHomePage } from './pages/public/HospitalHomePage.tsx';
 
 export const App: React.FC = () => {
   const { user, isLoading, portalKey } = useAuth();
@@ -17,7 +17,7 @@ export const App: React.FC = () => {
   const pathname = window.location.pathname.toLowerCase();
 
   // Route check
-  const isHub = pathname === '/' || pathname === '';
+  const isHome = pathname === '/' || pathname === '' || pathname === '/home';
   const isPatient = pathname.startsWith('/patient');
   const isDoctor = pathname.startsWith('/doctor');
   const isSenior = pathname.startsWith('/senior');
@@ -27,7 +27,9 @@ export const App: React.FC = () => {
   useEffect(() => {
     if (isPatient || user?.role === 'PATIENT') {
       setActivePage('dashboard');
-    } else if (isDoctor || isSenior || user?.role === 'DOCTOR' || user?.role === 'SENIOR_DOCTOR') {
+    } else if (isDoctor || user?.role === 'DOCTOR') {
+      setActivePage('overview');
+    } else if (isSenior || user?.role === 'SENIOR_DOCTOR') {
       setActivePage('overview');
     } else if (isNurse || user?.role === 'NURSE') {
       setActivePage('inpatient');
@@ -36,30 +38,31 @@ export const App: React.FC = () => {
     }
   }, [pathname, user?.role]);
 
-  if (isHub) {
-    return <PortalHub />;
+  // 1. PUBLIC HOSPITAL HOMEPAGE AT '/'
+  if (isHome) {
+    return <HospitalHomePage />;
   }
 
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#f3f8f7] flex flex-col items-center justify-center text-[#132e2b]">
         <div className="w-10 h-10 border-4 border-[#0c756e] border-t-transparent rounded-full animate-spin mb-4" />
-        <div className="font-bold text-base tracking-tight text-[#0c756e]">CarePlus Portal Loading...</div>
+        <div className="font-bold text-base tracking-tight text-[#0c756e]">Connecting to CarePlus Portal...</div>
       </div>
     );
   }
 
-  // If user is not authenticated for this portal, render the Portal's Credential Login Page
+  // 2. DYNAMIC LOGIN SCREEN WHEN NOT AUTHENTICATED
   if (!user) {
     return <LoginPage portalKey={portalKey} />;
   }
 
   const getPortalLabel = () => {
     if (isPatient) return 'Patient Portal';
-    if (isDoctor) return 'Doctor Portal';
+    if (isDoctor) return 'Physician Portal';
     if (isSenior) return 'Senior Doctor Portal';
-    if (isNurse) return 'Nurse Portal';
-    if (isLab) return 'Lab Technician Portal';
+    if (isNurse) return 'Nurse Station';
+    if (isLab) return 'Diagnostic Lab Portal';
     return user?.role ? user.role.replace('_', ' ') : 'Portal';
   };
 

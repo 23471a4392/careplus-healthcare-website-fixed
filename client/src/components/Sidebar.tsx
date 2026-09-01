@@ -16,7 +16,8 @@ import {
   Bed,
   Stethoscope,
   LogOut,
-  ExternalLink
+  ExternalLink,
+  ShieldCheck
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.tsx';
 
@@ -30,6 +31,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activePage, onSelectPage, port
   const { user, logout } = useAuth();
 
   const getNavItems = () => {
+    // 1. PATIENT NAVIGATION
     if (user?.role === 'PATIENT') {
       return [
         { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -46,7 +48,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ activePage, onSelectPage, port
       ];
     }
 
-    if (user?.role === 'DOCTOR' || user?.role === 'SENIOR_DOCTOR') {
+    // 2. DOCTOR NAVIGATION (Includes Prescriptions & Lab Orders Creation)
+    if (user?.role === 'DOCTOR') {
       return [
         { id: 'overview', label: 'Schedule', icon: LayoutDashboard },
         { id: 'requests', label: 'Appointment Requests', icon: Calendar },
@@ -58,6 +61,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ activePage, onSelectPage, port
       ];
     }
 
+    // 3. SENIOR DOCTOR NAVIGATION (Strictly Focused on Case Review & Governance - No Rx/Lab Management)
+    if (user?.role === 'SENIOR_DOCTOR') {
+      return [
+        { id: 'overview', label: 'Supervision & Reviews', icon: ShieldCheck },
+        { id: 'critical_cases', label: 'Critical Cases', icon: Activity },
+        { id: 'doctors_directory', label: 'Attending Doctors', icon: Users },
+        { id: 'patients', label: 'Patient Charts', icon: FileText },
+        { id: 'profile', label: 'Chief Profile', icon: User }
+      ];
+    }
+
+    // 4. NURSE NAVIGATION
     if (user?.role === 'NURSE') {
       return [
         { id: 'inpatient', label: 'Inpatient Ward', icon: Bed },
@@ -66,6 +81,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activePage, onSelectPage, port
       ];
     }
 
+    // 5. LAB TECHNICIAN NAVIGATION
     if (user?.role === 'LAB_TECHNICIAN') {
       return [
         { id: 'lab_queue', label: 'Orders Queue', icon: ClipboardList },
@@ -108,7 +124,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activePage, onSelectPage, port
           className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-teal-700 bg-teal-50 hover:bg-teal-100 transition"
         >
           <ExternalLink className="w-3.5 h-3.5" />
-          <span>Switch Portal Hub</span>
+          <span>Hospital Home Page</span>
         </a>
         <button
           onClick={logout}
