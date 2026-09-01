@@ -29,7 +29,6 @@ interface SidebarProps {
 export const Sidebar: React.FC<SidebarProps> = ({ activePage, onSelectPage }) => {
   const { user, logout } = useAuth();
 
-  // Role-specific navigation menus
   const getNavItems = () => {
     if (user?.role === 'PATIENT') {
       return [
@@ -39,7 +38,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activePage, onSelectPage }) =>
         { id: 'records', label: 'Health Records', icon: FileText },
         { id: 'medicines', label: 'Medicines', icon: Pill },
         { id: 'labs', label: 'Lab Tests', icon: TestTube },
-        { id: 'tracking', label: 'Health Tracking', icon: Activity },
+        { id: 'tracking', label: 'Vitals Tracking', icon: Activity },
         { id: 'articles', label: 'Health Articles', icon: BookOpen },
         { id: 'emergency', label: 'Emergency', icon: PhoneCall },
         { id: 'profile', label: 'Profile', icon: User },
@@ -49,27 +48,27 @@ export const Sidebar: React.FC<SidebarProps> = ({ activePage, onSelectPage }) =>
 
     if (user?.role === 'DOCTOR' || user?.role === 'SENIOR_DOCTOR') {
       return [
-        { id: 'overview', label: 'Doctor Schedule', icon: LayoutDashboard },
+        { id: 'overview', label: 'Schedule', icon: LayoutDashboard },
         { id: 'requests', label: 'Appointment Requests', icon: Calendar },
-        { id: 'patients', label: 'Assigned Patients', icon: Users },
-        { id: 'prescriptions', label: 'Write Prescription', icon: Pill },
-        { id: 'labs', label: 'Order Lab Tests', icon: TestTube },
+        { id: 'patients', label: 'Patients', icon: Users },
+        { id: 'prescriptions', label: 'Prescriptions', icon: Pill },
+        { id: 'labs', label: 'Lab Orders', icon: TestTube },
         { id: 'treatment_plans', label: 'Treatment Plans', icon: Stethoscope },
-        { id: 'profile', label: 'Profile & Hours', icon: User }
+        { id: 'profile', label: 'Profile', icon: User }
       ];
     }
 
     if (user?.role === 'NURSE') {
       return [
         { id: 'inpatient', label: 'Inpatient Ward', icon: Bed },
-        { id: 'vitals', label: 'Record Vitals', icon: Activity },
+        { id: 'vitals', label: 'Vitals Observation', icon: Activity },
         { id: 'med_schedule', label: 'Medication Roster', icon: Pill }
       ];
     }
 
     if (user?.role === 'LAB_TECHNICIAN') {
       return [
-        { id: 'lab_queue', label: 'Incoming Orders', icon: ClipboardList },
+        { id: 'lab_queue', label: 'Orders Queue', icon: ClipboardList },
         { id: 'lab_results', label: 'Completed Results', icon: CheckCircle },
         { id: 'lab_catalog', label: 'Test Catalog', icon: TestTube }
       ];
@@ -77,7 +76,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activePage, onSelectPage }) =>
 
     if (user?.role === 'PHARMACIST') {
       return [
-        { id: 'pharmacy_queue', label: 'Rx Dispensing Queue', icon: Pill },
+        { id: 'pharmacy_queue', label: 'Prescription Queue', icon: Pill },
         { id: 'inventory', label: 'Medicine Inventory', icon: Package }
       ];
     }
@@ -86,7 +85,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activePage, onSelectPage }) =>
       return [
         { id: 'admin_overview', label: 'Hospital Overview', icon: BarChart3 },
         { id: 'bed_management', label: 'Bed Management', icon: Bed },
-        { id: 'staff_directory', label: 'Staff Roster', icon: Users },
+        { id: 'staff_directory', label: 'Staff Directory', icon: Users },
         { id: 'audit_logs', label: 'System Audit Logs', icon: FileText }
       ];
     }
@@ -112,10 +111,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ activePage, onSelectPage }) =>
   const navItems = getNavItems();
 
   return (
-    <aside className="w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col justify-between shrink-0 min-h-[calc(100vh-6rem)]">
-      <div className="p-4 space-y-1">
-        <div className="px-3 py-2 text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
-          Navigation ({user?.role?.replace('_', ' ')})
+    <aside className="w-56 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col justify-between shrink-0 min-h-[calc(100vh-5rem)]">
+      <div className="p-3 space-y-0.5">
+        <div className="px-3 py-2 text-[11px] font-medium uppercase tracking-wider text-slate-400">
+          Menu
         </div>
 
         {navItems.map((item) => {
@@ -125,25 +124,25 @@ export const Sidebar: React.FC<SidebarProps> = ({ activePage, onSelectPage }) =>
             <button
               key={item.id}
               onClick={() => onSelectPage(item.id)}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition ${
+              className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium transition text-left ${
                 isActive
-                  ? 'bg-[#0c756e] text-white shadow-sm'
-                  : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
+                  ? 'bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-white font-semibold'
+                  : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-slate-200'
               }`}
             >
-              <Icon className="w-4 h-4 shrink-0" />
+              <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-teal-700 dark:text-teal-400' : 'text-slate-400'}`} />
               <span>{item.label}</span>
             </button>
           );
         })}
       </div>
 
-      <div className="p-4 border-t border-slate-200 dark:border-slate-800">
+      <div className="p-3 border-t border-slate-100 dark:border-slate-800">
         <button
           onClick={logout}
-          className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 transition"
+          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-600 hover:text-red-600 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-800 transition"
         >
-          <LogOut className="w-4 h-4" />
+          <LogOut className="w-4 h-4 text-slate-400" />
           <span>Sign Out</span>
         </button>
       </div>

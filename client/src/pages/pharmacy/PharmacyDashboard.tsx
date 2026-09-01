@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext.tsx';
 import { useSocket } from '../../context/SocketContext.tsx';
-import { Pill, Package, Check } from 'lucide-react';
 
 export const PharmacyDashboard: React.FC = () => {
   const { user, token } = useAuth();
@@ -34,7 +33,7 @@ export const PharmacyDashboard: React.FC = () => {
       });
       const data = await res.json();
       if (data.success) {
-        showToast('Prescription Dispensed', `Medicines dispensed to ${patientName}. Patient alerted in real-time.`, 'success');
+        showToast('Dispensed', `Medicines dispensed to ${patientName}.`, 'success');
         fetchPharmacyData();
       }
     } catch (err: any) {
@@ -43,44 +42,36 @@ export const PharmacyDashboard: React.FC = () => {
   };
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-6 animate-slide-up">
-      <div className="bg-purple-900 text-white p-8 rounded-2xl shadow-sm">
-        <span className="text-xs font-bold text-purple-300 uppercase tracking-wider">Hospital Pharmacy Dispensary</span>
-        <h1 className="text-3xl font-extrabold mt-1">{user?.name}</h1>
-        <p className="text-purple-200 text-xs mt-1">Prescription Fulfillment & Controlled Substance Inventory</p>
+    <div className="p-6 max-w-6xl mx-auto space-y-6">
+      <div className="pb-4 border-b border-slate-200 dark:border-slate-800">
+        <h1 className="text-xl font-semibold text-slate-900 dark:text-white">{user?.name}</h1>
+        <p className="text-xs text-slate-500">Hospital Pharmacy Dispensary & Inventory</p>
       </div>
 
-      <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
-        <h3 className="text-sm font-extrabold uppercase tracking-wider text-slate-800 dark:text-white mb-4">
-          Prescription Orders Queue
+      <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800">
+        <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-3">
+          Prescriptions Queue ({prescriptions.length})
         </h3>
 
         {prescriptions.length === 0 ? (
-          <div className="p-8 text-center text-xs text-slate-400">No prescriptions pending dispensing.</div>
+          <p className="text-xs text-slate-400 py-3">No prescriptions in queue.</p>
         ) : (
-          <div className="divide-y divide-slate-100 dark:divide-slate-700">
+          <div className="divide-y divide-slate-100 dark:divide-slate-800">
             {prescriptions.map((rx) => (
-              <div key={rx.id} className="py-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+              <div key={rx.id} className="py-3 flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
                 <div>
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                    rx.status === 'DISPENSED' ? 'bg-emerald-50 text-emerald-700' : 'bg-purple-50 text-purple-700'
-                  }`}>
-                    {rx.status}
-                  </span>
-                  <h4 className="font-bold text-sm text-slate-900 dark:text-white mt-1">
+                  <div className="font-medium text-sm text-slate-900 dark:text-white">
                     {rx.medications.map((m: any) => `${m.name} (${m.dosage})`).join(', ')}
-                  </h4>
-                  <p className="text-xs text-slate-500">Patient: <strong>{rx.patientName}</strong> · Prescribed by: <strong>{rx.doctorName}</strong></p>
-                  <p className="text-xs text-slate-400 mt-0.5">{rx.instructions}</p>
+                  </div>
+                  <p className="text-xs text-slate-500">Patient: {rx.patientName} · Doctor: {rx.doctorName}</p>
                 </div>
 
                 {rx.status !== 'DISPENSED' && (
                   <button
                     onClick={() => handleDispense(rx.id, rx.patientName)}
-                    className="px-4 py-2 bg-purple-700 hover:bg-purple-800 text-white font-bold text-xs rounded-xl shadow-sm flex items-center gap-1.5"
+                    className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-medium"
                   >
-                    <Check className="w-3.5 h-3.5" />
-                    <span>Dispense & Alert Patient</span>
+                    Dispense
                   </button>
                 )}
               </div>
@@ -89,22 +80,19 @@ export const PharmacyDashboard: React.FC = () => {
         )}
       </div>
 
-      {/* Inventory Stock */}
-      <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
-        <h3 className="text-sm font-extrabold uppercase tracking-wider text-slate-800 dark:text-white mb-4">
-          Medicine Inventory Levels
+      <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800">
+        <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-3">
+          Inventory Levels
         </h3>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
           {inventory.map((item) => (
-            <div key={item.id} className="p-4 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
-              <span className="text-[10px] font-bold text-slate-400 uppercase">{item.category}</span>
-              <div className="font-bold text-sm text-slate-900 dark:text-white mt-0.5">{item.name}</div>
-              <div className="mt-2 flex justify-between items-center">
+            <div key={item.id} className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-100 dark:border-slate-800">
+              <span className="text-[10px] text-slate-400 uppercase">{item.category}</span>
+              <div className="font-medium text-slate-900 dark:text-white mt-0.5">{item.name}</div>
+              <div className="mt-1.5 flex justify-between">
                 <span className="text-slate-500">Stock:</span>
-                <strong className={`font-extrabold ${item.quantity < 20 ? 'text-red-500' : 'text-emerald-600'}`}>
-                  {item.quantity} {item.unit}
-                </strong>
+                <span className="font-semibold text-slate-900 dark:text-white">{item.quantity} {item.unit}</span>
               </div>
             </div>
           ))}

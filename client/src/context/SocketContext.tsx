@@ -147,7 +147,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           <div
             key={t.id}
             onClick={() => removeToast(t.id)}
-            className={`pointer-events-auto shadow-xl rounded-xl p-4 text-sm border flex items-start gap-3 transition-all transform translate-y-0 cursor-pointer animate-slide-up ${
+            className={`pointer-events-auto shadow-xl rounded-xl p-4 text-sm border flex items-start gap-3 transition-all transform translate-y-0 cursor-pointer  ${
               t.type === 'alert'
                 ? 'bg-red-50 text-red-900 border-red-200 dark:bg-red-950 dark:text-red-200 dark:border-red-800'
                 : t.type === 'success'
