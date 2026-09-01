@@ -5,7 +5,7 @@ import { Modal } from '../../components/Modal.tsx';
 
 export const LabDashboard: React.FC = () => {
   const { user, token } = useAuth();
-  const { showToast } = useSocket();
+  const { showToast, realtimeVersion } = useSocket();
   const [orders, setOrders] = useState<any[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
   const [resultSummary, setResultSummary] = useState('All parameters within standard clinical reference intervals.');
@@ -24,7 +24,7 @@ export const LabDashboard: React.FC = () => {
 
   useEffect(() => {
     if (token) fetchOrders();
-  }, [token]);
+  }, [token, realtimeVersion]);
 
   const handleUpdateStatus = async (id: string, status: string, summary?: string) => {
     try {

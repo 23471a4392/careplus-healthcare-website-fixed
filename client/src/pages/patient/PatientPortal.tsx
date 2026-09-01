@@ -28,7 +28,7 @@ interface PatientPortalProps {
 
 export const PatientPortal: React.FC<PatientPortalProps> = ({ activeTab, onNavigateTab }) => {
   const { user, token, updateUserAvatar } = useAuth();
-  const { showToast } = useSocket();
+  const { showToast, realtimeVersion } = useSocket();
 
   // Data State
   const [doctors, setDoctors] = useState<Doctor[]>([]);
@@ -188,7 +188,7 @@ export const PatientPortal: React.FC<PatientPortalProps> = ({ activeTab, onNavig
 
   useEffect(() => {
     if (token) loadData();
-  }, [token]);
+  }, [token, realtimeVersion]);
 
   // Slot calculations
   useEffect(() => {

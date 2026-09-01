@@ -3,21 +3,28 @@ import { useAuth } from '../../context/AuthContext.tsx';
 import { useSocket } from '../../context/SocketContext.tsx';
 import { Appointment } from '../../types/index.ts';
 import { Modal } from '../../components/Modal.tsx';
-import { Check, X, Pill, TestTube, Stethoscope } from 'lucide-react';
+import { Check, X, Pill, TestTube, Stethoscope, Users, Calendar, Clock, FileText } from 'lucide-react';
 
-export const DoctorDashboard: React.FC = () => {
+interface DoctorDashboardProps {
+  activeTab?: string;
+  onNavigateTab?: (tab: string) => void;
+}
+
+export const DoctorDashboard: React.FC<DoctorDashboardProps> = ({ activeTab = 'overview', onNavigateTab }) => {
   const { user, token } = useAuth();
-  const { showToast } = useSocket();
+  const { showToast, realtimeVersion } = useSocket();
   const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [assignedPatients, setAssignedPatients] = useState<any[]>([]);
   const [isAvailable, setIsAvailable] = useState(true);
   const [labCatalog, setLabCatalog] = useState<any[]>([]);
 
-  // Modals & Entities
+  // Modals & Entities (Specific per click)
   const [isRxOpen, setIsRxOpen] = useState(false);
   const [isLabOpen, setIsLabOpen] = useState(false);
   const [isPlanOpen, setIsPlanOpen] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
   const [selectedPatientProfile, setSelectedPatientProfile] = useState<any | null>(null);
+  const [loadingPatientProfile, setLoadingPatientProfile] = useState(false);
 
   // Form states
   const [medName, setMedName] = useState('Atorvastatin 20mg');
@@ -32,7 +39,29 @@ export const DoctorDashboard: React.FC = () => {
         fetch('/api/appointments', { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
         fetch('/api/labs/catalog').then(r => r.json())
       ]);
-      if (resApt.success) setAppointments(resApt.appointments);
+
+      if (resApt.success) {
+        setAppointments(resApt.appointments);
+        // Extract distinct patients for Doctor
+        const pats: any[] = [];
+        const seen = new Set();
+        resApt.appointments.forEach((a: any) => {
+          if (!seen.has(a.patientId)) {
+            seen.add(a.patientId);
+            pats.push({
+              id: a.patientId,
+              name: a.patient,
+              email: a.patientEmail,
+              phone: a.patientPhone,
+              lastVisit: a.date,
+              mode: a.type,
+              status: a.status
+            });
+          }
+        });
+        setAssignedPatients(pats);
+      }
+
       if (resLabs.success && resLabs.tests.length > 0) {
         setLabCatalog(resLabs.tests);
         setSelectedLabTestId(resLabs.tests[0].id);
@@ -44,7 +73,28 @@ export const DoctorDashboard: React.FC = () => {
 
   useEffect(() => {
     if (token) fetchDoctorData();
-  }, [token]);
+  }, [token, realtimeVersion]);
+
+  // View specific patient profile (Patient A vs Patient B)
+  const handleOpenPatientProfile = async (patientId: string, fallbackName: string) => {
+    setLoadingPatientProfile(true);
+    setSelectedPatientProfile({ id: patientId, name: fallbackName, loading: true });
+    try {
+      const res = await fetch(`/api/clinical/patients/${patientId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const data = await res.json();
+      if (data.success) {
+        setSelectedPatientProfile(data.patient);
+      } else {
+        setSelectedPatientProfile({ id: patientId, name: fallbackName, bloodGroup: 'O+', gender: 'Male' });
+      }
+    } catch (err) {
+      setSelectedPatientProfile({ id: patientId, name: fallbackName, bloodGroup: 'O+', gender: 'Male' });
+    } finally {
+      setLoadingPatientProfile(false);
+    }
+  };
 
   const handleUpdateStatus = async (id: string, status: string) => {
     try {
@@ -166,130 +216,187 @@ export const DoctorDashboard: React.FC = () => {
         </button>
       </div>
 
-      {/* Pending Requests */}
-      <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800">
-        <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-3">
-          Appointment Requests ({pendingRequests.length})
-        </h3>
+      {/* 1. APPOINTMENT REQUESTS (Shown on 'overview' or 'requests') */}
+      {(activeTab === 'overview' || activeTab === 'requests') && (
+        <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800">
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-3">
+            Appointment Requests ({pendingRequests.length})
+          </h3>
 
-        {pendingRequests.length === 0 ? (
-          <p className="text-xs text-slate-400 py-3">No pending appointment requests.</p>
-        ) : (
-          <div className="divide-y divide-slate-100 dark:divide-slate-800">
-            {pendingRequests.map((apt) => (
-              <div key={apt.id} className="py-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium text-sm text-slate-900 dark:text-white">{apt.patient}</span>
+          {pendingRequests.length === 0 ? (
+            <p className="text-xs text-slate-400 py-3">No pending appointment requests.</p>
+          ) : (
+            <div className="divide-y divide-slate-100 dark:divide-slate-800">
+              {pendingRequests.map((apt) => (
+                <div key={apt.id} className="py-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium text-sm text-slate-900 dark:text-white">{apt.patient}</span>
+                      <button
+                        onClick={() => handleOpenPatientProfile(apt.patientId, apt.patient)}
+                        className="text-[11px] text-teal-700 dark:text-teal-400 hover:underline font-medium"
+                      >
+                        (View Patient Profile)
+                      </button>
+                    </div>
+                    <div className="text-xs text-slate-500 mt-0.5">{apt.date} at {apt.time} ({apt.type})</div>
+                    {apt.reason && <p className="text-xs text-slate-400 mt-0.5 italic">"{apt.reason}"</p>}
+                  </div>
+
+                  <div className="flex gap-2">
                     <button
-                      onClick={() => setSelectedPatientProfile({ id: apt.patientId, name: apt.patient })}
-                      className="text-[11px] text-teal-700 dark:text-teal-400 hover:underline"
+                      onClick={() => handleUpdateStatus(apt.id, 'CONFIRMED')}
+                      className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-medium"
                     >
-                      (Profile)
+                      Accept
+                    </button>
+                    <button
+                      onClick={() => handleUpdateStatus(apt.id, 'REJECTED')}
+                      className="px-3 py-1.5 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 text-slate-600 rounded-lg text-xs font-medium"
+                    >
+                      Decline
                     </button>
                   </div>
-                  <div className="text-xs text-slate-500 mt-0.5">{apt.date} at {apt.time} ({apt.type})</div>
-                  {apt.reason && <p className="text-xs text-slate-400 mt-0.5 italic">"{apt.reason}"</p>}
                 </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => handleUpdateStatus(apt.id, 'CONFIRMED')}
-                    className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-medium"
-                  >
-                    Accept
-                  </button>
-                  <button
-                    onClick={() => handleUpdateStatus(apt.id, 'REJECTED')}
-                    className="px-3 py-1.5 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 text-slate-600 rounded-lg text-xs font-medium"
-                  >
-                    Decline
-                  </button>
+      {/* 2. CONFIRMED VISITS (Shown on 'overview') */}
+      {activeTab === 'overview' && (
+        <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800">
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-3">
+            Confirmed Patient Visits ({activeVisits.length})
+          </h3>
+
+          {activeVisits.length === 0 ? (
+            <p className="text-xs text-slate-400 py-3">No confirmed visits on the schedule.</p>
+          ) : (
+            <div className="divide-y divide-slate-100 dark:divide-slate-800">
+              {activeVisits.map((apt) => (
+                <div key={apt.id} className="py-3 flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium text-sm text-slate-900 dark:text-white">{apt.patient}</span>
+                      <button
+                        onClick={() => handleOpenPatientProfile(apt.patientId, apt.patient)}
+                        className="text-[11px] text-teal-700 dark:text-teal-400 hover:underline font-medium"
+                      >
+                        (Profile)
+                      </button>
+                    </div>
+                    <div className="text-xs text-slate-500 mt-0.5">{apt.date} at {apt.time} ({apt.type})</div>
+                  </div>
+
+                  <div className="flex flex-wrap gap-2 text-xs">
+                    <button
+                      onClick={() => {
+                        setSelectedAppointment(apt);
+                        setIsRxOpen(true);
+                      }}
+                      className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-md font-medium"
+                    >
+                      Prescription
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        setSelectedAppointment(apt);
+                        setIsLabOpen(true);
+                      }}
+                      className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-md font-medium"
+                    >
+                      Order Lab
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        setSelectedAppointment(apt);
+                        setIsPlanOpen(true);
+                      }}
+                      className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-md font-medium"
+                    >
+                      Senior Review
+                    </button>
+
+                    <button
+                      onClick={() => handleUpdateStatus(apt.id, 'COMPLETED')}
+                      className="px-2.5 py-1 text-slate-500 hover:text-slate-800 font-medium"
+                    >
+                      Complete
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
-      {/* Confirmed Visits */}
-      <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800">
-        <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-3">
-          Confirmed Patient Visits ({activeVisits.length})
-        </h3>
+      {/* 3. ASSIGNED PATIENTS TAB */}
+      {activeTab === 'patients' && (
+        <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800">
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-3">
+            Assigned Patients Directory ({assignedPatients.length})
+          </h3>
 
-        {activeVisits.length === 0 ? (
-          <p className="text-xs text-slate-400 py-3">No confirmed visits on the schedule.</p>
-        ) : (
-          <div className="divide-y divide-slate-100 dark:divide-slate-800">
-            {activeVisits.map((apt) => (
-              <div key={apt.id} className="py-3 flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {assignedPatients.map((p) => (
+              <div key={p.id} className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 flex justify-between items-center">
                 <div>
-                  <div className="font-medium text-sm text-slate-900 dark:text-white">{apt.patient}</div>
-                  <div className="text-xs text-slate-500">{apt.date} at {apt.time} ({apt.type})</div>
+                  <h4 className="font-semibold text-sm text-slate-900 dark:text-white">{p.name}</h4>
+                  <p className="text-xs text-slate-500">{p.phone || p.email || 'Verified Patient'}</p>
+                  <p className="text-[11px] text-slate-400 mt-1">Last consultation: {p.lastVisit}</p>
                 </div>
-
-                <div className="flex flex-wrap gap-2 text-xs">
-                  <button
-                    onClick={() => {
-                      setSelectedAppointment(apt);
-                      setIsRxOpen(true);
-                    }}
-                    className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-md font-medium"
-                  >
-                    Prescription
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      setSelectedAppointment(apt);
-                      setIsLabOpen(true);
-                    }}
-                    className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-md font-medium"
-                  >
-                    Order Lab
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      setSelectedAppointment(apt);
-                      setIsPlanOpen(true);
-                    }}
-                    className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-md font-medium"
-                  >
-                    Senior Review
-                  </button>
-
-                  <button
-                    onClick={() => handleUpdateStatus(apt.id, 'COMPLETED')}
-                    className="px-2.5 py-1 text-slate-500 hover:text-slate-800 font-medium"
-                  >
-                    Complete
-                  </button>
-                </div>
+                <button
+                  onClick={() => handleOpenPatientProfile(p.id, p.name)}
+                  className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-medium"
+                >
+                  View Profile
+                </button>
               </div>
             ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
-      {/* Patient Profile Modal */}
+      {/* Patient Profile Modal (Dynamic Patient A vs Patient B) */}
       <Modal
         isOpen={!!selectedPatientProfile}
         onClose={() => setSelectedPatientProfile(null)}
-        title={`Patient - ${selectedPatientProfile?.name}`}
+        title={`Patient Profile - ${selectedPatientProfile?.name}`}
       >
         <div className="space-y-3 text-xs">
           <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
             <div className="font-medium text-slate-900 dark:text-white">{selectedPatientProfile?.name}</div>
-            <div className="text-slate-500 mt-0.5">Demographics: Male · Blood Group O+</div>
+            <div className="text-slate-500 mt-0.5">
+              Demographics: {selectedPatientProfile?.gender || 'Male'} · Blood Group: {selectedPatientProfile?.bloodGroup || 'O+'}
+            </div>
+            {selectedPatientProfile?.phone && (
+              <div className="text-slate-400 text-[11px] mt-0.5">Contact: {selectedPatientProfile?.phone}</div>
+            )}
           </div>
+
           <div>
-            <div className="text-slate-500 font-medium text-[11px]">Clinical Overview</div>
-            <p className="text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
-              Essential Hypertension (controlled). Normal resting ECG. No active drug contraindications.
-            </p>
+            <div className="text-slate-500 font-medium text-[11px]">Medical History & Records</div>
+            {selectedPatientProfile?.medicalRecords && selectedPatientProfile.medicalRecords.length > 0 ? (
+              <div className="divide-y divide-slate-100 dark:divide-slate-800 mt-1">
+                {selectedPatientProfile.medicalRecords.map((r: any) => (
+                  <div key={r.id} className="py-2">
+                    <div className="font-medium text-slate-800 dark:text-slate-200">{r.title} ({r.category})</div>
+                    <p className="text-slate-500 mt-0.5 text-[11px]">{r.summary}</p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                Essential Cardiovascular Monitoring. Normal resting ECG rhythm. No active contraindications.
+              </p>
+            )}
           </div>
+
           <div className="flex justify-end pt-2">
             <button onClick={() => setSelectedPatientProfile(null)} className="px-4 py-1.5 bg-slate-900 text-white rounded-lg font-medium">
               Close

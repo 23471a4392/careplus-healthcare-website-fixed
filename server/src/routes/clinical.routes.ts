@@ -339,4 +339,42 @@ router.patch('/treatment-plans/:id/review', authMiddleware, async (req: AuthRequ
   }
 });
 
+
+// GET /api/clinical/patients/:id
+router.get('/patients/:id', authMiddleware, async (req: AuthRequest, res: Response) => {
+  try {
+    const patient = await prisma.patient.findUnique({
+      where: { id: req.params.id },
+      include: {
+        user: { select: { id: true, firstName: true, lastName: true, email: true, phone: true, avatarUrl: true } },
+        medicalRecords: { orderBy: { date: 'desc' } },
+        prescriptions: { include: { medications: true, doctor: { include: { user: true } } }, orderBy: { createdAt: 'desc' } },
+        appointments: { include: { doctor: { include: { user: true } } }, orderBy: { date: 'desc' } }
+      }
+    });
+
+    if (!patient) {
+      return res.status(404).json({ success: false, message: 'Patient not found' });
+    }
+
+    res.json({
+      success: true,
+      patient: {
+        id: patient.id,
+        name: `${patient.user.firstName} ${patient.user.lastName}`,
+        email: patient.user.email,
+        phone: patient.user.phone,
+        gender: patient.gender,
+        bloodGroup: patient.bloodGroup,
+        dob: patient.dob,
+        medicalRecords: patient.medicalRecords,
+        prescriptions: patient.prescriptions,
+        appointments: patient.appointments
+      }
+    });
+  } catch (err: any) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 export default router;

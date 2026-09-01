@@ -29,7 +29,7 @@ export const App: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#f4f7f9] dark:bg-[#0b111a] text-slate-800 dark:text-slate-100 flex flex-col">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col">
       {/* 1-Click Fast Role Switcher */}
       <RoleSwitcher />
 
@@ -37,6 +37,7 @@ export const App: React.FC = () => {
       <Navbar
         onOpenEmergencyModal={() => setActivePage('emergency')}
         onNavigateProfile={() => setActivePage('profile')}
+        onNavigateTab={(tab) => setActivePage(tab)}
       />
 
       {/* Body Layout */}
@@ -50,12 +51,12 @@ export const App: React.FC = () => {
             <PatientPortal activeTab={activePage} onNavigateTab={setActivePage} />
           )}
 
-          {(user?.role === 'DOCTOR' || user?.role === 'SENIOR_DOCTOR') && activePage !== 'treatment_plans' && (
-            <DoctorDashboard />
+          {user?.role === 'DOCTOR' && (
+            <DoctorDashboard activeTab={activePage} onNavigateTab={setActivePage} />
           )}
 
-          {user?.role === 'SENIOR_DOCTOR' && activePage === 'treatment_plans' && (
-            <SeniorDoctorDashboard />
+          {user?.role === 'SENIOR_DOCTOR' && (
+            <SeniorDoctorDashboard activeTab={activePage} onNavigateTab={setActivePage} />
           )}
 
           {user?.role === 'NURSE' && <NurseDashboard />}

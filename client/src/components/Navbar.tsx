@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Bell, Moon, Sun, ChevronDown } from 'lucide-react';
+import { Bell, Moon, Sun } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.tsx';
 import { useSocket } from '../context/SocketContext.tsx';
 import { NotificationModal } from './NotificationModal.tsx';
@@ -7,9 +7,10 @@ import { NotificationModal } from './NotificationModal.tsx';
 interface NavbarProps {
   onOpenEmergencyModal?: () => void;
   onNavigateProfile?: () => void;
+  onNavigateTab?: (tab: string, entityId?: string) => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onNavigateProfile }) => {
+export const Navbar: React.FC<NavbarProps> = ({ onNavigateProfile, onNavigateTab }) => {
   const { user } = useAuth();
   const { unreadCount } = useSocket();
   const [isNotifOpen, setIsNotifOpen] = useState(false);
@@ -28,6 +29,19 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigateProfile }) => {
   });
 
   const initials = user?.name ? user.name.split(' ').map(n => n[0]).join('').toUpperCase() : 'CP';
+
+  const handleSelectNotification = (n: any) => {
+    if (!onNavigateTab) return;
+    if (n.entityType === 'appointment') {
+      onNavigateTab(user?.role === 'PATIENT' ? 'appointments' : 'requests', n.entityId);
+    } else if (n.entityType === 'lab_result' || n.entityType === 'lab_order') {
+      onNavigateTab(user?.role === 'LAB_TECHNICIAN' ? 'lab_queue' : 'labs', n.entityId);
+    } else if (n.entityType === 'prescription') {
+      onNavigateTab(user?.role === 'PHARMACIST' ? 'pharmacy_queue' : 'medicines', n.entityId);
+    } else if (n.entityType === 'treatment_plan') {
+      onNavigateTab('treatment_plans', n.entityId);
+    }
+  };
 
   return (
     <header className="h-14 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 flex items-center justify-between sticky top-9 z-40">
@@ -66,12 +80,15 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigateProfile }) => {
           >
             <Bell className="w-4 h-4" />
             {unreadCount > 0 && (
-              <span className="absolute 1 top-1.5 right-1.5 w-2 h-2 rounded-full bg-teal-600" />
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-teal-600" />
             )}
           </button>
 
           {isNotifOpen && (
-            <NotificationModal onClose={() => setIsNotifOpen(false)} />
+            <NotificationModal
+              onClose={() => setIsNotifOpen(false)}
+              onSelectNotification={handleSelectNotification}
+            />
           )}
         </div>
 

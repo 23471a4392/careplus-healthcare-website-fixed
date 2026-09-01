@@ -2,9 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext.tsx';
 import { useSocket } from '../../context/SocketContext.tsx';
 
-export const SeniorDoctorDashboard: React.FC = () => {
+interface SeniorDoctorDashboardProps {
+  activeTab?: string;
+  onNavigateTab?: (tab: string) => void;
+}
+
+export const SeniorDoctorDashboard: React.FC<SeniorDoctorDashboardProps> = ({ activeTab, onNavigateTab }) => {
   const { user, token } = useAuth();
-  const { showToast } = useSocket();
+  const { showToast, realtimeVersion } = useSocket();
   const [plans, setPlans] = useState<any[]>([]);
 
   const fetchPlans = async () => {
@@ -21,7 +26,7 @@ export const SeniorDoctorDashboard: React.FC = () => {
 
   useEffect(() => {
     if (token) fetchPlans();
-  }, [token]);
+  }, [token, realtimeVersion]);
 
   const handleReview = async (planId: string, decision: 'APPROVED' | 'CHANGES_REQUESTED', title: string) => {
     try {

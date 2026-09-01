@@ -4,10 +4,19 @@ import { X } from 'lucide-react';
 
 interface NotificationModalProps {
   onClose: () => void;
+  onSelectNotification?: (n: any) => void;
 }
 
-export const NotificationModal: React.FC<NotificationModalProps> = ({ onClose }) => {
+export const NotificationModal: React.FC<NotificationModalProps> = ({ onClose, onSelectNotification }) => {
   const { notifications, unreadCount, markAsRead, markAllAsRead } = useSocket();
+
+  const handleNotificationClick = async (n: any) => {
+    await markAsRead(n.id);
+    if (onSelectNotification) {
+      onSelectNotification(n);
+    }
+    onClose();
+  };
 
   return (
     <div className="absolute right-0 top-10 w-80 sm:w-96 bg-white dark:bg-slate-900 rounded-xl shadow-lg border border-slate-200 dark:border-slate-800 z-50 overflow-hidden">
@@ -40,7 +49,7 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({ onClose })
           notifications.map((n) => (
             <div
               key={n.id}
-              onClick={() => markAsRead(n.id)}
+              onClick={() => handleNotificationClick(n)}
               className={`p-3 hover:bg-slate-50 dark:hover:bg-slate-800/40 transition cursor-pointer flex items-start gap-2.5 ${
                 !n.isRead ? 'bg-slate-50/60 dark:bg-slate-800/20' : ''
               }`}
@@ -54,6 +63,11 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({ onClose })
                   </span>
                 </div>
                 <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">{n.message}</p>
+                {n.entityType && (
+                  <span className="inline-block mt-1 text-[10px] font-medium text-teal-700 dark:text-teal-400">
+                    Click to view {n.entityType.replace('_', ' ')} →
+                  </span>
+                )}
               </div>
             </div>
           ))

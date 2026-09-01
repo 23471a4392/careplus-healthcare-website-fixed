@@ -5,7 +5,7 @@ import { Modal } from '../../components/Modal.tsx';
 
 export const NurseDashboard: React.FC = () => {
   const { user, token } = useAuth();
-  const { showToast } = useSocket();
+  const { showToast, realtimeVersion } = useSocket();
   const [inpatients, setInpatients] = useState<any[]>([]);
   const [selectedPatient, setSelectedPatient] = useState<any | null>(null);
   const [pulse, setPulse] = useState('74');
@@ -27,7 +27,7 @@ export const NurseDashboard: React.FC = () => {
 
   useEffect(() => {
     if (token) fetchInpatients();
-  }, [token]);
+  }, [token, realtimeVersion]);
 
   const handleRecordVitals = async () => {
     if (!selectedPatient) return;

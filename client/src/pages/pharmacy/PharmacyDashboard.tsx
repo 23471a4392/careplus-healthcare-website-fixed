@@ -4,7 +4,7 @@ import { useSocket } from '../../context/SocketContext.tsx';
 
 export const PharmacyDashboard: React.FC = () => {
   const { user, token } = useAuth();
-  const { showToast } = useSocket();
+  const { showToast, realtimeVersion } = useSocket();
   const [prescriptions, setPrescriptions] = useState<any[]>([]);
   const [inventory, setInventory] = useState<any[]>([]);
 
@@ -23,7 +23,7 @@ export const PharmacyDashboard: React.FC = () => {
 
   useEffect(() => {
     if (token) fetchPharmacyData();
-  }, [token]);
+  }, [token, realtimeVersion]);
 
   const handleDispense = async (rxId: string, patientName: string) => {
     try {
