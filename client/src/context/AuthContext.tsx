@@ -7,18 +7,15 @@ interface AuthContextType {
   portalKey: string;
   demoUsers: { id: string; email: string; name: string; role: UserRole; specialty?: string }[];
   isLoading: boolean;
-  loginAsDemoUser: (email: string) => Promise<void>;
+  loginWithCredentials: (email: string, password: string, targetPortalKey: string) => Promise<boolean>;
+  loginAsDemoUser: (email: string) => Promise<boolean>;
   logout: () => void;
   updateUserAvatar: (avatarUrl: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: React.ReactNode; defaultPortalRole?: string }> = ({
-  children,
-  defaultPortalRole
-}) => {
-  // Determine active portal key based on pathname or prop
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const getPortalKey = () => {
     const path = window.location.pathname.toLowerCase();
     if (path.startsWith('/patient')) return 'patient';
@@ -26,7 +23,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode; defaultPortalRo
     if (path.startsWith('/senior')) return 'senior';
     if (path.startsWith('/nurse')) return 'nurse';
     if (path.startsWith('/lab')) return 'lab';
-    return defaultPortalRole || 'patient';
+    return 'patient';
   };
 
   const portalKey = getPortalKey();
@@ -36,19 +33,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode; defaultPortalRo
   const [token, setToken] = useState<string | null>(localStorage.getItem(tokenStorageKey));
   const [demoUsers, setDemoUsers] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  // Default emails per portal
-  const getDefaultEmailForPortal = (key: string) => {
-    switch (key) {
-      case 'doctor': return 'doctor.arjun@careplus.com';
-      case 'senior': return 'senior.verma@careplus.com';
-      case 'nurse': return 'nurse.sarah@careplus.com';
-      case 'lab': return 'lab.david@careplus.com';
-      case 'patient':
-      default:
-        return 'patient@careplus.com';
-    }
-  };
 
   const fetchDemoUsers = async () => {
     try {
@@ -62,27 +46,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode; defaultPortalRo
     }
   };
 
-  const loginAsDemoUser = async (email: string) => {
-    setIsLoading(true);
-    try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password: 'password123' })
-      });
-      const data = await res.json();
-      if (data.success) {
-        setToken(data.token);
-        setUser(data.user);
-        localStorage.setItem(tokenStorageKey, data.token);
-      }
-    } catch (err) {
-      console.error('Login error:', err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
+  // Validate existing token
   const fetchMe = async (authToken: string) => {
     try {
       const res = await fetch('/api/auth/me', {
@@ -90,15 +54,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode; defaultPortalRo
       });
       const data = await res.json();
       if (data.success && data.user) {
-        setUser(data.user);
-        setIsLoading(false);
+        // Validate user role matches the active portal
+        const role = data.user.role;
+        const valid =
+          (portalKey === 'patient' && role === 'PATIENT') ||
+          (portalKey === 'doctor' && (role === 'DOCTOR' || role === 'SENIOR_DOCTOR')) ||
+          (portalKey === 'senior' && role === 'SENIOR_DOCTOR') ||
+          (portalKey === 'nurse' && role === 'NURSE') ||
+          (portalKey === 'lab' && role === 'LAB_TECHNICIAN');
+
+        if (valid) {
+          setUser(data.user);
+        } else {
+          localStorage.removeItem(tokenStorageKey);
+          setUser(null);
+          setToken(null);
+        }
       } else {
         localStorage.removeItem(tokenStorageKey);
-        await loginAsDemoUser(getDefaultEmailForPortal(portalKey));
+        setUser(null);
+        setToken(null);
       }
     } catch {
       localStorage.removeItem(tokenStorageKey);
-      await loginAsDemoUser(getDefaultEmailForPortal(portalKey));
+      setUser(null);
+      setToken(null);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -107,13 +89,54 @@ export const AuthProvider: React.FC<{ children: React.ReactNode; defaultPortalRo
     if (token) {
       fetchMe(token);
     } else {
-      loginAsDemoUser(getDefaultEmailForPortal(portalKey));
+      setIsLoading(false);
     }
   }, [portalKey]);
 
+  // Login with Email & Password Credentials
+  const loginWithCredentials = async (email: string, pass: string, targetPortalKey: string): Promise<boolean> => {
+    setIsLoading(true);
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim(), password: pass.trim() })
+      });
+      const data = await res.json();
+
+      if (data.success && data.user && data.token) {
+        const role = data.user.role;
+        // Verify role authorization for this specific portal
+        const isAuthorized =
+          (targetPortalKey === 'patient' && role === 'PATIENT') ||
+          (targetPortalKey === 'doctor' && (role === 'DOCTOR' || role === 'SENIOR_DOCTOR')) ||
+          (targetPortalKey === 'senior' && role === 'SENIOR_DOCTOR') ||
+          (targetPortalKey === 'nurse' && role === 'NURSE') ||
+          (targetPortalKey === 'lab' && role === 'LAB_TECHNICIAN');
+
+        if (!isAuthorized) {
+          throw new Error(`Your account (${role}) is not authorized for the ${targetPortalKey} portal.`);
+        }
+
+        setToken(data.token);
+        setUser(data.user);
+        localStorage.setItem(tokenStorageKey, data.token);
+        return true;
+      }
+      return false;
+    } catch (err: any) {
+      console.error('Login error:', err);
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const logout = () => {
     localStorage.removeItem(tokenStorageKey);
-    loginAsDemoUser(getDefaultEmailForPortal(portalKey));
+    setUser(null);
+    setToken(null);
+    setIsLoading(false);
   };
 
   const updateUserAvatar = (avatarUrl: string) => {
@@ -122,9 +145,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode; defaultPortalRo
     }
   };
 
+  const loginAsDemoUser = async (email: string) => {
+    return loginWithCredentials(email, 'password123', portalKey);
+  };
+
   return (
     <AuthContext.Provider
-      value={{ user, token, portalKey, demoUsers, isLoading, loginAsDemoUser, logout, updateUserAvatar }}
+      value={{ user, token, portalKey, demoUsers, isLoading, loginWithCredentials, loginAsDemoUser, logout, updateUserAvatar }}
     >
       {children}
     </AuthContext.Provider>

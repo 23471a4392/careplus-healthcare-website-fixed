@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from './context/AuthContext.tsx';
 import { Navbar } from './components/Navbar.tsx';
 import { Sidebar } from './components/Sidebar.tsx';
+import { LoginPage } from './components/LoginPage.tsx';
 import { PatientPortal } from './pages/patient/PatientPortal.tsx';
 import { DoctorDashboard } from './pages/doctor/DoctorDashboard.tsx';
 import { SeniorDoctorDashboard } from './pages/senior-doctor/SeniorDoctorDashboard.tsx';
@@ -39,13 +40,18 @@ export const App: React.FC = () => {
     return <PortalHub />;
   }
 
-  if (isLoading && !user) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-[#f3f8f7] flex flex-col items-center justify-center text-[#132e2b]">
         <div className="w-10 h-10 border-4 border-[#0c756e] border-t-transparent rounded-full animate-spin mb-4" />
         <div className="font-bold text-base tracking-tight text-[#0c756e]">CarePlus Portal Loading...</div>
       </div>
     );
+  }
+
+  // If user is not authenticated for this portal, render the Portal's Credential Login Page
+  if (!user) {
+    return <LoginPage portalKey={portalKey} />;
   }
 
   const getPortalLabel = () => {
