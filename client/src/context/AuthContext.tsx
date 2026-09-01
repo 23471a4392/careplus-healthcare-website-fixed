@@ -31,34 +31,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const fetchMe = async (authToken: string) => {
-    try {
-      const res = await fetch('/api/auth/me', {
-        headers: { Authorization: `Bearer ${authToken}` }
-      });
-      const data = await res.json();
-      if (data.success) {
-        setUser(data.user);
-      } else {
-        logout();
-      }
-    } catch {
-      logout();
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchDemoUsers();
-    if (token) {
-      fetchMe(token);
-    } else {
-      // Auto login as default Patient
-      loginAsDemoUser('patient@careplus.com');
-    }
-  }, []);
-
   const loginAsDemoUser = async (email: string) => {
     setIsLoading(true);
     try {
@@ -80,11 +52,38 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const fetchMe = async (authToken: string) => {
+    try {
+      const res = await fetch('/api/auth/me', {
+        headers: { Authorization: `Bearer ${authToken}` }
+      });
+      const data = await res.json();
+      if (data.success && data.user) {
+        setUser(data.user);
+        setIsLoading(false);
+      } else {
+        localStorage.removeItem('careplus_token');
+        await loginAsDemoUser('patient@careplus.com');
+      }
+    } catch {
+      localStorage.removeItem('careplus_token');
+      await loginAsDemoUser('patient@careplus.com');
+    }
+  };
+
+  useEffect(() => {
+    fetchDemoUsers();
+    if (token) {
+      fetchMe(token);
+    } else {
+      loginAsDemoUser('patient@careplus.com');
+    }
+  }, []);
+
   const logout = () => {
-    setToken(null);
-    setUser(null);
     localStorage.removeItem('careplus_token');
-    setIsLoading(false);
+    // Smoothly switch to default demo patient on logout
+    loginAsDemoUser('patient@careplus.com');
   };
 
   const updateUserAvatar = (avatarUrl: string) => {
