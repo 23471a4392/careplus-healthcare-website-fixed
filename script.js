@@ -1,6 +1,7 @@
 /**
  * CarePlus Healthcare Portal - Core Application Script
  * Frontend-only application with authentic real stock photography,
+ * editable profile photos, clean clinical metrics without artificial icon badges,
  * complete local state and localStorage persistence.
  */
 
@@ -144,7 +145,7 @@ const DEFAULT_LAB_TESTS = [
 ];
 
 const DEFAULT_METRICS = [
-  { id: 'm-1', type: 'Heart Rate', value: '72 BPM', raw: 72, unit: 'BPM', status: 'Normal Resting', date: '2026-08-31 08:30' },
+  { id: 'm-1', type: 'Heart Rate', value: '72 BPM', raw: 72, unit: 'BPM', status: 'Optimal', date: '2026-08-31 08:30' },
   { id: 'm-2', type: 'Blood Pressure', value: '118/76 mmHg', raw: 118, unit: 'mmHg', status: 'Optimal', date: '2026-08-31 08:35' },
   { id: 'm-3', type: 'Body Weight', value: '68.4 kg', raw: 68.4, unit: 'kg', status: 'Target Range', date: '2026-08-30 07:00' },
   { id: 'm-4', type: 'Steps Walked', value: '7,842 steps', raw: 7842, unit: 'steps', status: 'Active Goal', date: '2026-08-30 21:00' },
@@ -163,7 +164,7 @@ const DEFAULT_ARTICLES = [
     fallbackPhoto: 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=600&q=80',
     summary: 'Practical strategies for creating nutrient-dense meals that stabilize blood sugar and fuel sustained energy throughout the day.',
     takeaways: ['Fill half your plate with colorful vegetables', 'Prioritize whole protein sources at each meal', 'Incorporate unsaturated fats like extra virgin olive oil and nuts', 'Maintain hydration of 2.5-3 liters per day'],
-    content: 'Evidence-based nutrition begins with foundational dietary diversity. Clinical research consistently shows that a dietary pattern rich in prebiotic soluble fiber, polyphenol-dense vegetables, and essential fatty acids supports optimal lipid homeostasis and gut microbiome resilience.\n\nWhen designing meals, focus on the 50-25-25 plate architecture: 50% non-starchy cruciferous and green vegetables, 25% clean bioavailable protein (lentils, fish, poultry, tofu), and 25% low-glycemic complex carbohydrates (quinoa, millets, brown rice, sweet potatoes).'
+    content: 'Evidence-based nutrition begins with foundational dietary diversity. Clinical research consistently shows that a dietary pattern rich in prebiotic soluble fiber, polyphenol-dense vegetables, and essential fatty acids supports optimal lipid homeostasis and gut microbiome resilience.\\n\\nWhen designing meals, focus on the 50-25-25 plate architecture: 50% non-starchy cruciferous and green vegetables, 25% clean bioavailable protein (lentils, fish, poultry, tofu), and 25% low-glycemic complex carbohydrates (quinoa, millets, brown rice, sweet potatoes).'
   },
   {
     id: 'art-2',
@@ -175,7 +176,7 @@ const DEFAULT_ARTICLES = [
     fallbackPhoto: 'https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?auto=format&fit=crop&w=600&q=80',
     summary: 'How consistent circadian timing and bedtime light mitigation dramatically optimize deep slow-wave sleep and cellular repair.',
     takeaways: ['Keep a consistent wake-up time 7 days a week', 'Dim blue light exposure 90 minutes before bedtime', 'Maintain bedroom temperature between 18-20°C', 'Avoid caffeine within 8 hours of sleep'],
-    content: 'Sleep architecture is governed by two complementary physiological mechanisms: circadian rhythmicity (Process C) and homeostatic sleep pressure (Process S). Deep non-REM sleep serves as the primary window for glymphatic cerebral toxin clearance and protein synthesis.\n\nTo optimize sleep quality, morning sunlight exposure within 30 minutes of waking sets the master suprachiasmatic nucleus clock, priming melatonin secretion approximately 14 hours later.'
+    content: 'Sleep architecture is governed by two complementary physiological mechanisms: circadian rhythmicity (Process C) and homeostatic sleep pressure (Process S). Deep non-REM sleep serves as the primary window for glymphatic cerebral toxin clearance and protein synthesis.\\n\\nTo optimize sleep quality, morning sunlight exposure within 30 minutes of waking sets the master suprachiasmatic nucleus clock, priming melatonin secretion approximately 14 hours later.'
   },
   {
     id: 'art-3',
@@ -187,7 +188,7 @@ const DEFAULT_ARTICLES = [
     fallbackPhoto: 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&w=600&q=80',
     summary: 'Why non-exercise activity thermogenesis (NEAT) and zone 2 aerobic conditioning are crucial for metabolic and vascular longevity.',
     takeaways: ['Aim for 7,500-10,000 functional daily steps', 'Incorporate 150 minutes of conversational Zone 2 cardio weekly', 'Perform compound resistance training twice a week', 'Take 3-minute walking breaks after sitting for 60 minutes'],
-    content: 'Sedentary physiology impairs capillary endothelial nitric oxide production and lipoprotein lipase activity. Integrating intermittent movement throughout the workday significantly attenuates postprandial glucose spikes.\n\nCombining moderate aerobic conditioning with progressive resistance exercises preserves lean muscle mass, improves bone mineral density, and supports lifelong mobility.'
+    content: 'Sedentary physiology impairs capillary endothelial nitric oxide production and lipoprotein lipase activity. Integrating intermittent movement throughout the workday significantly attenuates postprandial glucose spikes.\\n\\nCombining moderate aerobic conditioning with progressive resistance exercises preserves lean muscle mass, improves bone mineral density, and supports lifelong mobility.'
   },
   {
     id: 'art-4',
@@ -199,7 +200,7 @@ const DEFAULT_ARTICLES = [
     fallbackPhoto: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=600&q=80',
     summary: 'Evidence-based cognitive reframing, vagal nerve activation, and physiological sigh breathing to regulate the autonomic nervous system.',
     takeaways: ['Practice 4-7-8 or double-inhale physiological sigh breathing', 'Establish dedicated tech-free mindfulness blocks', 'Maintain social connection and peer dialogue', 'Schedule periodic clinical mental health check-ins'],
-    content: 'Chronic sympathetic nervous system overactivation leads to elevated cortisol and inflammatory cytokines. Activating parasympathetic tone via diaphragmatic breathing and structured mindfulness meditation facilitates heart rate variability (HRV) recovery.\n\nRegular cognitive boundary-setting promotes neuroplasticity, mood equilibrium, and executive cognitive resilience.'
+    content: 'Chronic sympathetic nervous system overactivation leads to elevated cortisol and inflammatory cytokines. Activating parasympathetic tone via diaphragmatic breathing and structured mindfulness meditation facilitates heart rate variability (HRV) recovery.\\n\\nRegular cognitive boundary-setting promotes neuroplasticity, mood equilibrium, and executive cognitive resilience.'
   },
   {
     id: 'art-5',
@@ -211,7 +212,7 @@ const DEFAULT_ARTICLES = [
     fallbackPhoto: 'https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=600&q=80',
     summary: 'A clinician guide to interpreting systolic/diastolic numbers, ApoB, triglycerides, and lifestyle interventions for arterial health.',
     takeaways: ['Target resting blood pressure below 120/80 mmHg', 'Monitor non-HDL cholesterol and triglyceride-to-HDL ratios', 'Reduce processed sodium and trans-fat consumption', 'Undergo periodic electrocardiogram and screening checkups'],
-    content: 'Cardiovascular wellness requires understanding vascular dynamics. Systolic blood pressure measures arterial wall tension during cardiac contraction, while diastolic pressure measures resting arterial resistance.\n\nEarly lifestyle optimization—including dietary potassium intake, regular cardiovascular exercise, and stress management—prevents arterial stiffness and preserves endothelial integrity.'
+    content: 'Cardiovascular wellness requires understanding vascular dynamics. Systolic blood pressure measures arterial wall tension during cardiac contraction, while diastolic pressure measures resting arterial resistance.\\n\\nEarly lifestyle optimization—including dietary potassium intake, regular cardiovascular exercise, and stress management—prevents arterial stiffness and preserves endothelial integrity.'
   }
 ];
 
@@ -222,6 +223,7 @@ const DEFAULT_NOTIFICATIONS = [
   { id: 'notif-4', title: 'Health Milestone Achieved', message: 'You have completed your 7-day hydration target. Great work maintaining wellness!', time: '2 days ago', type: 'tracking', read: true }
 ];
 
+// Profile defaults to clean initials monogram (no uninvited picture imposed)
 const DEFAULT_PROFILE = {
   name: 'Vaseem Basha',
   patientId: 'CP-2026-1048',
@@ -233,8 +235,7 @@ const DEFAULT_PROFILE = {
   bloodGroup: 'O Positive (O+)',
   address: 'Indiranagar 100ft Rd, Bengaluru, Karnataka 560038',
   emergencyContact: 'Farhana Basha (+91 98765 11223)',
-  photo: 'assets/images/profile/vaseem_basha.jpg',
-  fallbackPhoto: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80'
+  photo: '' // Empty by default: user gets clean monogram initials 'VB' unless they upload their own
 };
 
 const DEFAULT_EMERGENCY_HOSPITALS = [
@@ -279,10 +280,14 @@ class StateManager {
   }
 
   migrateProfile(prof) {
+    let photo = prof.photo || '';
+    // If it was the automatic placeholder vaseem_basha.jpg from earlier sessions, reset to clean initials
+    if (photo.includes('vaseem_basha.jpg') || photo.includes('photo-15070032111')) {
+      photo = '';
+    }
     return {
       ...prof,
-      photo: prof.photo || DEFAULT_PROFILE.photo,
-      fallbackPhoto: prof.fallbackPhoto || DEFAULT_PROFILE.fallbackPhoto
+      photo: photo
     };
   }
 
@@ -451,15 +456,12 @@ function renderDashboard() {
     }
   }
 
-  // Render Dashboard Medication Checklist
+  // Render Dashboard Medication Checklist without artificial icon boxes
   const medContainer = document.getElementById('dashMedicationList');
   if (medContainer) {
     if (App.state.medicines.length > 0) {
       medContainer.innerHTML = App.state.medicines.slice(0, 3).map((m, i) => `
         <div class="med-row">
-          <div class="stat-icon emerald" style="width:36px;height:36px;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/></svg>
-          </div>
           <div>
             <strong>${m.name}</strong>
             <p>${m.dose} · ${m.schedule}</p>
@@ -892,10 +894,10 @@ function deleteAppointment(id) {
 }
 
 function exportAppointments() {
-  const header = 'ID,Doctor,Specialty,Hospital,Date,Time,Type,Status,Notes\n';
+  const header = 'ID,Doctor,Specialty,Hospital,Date,Time,Type,Status,Notes\\n';
   const rows = App.state.appointments.map(a => 
     `"${a.id}","${a.doctor}","${a.spec}","${a.hospital}","${a.date}","${a.time}","${a.type}","${a.status}","${a.notes || ''}"`
-  ).join('\n');
+  ).join('\\n');
 
   downloadTextFile('CarePlus_Appointments_Schedule.csv', header + rows, 'text/csv');
   toast('Appointments schedule exported successfully');
@@ -1447,59 +1449,51 @@ function saveLabBooking() {
   toast(`${testTitle} booked for ${date} (${mode})!`);
 }
 
-// --- Health Tracking Module ---
+// --- Health Tracking Module (Clean Clinical Telemetry WITHOUT Artificial Icons) ---
 function renderTracking() {
   const grid = document.getElementById('trackingGrid');
   const historyTbody = document.getElementById('metricHistoryRows');
   if (!grid || !historyTbody) return;
 
-  // Render Metric Cards
+  // Clean, professional medical metrics without artificial square icon badges
   grid.innerHTML = `
     <div class="card metric">
       <div class="stat-header">
         <small>HEART RATE</small>
-        <div class="stat-icon red">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-        </div>
+        <span class="pill">OPTIMAL</span>
       </div>
-      <strong>72 BPM</strong>
-      <div class="trend up">Optimal Resting Rate</div>
+      <strong>72 <span style="font-size:15px;font-weight:600;color:var(--text-muted);">BPM</span></strong>
+      <div class="trend up">Normal Resting Rate (60-100 BPM)</div>
       <button class="primary full-btn" style="margin-top:14px;" onclick="openAddMetricModal('Heart Rate')">+ Add Reading</button>
     </div>
 
     <div class="card metric">
       <div class="stat-header">
         <small>BLOOD PRESSURE</small>
-        <div class="stat-icon blue">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
-        </div>
+        <span class="pill">OPTIMAL</span>
       </div>
-      <strong>118/76 mmHg</strong>
-      <div class="trend up">Normal Hemodynamics</div>
+      <strong>118/76 <span style="font-size:15px;font-weight:600;color:var(--text-muted);">mmHg</span></strong>
+      <div class="trend up">Normal Systolic & Diastolic</div>
       <button class="primary full-btn" style="margin-top:14px;" onclick="openAddMetricModal('Blood Pressure')">+ Add Reading</button>
     </div>
 
     <div class="card metric">
       <div class="stat-header">
         <small>BODY WEIGHT</small>
-        <div class="stat-icon emerald">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="12" cy="10" r="3"/></svg>
-        </div>
+        <span class="pill">TARGET</span>
       </div>
-      <strong>68.4 kg</strong>
-      <div class="trend up">↓ 0.6 kg this month</div>
+      <strong>68.4 <span style="font-size:15px;font-weight:600;color:var(--text-muted);">kg</span></strong>
+      <div class="trend up">↓ 0.6 kg this month (BMI 22.4)</div>
       <button class="primary full-btn" style="margin-top:14px;" onclick="openAddMetricModal('Body Weight')">+ Add Reading</button>
     </div>
 
     <div class="card metric">
       <div class="stat-header">
         <small>FASTING GLUCOSE</small>
-        <div class="stat-icon purple">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        </div>
+        <span class="pill">NORMAL</span>
       </div>
-      <strong>92 mg/dL</strong>
-      <div class="trend up">Optimal Glycemic Index</div>
+      <strong>92 <span style="font-size:15px;font-weight:600;color:var(--text-muted);">mg/dL</span></strong>
+      <div class="trend up">Optimal Glycemic Index (70-99 mg/dL)</div>
       <button class="primary full-btn" style="margin-top:14px;" onclick="openAddMetricModal('Fasting Blood Glucose')">+ Add Reading</button>
     </div>
   `;
@@ -1601,8 +1595,8 @@ function deleteMetric(id) {
 }
 
 function exportMetrics() {
-  const header = 'ID,Type,Value,Date,Status\n';
-  const rows = App.state.metrics.map(m => `"${m.id}","${m.type}","${m.value}","${m.date}","${m.status}"`).join('\n');
+  const header = 'ID,Type,Value,Date,Status\\n';
+  const rows = App.state.metrics.map(m => `"${m.id}","${m.type}","${m.value}","${m.date}","${m.status}"`).join('\\n');
   downloadTextFile('CarePlus_Biometrics_Log.csv', header + rows, 'text/csv');
   toast('Biometric logs exported');
 }
@@ -1741,7 +1735,7 @@ PRIMARY ADDRESS:
 ${p.address}
 
 ACTIVE MEDICATIONS:
-${App.state.medicines.map(m => '- ' + m.name + ' (' + m.dose + ')').join('\n') || 'None recorded'}
+${App.state.medicines.map(m => '- ' + m.name + ' (' + m.dose + ')').join('\\n') || 'None recorded'}
 
 KNOWN ALLERGIES:
 No drug allergies reported (NKDA)
@@ -1754,27 +1748,29 @@ Please present this medical card to first responders or ER triage.
   toast('Emergency Medical Card downloaded.');
 }
 
-// --- Profile Module (Authentic Portrait & Monogram Fallback) ---
+// --- Profile Module (Editable Photo & Clean Initial Monogram Fallback) ---
 function renderProfile() {
   const p = App.state.profile;
-  const initials = p.name.split(' ').map(n => n[0]).join('');
-  const photoUrl = p.photo || 'assets/images/profile/vaseem_basha.jpg';
-  const photoFallback = p.fallbackPhoto || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80';
+  const initials = p.name ? p.name.split(' ').map(n => n[0]).join('').toUpperCase() : 'VB';
 
+  // Update topbar avatar
   const topAvatarEl = document.getElementById('topAvatar');
   if (topAvatarEl) {
-    topAvatarEl.innerHTML = `
-      <img src="${photoUrl}" alt="${p.name}" class="avatar-photo" onerror="this.onerror=null; if(this.src!=='${photoFallback}'){this.src='${photoFallback}'}else{this.style.display='none'; this.nextElementSibling.style.display='block';}" loading="lazy">
-      <span class="avatar-initials" style="display:none;">${initials}</span>
-    `;
+    if (p.photo) {
+      topAvatarEl.innerHTML = `<img src="${p.photo}" alt="${p.name}" class="avatar-photo" onerror="this.parentElement.textContent='${initials}'">`;
+    } else {
+      topAvatarEl.textContent = initials;
+    }
   }
 
+  // Update big profile avatar
   const bigAvatarEl = document.getElementById('profileBigAvatar');
   if (bigAvatarEl) {
-    bigAvatarEl.innerHTML = `
-      <img src="${photoUrl}" alt="${p.name}" class="big-avatar-photo" onerror="this.onerror=null; if(this.src!=='${photoFallback}'){this.src='${photoFallback}'}else{this.style.display='none'; this.nextElementSibling.style.display='block';}" loading="lazy">
-      <span class="avatar-initials" style="display:none;">${initials}</span>
-    `;
+    if (p.photo) {
+      bigAvatarEl.innerHTML = `<img src="${p.photo}" alt="${p.name}" class="big-avatar-photo" onerror="this.parentElement.textContent='${initials}'">`;
+    } else {
+      bigAvatarEl.textContent = initials;
+    }
   }
 
   const nameEl = document.getElementById('profileName');
@@ -1795,12 +1791,79 @@ function renderProfile() {
   if (addrEl) addrEl.textContent = p.address;
 }
 
+// Photo Upload Handler (Supports user-selected files via FileReader)
+function handleProfilePhotoSelect(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  if (!file.type.startsWith('image/')) {
+    toast('Please choose a valid image file (JPEG, PNG, or WebP).');
+    return;
+  }
+
+  if (file.size > 5 * 1024 * 1024) {
+    toast('Image file size must be less than 5MB.');
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const dataUrl = e.target.result;
+    App.state.profile.photo = dataUrl;
+    App.save('profile');
+    renderProfile();
+
+    const preview = document.getElementById('modalAvatarPreview');
+    if (preview) {
+      preview.innerHTML = `<img src="${dataUrl}" alt="Avatar Preview" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+    }
+    toast('Profile picture updated successfully!');
+  };
+  reader.readAsDataURL(file);
+}
+
+// Photo Removal Handler (Resets to clean monogram initials)
+function removeProfilePhoto() {
+  App.state.profile.photo = '';
+  App.save('profile');
+  renderProfile();
+
+  const preview = document.getElementById('modalAvatarPreview');
+  if (preview) {
+    const initials = App.state.profile.name ? App.state.profile.name.split(' ').map(n => n[0]).join('').toUpperCase() : 'VB';
+    preview.textContent = initials;
+  }
+  toast('Profile picture removed. Initials active.');
+}
+
 function openEditProfileModal() {
   const p = App.state.profile;
+  const initials = p.name ? p.name.split(' ').map(n => n[0]).join('').toUpperCase() : 'VB';
 
   openModal(`
     <h2>Edit Profile</h2>
     <p class="muted">Update identification, clinical demographics, and contact info.</p>
+
+    <!-- Interactive Profile Picture Section -->
+    <div class="avatar-controls">
+      <div class="avatar-preview-wrap" id="modalAvatarPreview">
+        ${p.photo ? `<img src="${p.photo}" alt="${p.name}">` : initials}
+      </div>
+      <div>
+        <div style="font-weight:600;font-size:14px;color:var(--text-main);">Profile Picture</div>
+        <div class="avatar-btn-row">
+          <label class="btn-secondary" style="padding:6px 12px;font-size:12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Upload Photo
+            <input type="file" id="modalPhotoInput" accept="image/*" style="display:none;" onchange="handleProfilePhotoSelect(event)">
+          </label>
+          <button type="button" class="btn-danger" style="padding:6px 12px;font-size:12px;" onclick="removeProfilePhoto()">
+            Remove Photo
+          </button>
+        </div>
+        <small class="muted" style="display:block;margin-top:6px;font-size:11px;">You can upload your own picture or keep clean monogram initials.</small>
+      </div>
+    </div>
 
     <div class="form-group">
       <label>Full Name</label>

@@ -1,4 +1,4 @@
-﻿/* ==========================================================================
+/* ==========================================================================
    CarePlus Healthcare Portal - Modern UI & Dark Mode Stylesheet
    ========================================================================== */
 
@@ -1176,6 +1176,67 @@ tr:hover td {
   display: flex;
   gap: 28px;
   align-items: flex-start;
+}
+
+.profile-avatar-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.avatar-quick-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.avatar-quick-actions label, .avatar-quick-actions button {
+  padding: 5px 10px;
+  font-size: 11px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.avatar-controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+  padding: 16px;
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+}
+
+.avatar-preview-wrap {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: var(--primary-light);
+  color: var(--primary-dark);
+  font-size: 20px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--primary);
+  flex-shrink: 0;
+}
+
+.avatar-preview-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.avatar-btn-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 6px;
 }
 
 .big-avatar {

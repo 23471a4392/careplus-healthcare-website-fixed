@@ -132,13 +132,10 @@
           <div class="stat">
             <div class="stat-header">
               <small>HEART RATE</small>
-              <div class="stat-icon red">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-              </div>
+              <span class="pill">RESTING</span>
             </div>
             <strong>72 <i>BPM</i></strong>
             <div class="trend up">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
               Optimal resting rate
             </div>
           </div>
@@ -146,13 +143,10 @@
           <div class="stat">
             <div class="stat-header">
               <small>BODY WEIGHT</small>
-              <div class="stat-icon blue">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="12" cy="10" r="3"/><line x1="12" y1="10" x2="14" y2="8"/></svg>
-              </div>
+              <span class="pill">TARGET</span>
             </div>
             <strong>68.4 <i>kg</i></strong>
             <div class="trend up">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
               -0.6 kg this month
             </div>
           </div>
@@ -160,9 +154,7 @@
           <div class="stat">
             <div class="stat-header">
               <small>DAILY HYDRATION</small>
-              <div class="stat-icon emerald">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
-              </div>
+              <span class="pill">ACTIVE</span>
             </div>
             <strong>5.2 <i>/ 8 glasses</i></strong>
             <div class="progress"><b style="width: 65%;"></b></div>
@@ -171,13 +163,10 @@
           <div class="stat">
             <div class="stat-header">
               <small>SLEEP DURATION</small>
-              <div class="stat-icon purple">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
-              </div>
+              <span class="pill">DEEP</span>
             </div>
             <strong>7h 24m</strong>
             <div class="trend up">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
               92% Sleep quality
             </div>
           </div>
@@ -562,7 +551,16 @@
         </div>
 
         <div class="card profile-card">
-          <div class="big-avatar" id="profileBigAvatar">VB</div>
+          <div class="profile-avatar-block">
+            <div class="big-avatar" id="profileBigAvatar">VB</div>
+            <div class="avatar-quick-actions">
+              <label class="btn-secondary" title="Upload custom profile photo">
+                Upload
+                <input type="file" accept="image/*" style="display:none;" onchange="handleProfilePhotoSelect(event)">
+              </label>
+              <button class="btn-secondary" onclick="removeProfilePhoto()" title="Remove photo and use initials">Remove</button>
+            </div>
+          </div>
           <div class="profile-info">
             <h2 id="profileName">Vaseem Basha</h2>
             <p class="muted" id="profileId">Patient ID: CP-2026-1048</p>
