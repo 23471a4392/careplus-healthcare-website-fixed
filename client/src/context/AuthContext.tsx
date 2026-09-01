@@ -8,6 +8,7 @@ interface AuthContextType {
   demoUsers: { id: string; email: string; name: string; role: UserRole; specialty?: string }[];
   isLoading: boolean;
   loginWithCredentials: (email: string, password: string, targetPortalKey: string) => Promise<boolean>;
+  registerUser: (formData: any) => Promise<boolean>;
   loginAsDemoUser: (email: string) => Promise<boolean>;
   logout: () => void;
   updateUserAvatar: (avatarUrl: string) => void;
@@ -54,7 +55,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       });
       const data = await res.json();
       if (data.success && data.user) {
-        // Validate user role matches the active portal
         const role = data.user.role;
         const valid =
           (portalKey === 'patient' && role === 'PATIENT') ||
@@ -93,7 +93,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, [portalKey]);
 
-  // Login with Email & Password Credentials
+  // Dynamic Login with user-entered Email & Password
   const loginWithCredentials = async (email: string, pass: string, targetPortalKey: string): Promise<boolean> => {
     setIsLoading(true);
     try {
@@ -106,7 +106,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (data.success && data.user && data.token) {
         const role = data.user.role;
-        // Verify role authorization for this specific portal
         const isAuthorized =
           (targetPortalKey === 'patient' && role === 'PATIENT') ||
           (targetPortalKey === 'doctor' && (role === 'DOCTOR' || role === 'SENIOR_DOCTOR')) ||
@@ -115,21 +114,53 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           (targetPortalKey === 'lab' && role === 'LAB_TECHNICIAN');
 
         if (!isAuthorized) {
-          throw new Error(`Your account (${role}) is not authorized for the ${targetPortalKey} portal.`);
+          throw new Error(`Your account role (${role}) is not authorized for the ${targetPortalKey} portal.`);
         }
 
         setToken(data.token);
         setUser(data.user);
         localStorage.setItem(tokenStorageKey, data.token);
         return true;
+      } else {
+        throw new Error(data.message || 'Invalid email or password.');
       }
-      return false;
     } catch (err: any) {
       console.error('Login error:', err);
       throw err;
     } finally {
       setIsLoading(false);
     }
+  };
+
+  // Dynamic Registration
+  const registerUser = async (formData: any): Promise<boolean> => {
+    setIsLoading(true);
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+      const data = await res.json();
+
+      if (data.success && data.user && data.token) {
+        setToken(data.token);
+        setUser(data.user);
+        localStorage.setItem(tokenStorageKey, data.token);
+        return true;
+      } else {
+        throw new Error(data.message || 'Registration failed.');
+      }
+    } catch (err: any) {
+      console.error('Register error:', err);
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const loginAsDemoUser = async (email: string) => {
+    return loginWithCredentials(email, 'password123', portalKey);
   };
 
   const logout = () => {
@@ -145,13 +176,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const loginAsDemoUser = async (email: string) => {
-    return loginWithCredentials(email, 'password123', portalKey);
-  };
-
   return (
     <AuthContext.Provider
-      value={{ user, token, portalKey, demoUsers, isLoading, loginWithCredentials, loginAsDemoUser, logout, updateUserAvatar }}
+      value={{
+        user,
+        token,
+        portalKey,
+        demoUsers,
+        isLoading,
+        loginWithCredentials,
+        registerUser,
+        loginAsDemoUser,
+        logout,
+        updateUserAvatar
+      }}
     >
       {children}
     </AuthContext.Provider>

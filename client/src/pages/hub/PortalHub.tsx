@@ -1,5 +1,5 @@
 import React from 'react';
-import { Plus, User, Stethoscope, ShieldCheck, Bed, TestTube, ArrowRight, Lock } from 'lucide-react';
+import { Plus, User, Stethoscope, ShieldCheck, Bed, TestTube, ArrowRight } from 'lucide-react';
 
 export const PortalHub: React.FC = () => {
   const portals = [
@@ -8,60 +8,45 @@ export const PortalHub: React.FC = () => {
       title: 'Patient Portal',
       url: '/patient',
       role: 'PATIENT',
-      user: 'Vaseem Basha',
-      email: 'patient@careplus.com',
-      password: 'password123',
-      desc: 'Book doctor appointments, monitor longitudinal vitals, access prescriptions & pathology lab records.',
+      desc: 'Dynamic login for patients to book consultations, track longitudinal biometrics, and manage prescriptions.',
       icon: User,
-      badge: 'Self-Service & Telehealth'
+      badge: 'Patient Access'
     },
     {
       id: 'doctor',
       title: 'Doctor Portal',
       url: '/doctor',
       role: 'DOCTOR',
-      user: 'Dr. Arjun Rao (Cardiology)',
-      email: 'doctor.arjun@careplus.com',
-      password: 'password123',
-      desc: 'Review consultation schedule, accept appointments, issue prescriptions, and order diagnostics.',
+      desc: 'Dynamic login for physicians to manage appointments, issue e-prescriptions, and order diagnostic labs.',
       icon: Stethoscope,
-      badge: 'Physician Practice'
+      badge: 'Physicians'
     },
     {
       id: 'senior',
       title: 'Senior Doctor Portal',
       url: '/senior',
       role: 'SENIOR_DOCTOR',
-      user: 'Dr. K. S. Verma (Chief of Medicine)',
-      email: 'senior.verma@careplus.com',
-      password: 'password123',
-      desc: 'Clinical supervision, critical care governance, and treatment plan approval workflows.',
+      desc: 'Dynamic login for Chiefs of Medicine to review and approve specialized clinical protocols.',
       icon: ShieldCheck,
       badge: 'Clinical Governance'
     },
     {
       id: 'nurse',
-      title: 'Nurse Portal',
+      title: 'Nurse Station',
       url: '/nurse',
       role: 'NURSE',
-      user: 'Sarah Jenkins, RN',
-      email: 'nurse.sarah@careplus.com',
-      password: 'password123',
-      desc: 'Inpatient ward rounds, electronic vitals recording, and medication administration roster.',
+      desc: 'Dynamic login for nursing staff to record inpatient observation vitals and manage bedside care.',
       icon: Bed,
-      badge: 'Inpatient Operations'
+      badge: 'Inpatient Ward'
     },
     {
       id: 'lab',
-      title: 'Lab Technician Portal',
+      title: 'Diagnostic Lab Portal',
       url: '/lab',
       role: 'LAB_TECHNICIAN',
-      user: 'David Miller',
-      email: 'lab.david@careplus.com',
-      password: 'password123',
-      desc: 'Diagnostic pathology orders queue, specimen processing, and verified report publishing.',
+      desc: 'Dynamic login for pathology technicians to receive specimen orders and publish verified results.',
       icon: TestTube,
-      badge: 'Pathology & Diagnostics'
+      badge: 'Pathology & Labs'
     }
   ];
 
@@ -77,7 +62,7 @@ export const PortalHub: React.FC = () => {
             CarePlus
           </span>
           <span className="text-xs text-[#0c756e] bg-[#e6f5f2] border border-[#cbe7e2] px-2.5 py-0.5 rounded-full font-semibold ml-2">
-            Role-Based Authentication Launchpad
+            Healthcare Portal Network
           </span>
         </div>
       </header>
@@ -86,10 +71,10 @@ export const PortalHub: React.FC = () => {
       <main className="max-w-6xl mx-auto px-6 py-12 space-y-8">
         <div className="text-center max-w-2xl mx-auto space-y-2">
           <h1 className="text-3xl font-extrabold text-[#132e2b] tracking-tight">
-            5 Dedicated Role-Based Healthcare Portals
+            5 Role-Based Healthcare Portals
           </h1>
           <p className="text-xs text-[#4d7872] leading-relaxed">
-            Each portal has its own credential-based login page. Open any portal in a separate browser tab to sign in with authorized role credentials.
+            Enter your credentials on each portal's dedicated login page. Any registered user or staff member can sign in to their authorized portal.
           </p>
         </div>
 
@@ -115,26 +100,9 @@ export const PortalHub: React.FC = () => {
                   <h3 className="font-bold text-base text-[#132e2b] group-hover:text-[#0c756e] transition">
                     {p.title}
                   </h3>
-                  <p className="text-xs font-semibold text-[#0c756e] mt-0.5">
-                    Authorized User: {p.user}
-                  </p>
-                  <p className="text-xs text-[#4d7872] mt-2 leading-relaxed">
+                  <p className="text-xs text-[#4d7872] mt-2.5 leading-relaxed">
                     {p.desc}
                   </p>
-
-                  {/* Credentials Box */}
-                  <div className="mt-4 p-3 bg-[#f8fbfb] rounded-xl border border-[#eef6f5] space-y-1">
-                    <div className="text-[10px] font-bold text-[#6b9690] uppercase tracking-wider flex items-center gap-1">
-                      <Lock className="w-3 h-3 text-[#0c756e]" />
-                      <span>Portal Credentials</span>
-                    </div>
-                    <div className="text-xs font-mono text-[#132e2b]">
-                      <strong>Email:</strong> {p.email}
-                    </div>
-                    <div className="text-xs font-mono text-[#132e2b]">
-                      <strong>Password:</strong> {p.password}
-                    </div>
-                  </div>
                 </div>
 
                 <div className="mt-6 pt-4 border-t border-[#eef6f5] flex justify-between items-center">
@@ -145,7 +113,7 @@ export const PortalHub: React.FC = () => {
                     rel="noreferrer"
                     className="px-4 py-2 bg-[#0c756e] hover:bg-[#095e58] text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition"
                   >
-                    <span>Open Login Page</span>
+                    <span>Sign In</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </a>
                 </div>
