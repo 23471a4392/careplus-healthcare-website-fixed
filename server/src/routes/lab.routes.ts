@@ -63,12 +63,20 @@ router.post('/orders', authMiddleware, async (req: AuthRequest, res: Response) =
     let effectiveDoctorId = req.user?.doctorId;
 
     if (!effectiveDoctorId) {
-      // Patient self-booking -> assign to chief doctor
       const firstDoc = await prisma.doctor.findFirst();
       effectiveDoctorId = firstDoc?.id;
     }
 
-    const test = await prisma.labTest.findUnique({ where: { id: testId } });
+    const test = await prisma.labTest.findFirst({
+      where: {
+        OR: [
+          { id: testId },
+          { code: testId },
+          { name: { contains: testId } }
+        ]
+      }
+    });
+
     const patient = await prisma.patient.findUnique({
       where: { id: patientId || req.user?.patientId },
       include: { user: true }
@@ -80,7 +88,7 @@ router.post('/orders', authMiddleware, async (req: AuthRequest, res: Response) =
 
     const order = await prisma.labResult.create({
       data: {
-        testId,
+        testId: test.id,
         patientId: patient.id,
         doctorId: effectiveDoctorId!,
         sampleMode: sampleMode || 'Home Collection',
@@ -89,7 +97,6 @@ router.post('/orders', authMiddleware, async (req: AuthRequest, res: Response) =
       }
     });
 
-    // Real-time alert to LAB_TECHNICIAN role
     emitToRole('LAB_TECHNICIAN', 'new_lab_request', {
       orderId: order.id,
       testName: test.name,
@@ -128,7 +135,6 @@ router.patch('/orders/:id/status', authMiddleware, async (req: AuthRequest, res:
       }
     });
 
-    // When completed, dispatch to Doctor AND Patient
     if (status === 'COMPLETED') {
       const msg = `Lab results for ${order.test.name} have been processed and uploaded.`;
       await sendNotification({

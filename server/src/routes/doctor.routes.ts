@@ -38,6 +38,79 @@ router.get('/', async (_req, res) => {
   }
 });
 
+// GET /api/doctors/:id
+router.get('/:id', async (req, res) => {
+  try {
+    const d = await prisma.doctor.findUnique({
+      where: { id: req.params.id },
+      include: {
+        user: { select: { firstName: true, lastName: true, avatarUrl: true, email: true, phone: true } },
+        department: { select: { name: true, hospital: { select: { name: true } } } },
+        availabilities: true
+      }
+    });
+
+    if (!d) {
+      return res.status(404).json({ success: false, message: 'Doctor not found' });
+    }
+
+    res.json({
+      success: true,
+      doctor: {
+        id: d.id,
+        name: `Dr. ${d.user.firstName} ${d.user.lastName}`,
+        specialty: d.specialty,
+        department: d.department.name,
+        hospital: d.department.hospital.name,
+        fee: d.consultationFee,
+        rating: d.rating,
+        experience: `${d.experienceYears} years`,
+        bio: d.bio,
+        isAvailable: d.isAvailable,
+        isSenior: d.isSenior,
+        photo: d.user.avatarUrl,
+        availabilities: d.availabilities
+      }
+    });
+  } catch (err: any) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// GET /api/doctors/:id/patients
+router.get('/:id/patients', authMiddleware, async (req: AuthRequest, res: Response) => {
+  try {
+    const appointments = await prisma.appointment.findMany({
+      where: { doctorId: req.params.id },
+      include: {
+        patient: {
+          include: {
+            user: true,
+            medicalRecords: true
+          }
+        }
+      },
+      distinct: ['patientId']
+    });
+
+    res.json({
+      success: true,
+      patients: appointments.map(a => ({
+        id: a.patient.id,
+        name: `${a.patient.user.firstName} ${a.patient.user.lastName}`,
+        email: a.patient.user.email,
+        phone: a.patient.user.phone,
+        gender: a.patient.gender,
+        bloodGroup: a.patient.bloodGroup,
+        dob: a.patient.dob,
+        recordsCount: a.patient.medicalRecords.length
+      }))
+    });
+  } catch (err: any) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 // GET /api/doctors/:id/slots?date=YYYY-MM-DD
 router.get('/:id/slots', async (req, res) => {
   try {
@@ -57,24 +130,18 @@ router.get('/:id/slots', async (req, res) => {
       return res.status(404).json({ success: false, message: 'Doctor not found' });
     }
 
-    // Day of week
     const targetDate = new Date(date);
-    const dayOfWeek = targetDate.getDay(); // 0-6
-
-    // Check Leave
     const isLeave = doctor.leaves.some(l => l.status === 'APPROVED' && targetDate >= l.startDate && targetDate <= l.endDate);
     if (isLeave) {
       return res.json({ success: true, isAvailable: false, message: 'Doctor is on leave on this date.', slots: [] });
     }
 
-    // Default slots template
     const standardSlots = [
       '09:00 AM', '09:30 AM', '10:00 AM', '10:30 AM',
       '11:00 AM', '11:30 AM', '02:00 PM', '02:30 PM',
       '03:00 PM', '03:30 PM', '04:00 PM', '04:30 PM'
     ];
 
-    // Find booked appointments on this date
     const booked = await prisma.appointment.findMany({
       where: {
         doctorId: id,

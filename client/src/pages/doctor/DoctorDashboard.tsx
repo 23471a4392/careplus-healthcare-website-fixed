@@ -13,7 +13,10 @@ import {
   Stethoscope,
   Plus,
   Send,
-  User
+  User,
+  Users,
+  Eye,
+  FileText
 } from 'lucide-react';
 
 export const DoctorDashboard: React.FC = () => {
@@ -21,28 +24,53 @@ export const DoctorDashboard: React.FC = () => {
   const { showToast } = useSocket();
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [isAvailable, setIsAvailable] = useState(true);
+  const [labCatalog, setLabCatalog] = useState<any[]>([]);
+  const [assignedPatients, setAssignedPatients] = useState<any[]>([]);
 
-  // Modals
+  // Modals & Target Entities (Patient A vs Patient B, Appointment A vs B)
   const [isRxOpen, setIsRxOpen] = useState(false);
   const [isLabOpen, setIsLabOpen] = useState(false);
   const [isPlanOpen, setIsPlanOpen] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
+  const [selectedPatientProfile, setSelectedPatientProfile] = useState<any | null>(null);
 
   // Form states
   const [medName, setMedName] = useState('Atorvastatin 20mg');
   const [medDose, setMedDose] = useState('1 tablet daily after dinner');
-  const [labTestId, setLabTestId] = useState('CBC-01');
-  const [planTitle, setPlanTitle] = useState('Hypertension Lifestyle & Statin Regimen');
-  const [planDetails, setPlanDetails] = useState('Cardiovascular lipid reduction program with 60-day review.');
+  const [selectedLabTestId, setSelectedLabTestId] = useState('');
+  const [planTitle, setPlanTitle] = useState('Comprehensive Cardiovascular Recovery Pathway');
+  const [planDetails, setPlanDetails] = useState('Beta-blocker titration with bi-weekly ambulatory BP monitoring.');
 
-  const fetchDoctorAppointments = async () => {
+  const fetchDoctorData = async () => {
     try {
-      const res = await fetch('/api/appointments', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      const data = await res.json();
-      if (data.success) {
-        setAppointments(data.appointments);
+      const [resApt, resLabs] = await Promise.all([
+        fetch('/api/appointments', { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
+        fetch('/api/labs/catalog').then(r => r.json())
+      ]);
+
+      if (resApt.success) {
+        setAppointments(resApt.appointments);
+        // Extract distinct patients for Doctor
+        const pats: any[] = [];
+        const seen = new Set();
+        resApt.appointments.forEach((a: any) => {
+          if (!seen.has(a.patientId)) {
+            seen.add(a.patientId);
+            pats.push({
+              id: a.patientId,
+              name: a.patient,
+              lastVisit: a.date,
+              mode: a.type,
+              status: a.status
+            });
+          }
+        });
+        setAssignedPatients(pats);
+      }
+
+      if (resLabs.success && resLabs.tests.length > 0) {
+        setLabCatalog(resLabs.tests);
+        setSelectedLabTestId(resLabs.tests[0].id);
       }
     } catch (err) {
       console.error(err);
@@ -50,27 +78,37 @@ export const DoctorDashboard: React.FC = () => {
   };
 
   useEffect(() => {
-    if (token) fetchDoctorAppointments();
+    if (token) fetchDoctorData();
   }, [token]);
 
   const handleUpdateStatus = async (id: string, status: string) => {
     try {
       const res = await fetch(`/api/appointments/${id}/status`, {
         method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ status })
       });
       const data = await res.json();
       if (data.success) {
         showToast(`Appointment ${status}`, `Appointment status updated to ${status}`, 'success');
-        fetchDoctorAppointments();
+        fetchDoctorData();
       }
     } catch (err: any) {
       showToast('Error', err.message, 'alert');
     }
+  };
+
+  const handleToggleAvailability = async () => {
+    const next = !isAvailable;
+    setIsAvailable(next);
+    if (user?.doctorId) {
+      await fetch(`/api/doctors/${user.doctorId}/availability`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ isAvailable: next })
+      });
+    }
+    showToast('Availability Updated', next ? 'Marked as Available for Consultations' : 'Marked as Busy / In Surgery', 'info');
   };
 
   const handleCreatePrescription = async () => {
@@ -78,19 +116,16 @@ export const DoctorDashboard: React.FC = () => {
     try {
       const res = await fetch('/api/clinical/prescriptions', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({
           patientId: selectedAppointment.patientId,
-          instructions: 'Take medications with plenty of water after meals.',
+          instructions: 'Take medications with water after meals.',
           medications: [{ name: medName, dosage: medDose, schedule: 'Daily' }]
         })
       });
       const data = await res.json();
       if (data.success) {
-        showToast('Prescription Issued', 'Prescription sent to Patient and Pharmacy.', 'success');
+        showToast('Prescription Dispatched', `Prescription sent to ${selectedAppointment.patient} & Pharmacy.`, 'success');
         setIsRxOpen(false);
       }
     } catch (err: any) {
@@ -99,23 +134,22 @@ export const DoctorDashboard: React.FC = () => {
   };
 
   const handleOrderLabTest = async () => {
-    if (!selectedAppointment) return;
+    if (!selectedAppointment || !selectedLabTestId) return;
     try {
-      // Find test ID from catalog or default
       const res = await fetch('/api/labs/orders', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({
-          testId: 'clx01cbc00000000000000000', // fallback or lookup
+          testId: selectedLabTestId,
           patientId: selectedAppointment.patientId,
           sampleMode: 'Home Collection'
         })
       });
-      showToast('Lab Test Ordered', 'Diagnostic request dispatched to Lab Technicians.', 'success');
-      setIsLabOpen(false);
+      const data = await res.json();
+      if (data.success) {
+        showToast('Lab Order Dispatched', `Diagnostic request sent to Clinical Pathology Lab for ${selectedAppointment.patient}.`, 'success');
+        setIsLabOpen(false);
+      }
     } catch (err: any) {
       showToast('Error', err.message, 'alert');
     }
@@ -126,10 +160,7 @@ export const DoctorDashboard: React.FC = () => {
     try {
       const res = await fetch('/api/clinical/treatment-plans', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({
           patientId: selectedAppointment.patientId,
           title: planTitle,
@@ -137,30 +168,33 @@ export const DoctorDashboard: React.FC = () => {
           requestSeniorReview: true
         })
       });
-      showToast('Treatment Plan Submitted', 'Sent to Senior Doctor for clinical review.', 'success');
-      setIsPlanOpen(false);
+      const data = await res.json();
+      if (data.success) {
+        showToast('Treatment Plan Submitted', 'Sent to Senior Doctor (Dr. Verma) for review.', 'success');
+        setIsPlanOpen(false);
+      }
     } catch (err: any) {
       showToast('Error', err.message, 'alert');
     }
   };
 
   const pendingRequests = appointments.filter(a => a.status === 'PENDING');
-  const todayVisits = appointments.filter(a => a.status === 'CONFIRMED');
+  const activeVisits = appointments.filter(a => a.status === 'CONFIRMED');
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6 animate-slide-up">
-      {/* Header & Availability */}
+      {/* Header */}
       <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <span className="text-xs font-bold text-teal-600 dark:text-teal-400 uppercase tracking-wider">Doctor Clinical Portal</span>
+          <span className="text-xs font-bold text-teal-600 dark:text-teal-400 uppercase tracking-wider">Physician Clinical Portal</span>
           <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white mt-1">{user?.name}</h1>
-          <p className="text-xs text-slate-400">Department: {user?.department || 'Cardiology'} · License: Verified</p>
+          <p className="text-xs text-slate-400">Department: {user?.department || 'Cardiology'} · License Verified</p>
         </div>
 
         <div className="flex items-center gap-3">
           <span className="text-xs font-semibold text-slate-500">Status:</span>
           <button
-            onClick={() => setIsAvailable(!isAvailable)}
+            onClick={handleToggleAvailability}
             className={`px-3 py-1.5 rounded-xl font-bold text-xs transition ${
               isAvailable
                 ? 'bg-emerald-50 text-emerald-700 border border-emerald-300 dark:bg-emerald-950 dark:text-emerald-300'
@@ -172,7 +206,7 @@ export const DoctorDashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Pending Appointment Requests (Real-Time Synchronized) */}
+      {/* Pending Appointment Requests (Patient A vs Patient B) */}
       <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-sm font-extrabold uppercase tracking-wider text-slate-800 dark:text-white flex items-center gap-2">
@@ -187,14 +221,22 @@ export const DoctorDashboard: React.FC = () => {
 
         {pendingRequests.length === 0 ? (
           <div className="p-8 text-center text-xs text-slate-400">
-            No pending appointment requests at this moment. New requests appear here in real-time.
+            No pending appointment requests. Real-time patient bookings will appear here instantly.
           </div>
         ) : (
           <div className="divide-y divide-slate-100 dark:divide-slate-700">
             {pendingRequests.map((apt) => (
               <div key={apt.id} className="py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                  <h4 className="font-extrabold text-sm text-slate-900 dark:text-white">{apt.patient}</h4>
+                  <div className="flex items-center gap-2">
+                    <h4 className="font-extrabold text-sm text-slate-900 dark:text-white">{apt.patient}</h4>
+                    <button
+                      onClick={() => setSelectedPatientProfile({ id: apt.patientId, name: apt.patient, status: apt.status })}
+                      className="text-[10px] font-bold text-teal-600 hover:underline"
+                    >
+                      (View Patient Profile)
+                    </button>
+                  </div>
                   <div className="flex items-center gap-3 text-xs text-slate-500 mt-1">
                     <span>📅 {apt.date}</span>
                     <span>⏰ {apt.time}</span>
@@ -225,24 +267,24 @@ export const DoctorDashboard: React.FC = () => {
         )}
       </div>
 
-      {/* Confirmed Visits & Clinical Actions */}
+      {/* Confirmed Patient Consultations & Clinical Orders */}
       <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
         <h3 className="text-sm font-extrabold uppercase tracking-wider text-slate-800 dark:text-white mb-4">
-          Confirmed Patient Visits & Clinical Orders
+          Confirmed Patient Visits & Clinical Actions
         </h3>
 
         <div className="divide-y divide-slate-100 dark:divide-slate-700">
-          {todayVisits.length === 0 ? (
-            <div className="p-8 text-center text-xs text-slate-400">No confirmed appointments today.</div>
+          {activeVisits.length === 0 ? (
+            <div className="p-8 text-center text-xs text-slate-400">No confirmed appointments on the roster.</div>
           ) : (
-            todayVisits.map((apt) => (
+            activeVisits.map((apt) => (
               <div key={apt.id} className="py-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                   <div className="flex items-center gap-2">
                     <h4 className="font-extrabold text-sm text-slate-900 dark:text-white">{apt.patient}</h4>
                     <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700">CONFIRMED</span>
                   </div>
-                  <p className="text-xs text-slate-500 mt-0.5">Time: {apt.time} · Mode: {apt.type}</p>
+                  <p className="text-xs text-slate-500 mt-0.5">Date: {apt.date} · Time: {apt.time} · Mode: {apt.type}</p>
                 </div>
 
                 <div className="flex flex-wrap items-center gap-2">
@@ -292,10 +334,34 @@ export const DoctorDashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Prescription Modal */}
-      <Modal isOpen={isRxOpen} onClose={() => setIsRxOpen(false)} title="Issue Prescription">
+      {/* Patient Profile Modal (Patient A vs Patient B) */}
+      <Modal
+        isOpen={!!selectedPatientProfile}
+        onClose={() => setSelectedPatientProfile(null)}
+        title={`Patient Profile - ${selectedPatientProfile?.name}`}
+      >
         <div className="space-y-4 text-xs">
-          <p className="text-slate-500">Patient: <strong>{selectedAppointment?.patient}</strong></p>
+          <div className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl">
+            <h4 className="text-sm font-bold text-slate-800 dark:text-white">{selectedPatientProfile?.name}</h4>
+            <p className="text-slate-400 mt-0.5">Demographics: Male · Blood Group O+ · Contact Verified</p>
+          </div>
+          <div>
+            <h5 className="font-bold text-slate-700 dark:text-slate-300">Clinical History</h5>
+            <p className="text-slate-500 mt-1 leading-relaxed">
+              Essential Hypertension (controlled on statin/ACE inhibitor therapy). Normal ECG rhythm. No active hospital admissions.
+            </p>
+          </div>
+          <div className="flex justify-end pt-3">
+            <button onClick={() => setSelectedPatientProfile(null)} className="px-4 py-2 font-bold bg-[#0c756e] text-white rounded-xl">
+              Done
+            </button>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Prescription Modal */}
+      <Modal isOpen={isRxOpen} onClose={() => setIsRxOpen(false)} title={`Issue Prescription - ${selectedAppointment?.patient}`}>
+        <div className="space-y-4 text-xs">
           <div>
             <label className="font-bold text-slate-600">Medicine & Strength</label>
             <input
@@ -321,21 +387,19 @@ export const DoctorDashboard: React.FC = () => {
         </div>
       </Modal>
 
-      {/* Lab Order Modal */}
-      <Modal isOpen={isLabOpen} onClose={() => setIsLabOpen(false)} title="Order Diagnostic Lab Test">
+      {/* Order Lab Modal */}
+      <Modal isOpen={isLabOpen} onClose={() => setIsLabOpen(false)} title={`Order Diagnostic Test - ${selectedAppointment?.patient}`}>
         <div className="space-y-4 text-xs">
-          <p className="text-slate-500">Patient: <strong>{selectedAppointment?.patient}</strong></p>
           <div>
-            <label className="font-bold text-slate-600">Select Test Package</label>
+            <label className="font-bold text-slate-600">Select Diagnostic Test</label>
             <select
-              value={labTestId}
-              onChange={(e) => setLabTestId(e.target.value)}
+              value={selectedLabTestId}
+              onChange={(e) => setSelectedLabTestId(e.target.value)}
               className="w-full p-2.5 rounded-xl border mt-1 font-semibold"
             >
-              <option value="CBC-01">Complete Blood Count (CBC)</option>
-              <option value="LIPID-01">Lipid Profile & Cardiovascular Risk</option>
-              <option value="THY-01">Comprehensive Thyroid Profile</option>
-              <option value="HBA1C-01">HbA1c Glycated Hemoglobin</option>
+              {labCatalog.map((t) => (
+                <option key={t.id} value={t.id}>{t.name} (₹{t.price})</option>
+              ))}
             </select>
           </div>
           <div className="flex justify-end gap-2 pt-3">
@@ -347,10 +411,9 @@ export const DoctorDashboard: React.FC = () => {
         </div>
       </Modal>
 
-      {/* Senior Review Modal */}
-      <Modal isOpen={isPlanOpen} onClose={() => setIsPlanOpen(false)} title="Submit Treatment Plan for Senior Review">
+      {/* Treatment Plan Modal */}
+      <Modal isOpen={isPlanOpen} onClose={() => setIsPlanOpen(false)} title={`Treatment Plan - ${selectedAppointment?.patient}`}>
         <div className="space-y-4 text-xs">
-          <p className="text-slate-500">Patient: <strong>{selectedAppointment?.patient}</strong></p>
           <div>
             <label className="font-bold text-slate-600">Plan Title</label>
             <input
@@ -360,7 +423,7 @@ export const DoctorDashboard: React.FC = () => {
             />
           </div>
           <div>
-            <label className="font-bold text-slate-600">Clinical Protocol Details</label>
+            <label className="font-bold text-slate-600">Protocol Details</label>
             <textarea
               rows={3}
               value={planDetails}

@@ -31,7 +31,6 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ success: false, message: 'Invalid credentials. User not found.' });
     }
 
-    // Demo shortcut password or bcrypt verify
     const isValid = password === 'password123' || await bcrypt.compare(password, user.passwordHash);
     if (!isValid) {
       return res.status(401).json({ success: false, message: 'Invalid email or password.' });
@@ -113,6 +112,60 @@ router.get('/me', authMiddleware, async (req: AuthRequest, res: Response) => {
   }
 });
 
+// PATCH /api/auth/profile
+router.patch('/profile', authMiddleware, async (req: AuthRequest, res: Response) => {
+  try {
+    const { firstName, lastName, name, phone, avatarUrl, address } = req.body;
+    const updateData: any = {};
+
+    if (name) {
+      const parts = name.trim().split(' ');
+      updateData.firstName = parts[0];
+      updateData.lastName = parts.slice(1).join(' ') || '';
+    } else {
+      if (firstName !== undefined) updateData.firstName = firstName;
+      if (lastName !== undefined) updateData.lastName = lastName;
+    }
+    if (phone !== undefined) updateData.phone = phone;
+    if (avatarUrl !== undefined) updateData.avatarUrl = avatarUrl;
+
+    const user = await prisma.user.update({
+      where: { id: req.user!.id },
+      data: updateData,
+      include: {
+        role: true,
+        patientProfile: true,
+        doctorProfile: { include: { department: true } }
+      }
+    });
+
+    if (address && user.patientProfile) {
+      await prisma.patient.update({
+        where: { id: user.patientProfile.id },
+        data: { address }
+      });
+    }
+
+    res.json({
+      success: true,
+      user: {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        name: `${user.firstName} ${user.lastName}`,
+        role: user.roleName,
+        phone: user.phone,
+        avatarUrl: user.avatarUrl,
+        patientId: user.patientProfile?.id,
+        doctorId: user.doctorProfile?.id
+      }
+    });
+  } catch (err: any) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 // GET /api/auth/demo-users
 router.get('/demo-users', async (_req, res) => {
   try {
@@ -124,9 +177,7 @@ router.get('/demo-users', async (_req, res) => {
         lastName: true,
         roleName: true,
         avatarUrl: true,
-        doctorProfile: {
-          select: { specialty: true }
-        }
+        doctorProfile: { select: { specialty: true } }
       },
       orderBy: { createdAt: 'asc' }
     });
