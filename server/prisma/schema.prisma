@@ -1,0 +1,523 @@
+// Prisma Schema for CarePlus Healthcare Management System
+// Full normalization supporting 10 Healthcare Roles, Appointments, Clinical Records, Beds, Realtime Notifications
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// 1. Role Model
+model Role {
+  id          String       @id @default(cuid())
+  name        String       @unique // SUPER_ADMIN, HOSPITAL_ADMIN, SENIOR_DOCTOR, DOCTOR, NURSE, PATIENT, RECEPTIONIST, LAB_TECHNICIAN, PHARMACIST, ACCOUNTANT
+  description String?
+  users       User[]
+  permissions Permission[]
+  createdAt   DateTime     @default(now())
+}
+
+// 2. Permission Model
+model Permission {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  roleId    String
+  role      Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
+// 3. User Model
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  passwordHash  String
+  firstName     String
+  lastName      String
+  phone         String?
+  avatarUrl     String?
+  roleId        String
+  role          Role      @relation(fields: [roleId], references: [id])
+  roleName      String    // Denormalized for fast RBAC checks
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Role Profile Relations
+  patientProfile Patient?
+  doctorProfile  Doctor?
+  nurseProfile   Nurse?
+  staffProfile   Staff?
+
+  // System Relations
+  sentNotifications     Notification[]         @relation("SentNotifications")
+  receivedNotifications Notification[]         @relation("ReceivedNotifications")
+  notificationPref      NotificationPreference?
+  sentMessages          Message[]              @relation("SentMessages")
+  receivedMessages      Message[]              @relation("ReceivedMessages")
+  auditLogs             AuditLog[]
+
+  @@index([email])
+  @@index([roleName])
+}
+
+// 4. Hospital Model
+model Hospital {
+  id          String        @id @default(cuid())
+  name        String
+  code        String        @unique
+  address     String
+  phone       String
+  email       String
+  departments Department[]
+  rooms       Room[]
+  staff       Staff[]
+  appointments Appointment[]
+  createdAt   DateTime      @default(now())
+}
+
+// 5. Department Model
+model Department {
+  id          String     @id @default(cuid())
+  name        String
+  code        String
+  hospitalId  String
+  hospital    Hospital   @relation(fields: [hospitalId], references: [id], onDelete: Cascade)
+  doctors     Doctor[]
+  nurses      Nurse[]
+  rooms       Room[]
+  appointments Appointment[]
+  createdAt   DateTime   @default(now())
+
+  @@unique([hospitalId, code])
+}
+
+// 6. Patient Model
+model Patient {
+  id               String          @id @default(cuid())
+  userId           String          @unique
+  user             User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  patientCode      String          @unique
+  dob              DateTime
+  gender           String
+  bloodGroup       String
+  address          String
+  emergencyContact String
+  allergies        String?
+  createdAt        DateTime        @default(now())
+
+  // Clinical Relations
+  appointments     Appointment[]
+  medicalRecords   MedicalRecord[]
+  prescriptions    Prescription[]
+  labResults       LabResult[]
+  radiologyReports RadiologyReport[]
+  treatmentPlans   TreatmentPlan[]
+  diagnoses        Diagnosis[]
+  admissions       Admission[]
+  invoices         Invoice[]
+  insurances       Insurance[]
+}
+
+// 7. Doctor Model
+model Doctor {
+  id               String               @id @default(cuid())
+  userId           String               @unique
+  user             User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  departmentId     String
+  department       Department           @relation(fields: [departmentId], references: [id])
+  specialty        String
+  licenseNumber    String               @unique
+  experienceYears  Int
+  consultationFee  Float
+  rating           Float                @default(4.9)
+  bio              String?
+  isAvailable      Boolean              @default(true)
+  isSenior         Boolean              @default(false)
+  createdAt        DateTime             @default(now())
+
+  seniorProfile    SeniorDoctor?
+  availabilities   DoctorAvailability[]
+  leaves           DoctorLeave[]
+  appointments     Appointment[]
+  medicalRecords   MedicalRecord[]
+  prescriptions    Prescription[]
+  labResults       LabResult[]
+  treatmentPlans   TreatmentPlan[]      @relation("DoctorTreatments")
+  diagnoses        Diagnosis[]
+  radiologyReports RadiologyReport[]
+}
+
+// 8. Senior Doctor Supervision Model
+model SeniorDoctor {
+  id               String          @id @default(cuid())
+  doctorId         String          @unique
+  doctor           Doctor          @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  supervisionNotes String?
+  reviewedPlans    TreatmentPlan[] @relation("SeniorReviews")
+  createdAt        DateTime        @default(now())
+}
+
+// 9. Nurse Model
+model Nurse {
+  id           String      @id @default(cuid())
+  userId       String      @unique
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  departmentId String
+  department   Department  @relation(fields: [departmentId], references: [id])
+  shift        String      @default("Morning") // Morning, Evening, Night
+  createdAt    DateTime    @default(now())
+}
+
+// 10. Staff Model (Reception, Pharmacist, Lab Tech, Accountant, Admins)
+model Staff {
+  id         String   @id @default(cuid())
+  userId     String   @unique
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  hospitalId String
+  hospital   Hospital @relation(fields: [hospitalId], references: [id])
+  jobTitle   String
+  createdAt  DateTime @default(now())
+}
+
+// 11. Doctor Availability Model
+model DoctorAvailability {
+  id                  String   @id @default(cuid())
+  doctorId            String
+  doctor              Doctor   @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  dayOfWeek           Int      // 0 = Sunday, 1 = Monday ... 6 = Saturday
+  startTime           String   // e.g. "09:00"
+  endTime             String   // e.g. "17:00"
+  slotDurationMinutes Int      @default(30)
+  isAvailable         Boolean  @default(true)
+
+  @@unique([doctorId, dayOfWeek])
+}
+
+// 12. Doctor Leave Model
+model DoctorLeave {
+  id        String   @id @default(cuid())
+  doctorId  String
+  doctor    Doctor   @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  startDate DateTime
+  endDate   DateTime
+  reason    String
+  status    String   @default("APPROVED") // PENDING, APPROVED, REJECTED
+  createdAt DateTime @default(now())
+}
+
+// 13. Appointment Model (with Double-Booking Prevention)
+model Appointment {
+  id               String      @id @default(cuid())
+  appointmentCode  String      @unique
+  patientId        String
+  patient          Patient     @relation(fields: [patientId], references: [id])
+  doctorId         String
+  doctor           Doctor      @relation(fields: [doctorId], references: [id])
+  hospitalId       String
+  hospital         Hospital    @relation(fields: [hospitalId], references: [id])
+  departmentId     String
+  department       Department  @relation(fields: [departmentId], references: [id])
+  date             String      // YYYY-MM-DD
+  timeSlot         String      // e.g. "10:30"
+  consultationType String      @default("In-person") // In-person, Video
+  status           String      @default("PENDING") // PENDING, CONFIRMED, REJECTED, RESCHEDULED, COMPLETED, CANCELLED
+  reason           String?
+  clinicalNotes    String?
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+
+  prescriptions    Prescription[]
+  diagnoses        Diagnosis[]
+
+  @@unique([doctorId, date, timeSlot]) // STRICT DATABASE LEVEL DOUBLE-BOOKING PREVENTION
+  @@index([patientId])
+  @@index([doctorId])
+  @@index([date])
+}
+
+// 14. Medical Record Model
+model MedicalRecord {
+  id          String   @id @default(cuid())
+  patientId   String
+  patient     Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  doctorId    String
+  doctor      Doctor   @relation(fields: [doctorId], references: [id])
+  title       String
+  category    String   // Lab Report, Radiology, Prescription, Discharge Summary
+  date        String
+  facility    String
+  summary     String
+  fileUrl     String?
+  createdAt   DateTime @default(now())
+
+  @@index([patientId])
+}
+
+// 15. Diagnosis Model
+model Diagnosis {
+  id            String       @id @default(cuid())
+  appointmentId String?
+  appointment   Appointment? @relation(fields: [appointmentId], references: [id])
+  patientId     String
+  patient       Patient      @relation(fields: [patientId], references: [id])
+  doctorId      String
+  doctor        Doctor       @relation(fields: [doctorId], references: [id])
+  icdCode       String?
+  description   String
+  severity      String       @default("Mild") // Mild, Moderate, Severe, Critical
+  createdAt     DateTime     @default(now())
+}
+
+// 16. Treatment Plan Model (with Senior Review workflow)
+model TreatmentPlan {
+  id              String        @id @default(cuid())
+  patientId       String
+  patient         Patient       @relation(fields: [patientId], references: [id])
+  doctorId        String
+  doctor          Doctor        @relation("DoctorTreatments", fields: [doctorId], references: [id])
+  seniorDoctorId  String?
+  seniorDoctor    SeniorDoctor? @relation("SeniorReviews", fields: [seniorDoctorId], references: [id])
+  title           String
+  description     String
+  status          String        @default("DRAFT") // DRAFT, PENDING_APPROVAL, APPROVED, CHANGES_REQUESTED
+  reviewNotes     String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+// 17. Prescription Model
+model Prescription {
+  id            String        @id @default(cuid())
+  appointmentId String?
+  appointment   Appointment?  @relation(fields: [appointmentId], references: [id])
+  patientId     String
+  patient       Patient       @relation(fields: [patientId], references: [id])
+  doctorId      String
+  doctor        Doctor        @relation(fields: [doctorId], references: [id])
+  status        String        @default("PENDING") // PENDING, DISPENSED, CANCELLED
+  instructions  String?
+  medications   Medication[]
+  createdAt     DateTime      @default(now())
+  dispensedAt   DateTime?
+}
+
+// 18. Medication Item Model
+model Medication {
+  id             String       @id @default(cuid())
+  prescriptionId String
+  prescription   Prescription @relation(fields: [prescriptionId], references: [id], onDelete: Cascade)
+  medicineName   String
+  dosage         String       // e.g. "500 mg"
+  schedule       String       // e.g. "Daily · After breakfast"
+  durationDays   Int          @default(30)
+  takenToday     Boolean      @default(false)
+}
+
+// 19. Lab Test Catalog Model
+model LabTest {
+  id              String      @id @default(cuid())
+  code            String      @unique
+  name            String
+  category        String      // Blood, Organ Profile, Diabetes, Vitamins
+  price           Float
+  turnaroundHours Int         @default(24)
+  preparation     String
+  description     String
+  results         LabResult[]
+}
+
+// 20. Lab Result Order Model
+model LabResult {
+  id              String    @id @default(cuid())
+  testId          String
+  test            LabTest   @relation(fields: [testId], references: [id])
+  patientId       String
+  patient         Patient   @relation(fields: [patientId], references: [id])
+  doctorId        String
+  doctor          Doctor    @relation(fields: [doctorId], references: [id])
+  status          String    @default("REQUESTED") // REQUESTED, SAMPLE_COLLECTED, PROCESSING, COMPLETED, CANCELLED
+  sampleMode      String    @default("Home Collection")
+  collectionDate  String
+  resultSummary   String?
+  reportFileUrl   String?
+  createdAt       DateTime  @default(now())
+  completedAt     DateTime?
+}
+
+// 21. Radiology Report Model
+model RadiologyReport {
+  id          String   @id @default(cuid())
+  patientId   String
+  patient     Patient  @relation(fields: [patientId], references: [id])
+  doctorId    String
+  doctor      Doctor   @relation(fields: [doctorId], references: [id])
+  modality    String   // X-Ray, MRI, CT Scan, Ultrasound
+  findings    String
+  impression  String
+  fileUrl     String?
+  createdAt   DateTime @default(now())
+}
+
+// 22. Hospital Room Model
+model Room {
+  id           String      @id @default(cuid())
+  roomNumber   String
+  hospitalId   String
+  hospital     Hospital    @relation(fields: [hospitalId], references: [id])
+  departmentId String
+  department   Department  @relation(fields: [departmentId], references: [id])
+  roomType     String      @default("General") // General, Semi-Private, ICU, Deluxe
+  beds         Bed[]
+
+  @@unique([hospitalId, roomNumber])
+}
+
+// 23. Bed Model
+model Bed {
+  id          String      @id @default(cuid())
+  roomId      String
+  room        Room        @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  bedNumber   String
+  status      String      @default("AVAILABLE") // AVAILABLE, OCCUPIED, RESERVED, MAINTENANCE
+  admissions  Admission[]
+
+  @@unique([roomId, bedNumber])
+}
+
+// 24. Patient Admission Model
+model Admission {
+  id            String    @id @default(cuid())
+  patientId     String
+  patient       Patient   @relation(fields: [patientId], references: [id])
+  bedId         String
+  bed           Bed       @relation(fields: [bedId], references: [id])
+  admissionDate DateTime  @default(now())
+  dischargeDate DateTime?
+  diagnosis     String
+  status        String    @default("ACTIVE") // ACTIVE, DISCHARGED
+}
+
+// 25. Invoice Model
+model Invoice {
+  id          String    @id @default(cuid())
+  invoiceCode String    @unique
+  patientId   String
+  patient     Patient   @relation(fields: [patientId], references: [id])
+  amount      Float
+  status      String    @default("PENDING") // PENDING, PAID, PARTIAL, CANCELLED
+  itemsJson   String    // JSON description of billed items
+  dueDate     DateTime
+  payments    Payment[]
+  createdAt   DateTime  @default(now())
+}
+
+// 26. Payment Model
+model Payment {
+  id            String   @id @default(cuid())
+  invoiceId     String
+  invoice       Invoice  @relation(fields: [invoiceId], references: [id])
+  amount        Float
+  paymentMethod String   // UPI, Credit Card, Cash, Insurance
+  referenceNo   String
+  paidAt        DateTime @default(now())
+}
+
+// 27. Insurance Model
+model Insurance {
+  id            String   @id @default(cuid())
+  patientId     String
+  patient       Patient  @relation(fields: [patientId], references: [id])
+  providerName  String
+  policyNumber  String   @unique
+  coverageLimit Float
+  validUntil    DateTime
+  status        String   @default("ACTIVE")
+}
+
+// 28. Pharmacy Inventory Model
+model Inventory {
+  id           String    @id @default(cuid())
+  medicineName String    @unique
+  category     String    // Tablet, Capsule, Syrup, Injectable
+  stock        Int
+  minThreshold Int       @default(20)
+  unitPrice    Float
+  supplierId   String?
+  supplier     Supplier? @relation(fields: [supplierId], references: [id])
+  expiryDate   DateTime
+  createdAt    DateTime  @default(now())
+}
+
+// 29. Supplier Model
+model Supplier {
+  id          String      @id @default(cuid())
+  name        String
+  contactName String
+  phone       String
+  email       String
+  inventory   Inventory[]
+}
+
+// 30. Real-time Notification Model
+model Notification {
+  id          String   @id @default(cuid())
+  recipientId String
+  recipient   User     @relation("ReceivedNotifications", fields: [recipientId], references: [id], onDelete: Cascade)
+  senderId    String?
+  sender      User?    @relation("SentNotifications", fields: [senderId], references: [id])
+  type        String   // NEW_APPOINTMENT, APPOINTMENT_CONFIRMED, LAB_TEST_REQUESTED, etc.
+  title       String
+  message     String
+  entityType  String?  // appointment, prescription, lab_result, treatment_plan
+  entityId    String?
+  isRead      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  @@index([recipientId])
+  @@index([isRead])
+}
+
+// 31. Notification Preference Model
+model NotificationPreference {
+  id                   String  @id @default(cuid())
+  userId               String  @unique
+  user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  emailAlerts          Boolean @default(true)
+  appointmentReminders Boolean @default(true)
+  medicationAlerts     Boolean @default(true)
+  emergencyBroadcasts  Boolean @default(true)
+}
+
+// 32. Internal Messaging Model
+model Message {
+  id          String   @id @default(cuid())
+  senderId    String
+  sender      User     @relation("SentMessages", fields: [senderId], references: [id])
+  recipientId String
+  recipient   User     @relation("ReceivedMessages", fields: [recipientId], references: [id])
+  content     String
+  isRead      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  @@index([senderId, recipientId])
+}
+
+// 33. Audit Log Model
+model AuditLog {
+  id           String   @id @default(cuid())
+  userId       String?
+  user         User?    @relation(fields: [userId], references: [id])
+  action       String   // CREATE, UPDATE, DELETE, LOGIN, APPROVE, DISPENSE
+  resource     String   // Appointment, Prescription, LabResult, Bed, TreatmentPlan
+  resourceId   String?
+  details      String?  // JSON string
+  ipAddress    String?
+  timestamp    DateTime @default(now())
+
+  @@index([action])
+  @@index([resource])
+  @@index([timestamp])
+}
