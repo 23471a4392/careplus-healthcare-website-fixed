@@ -16,18 +16,52 @@ import {
   PhoneCall,
   ArrowRight,
   CheckCircle2,
-  Users,
   Calendar,
   Building,
-  ChevronRight,
-  ExternalLink,
   Lock,
-  UserPlus
+  Eye,
+  EyeOff,
+  AlertCircle,
+  Loader2
 } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext.tsx';
 
 export const HospitalHomePage: React.FC = () => {
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [selectedRoleForLogin, setSelectedRoleForLogin] = useState<string | null>(null);
+  const { loginWithCredentials } = useAuth();
+
+  // Sign In Modal State (Single clean form, no role cards)
+  const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
+  const [modalEmail, setModalEmail] = useState('');
+  const [modalPassword, setModalPassword] = useState('');
+  const [showModalPassword, setShowModalPassword] = useState(false);
+  const [modalError, setModalError] = useState('');
+  const [isModalSubmitting, setIsModalSubmitting] = useState(false);
+
+  const handleModalSignIn = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setModalError('');
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!modalEmail.trim() || !emailRegex.test(modalEmail.trim()) || !modalPassword.trim()) {
+      setModalError('Invalid email or password.');
+      return;
+    }
+
+    setIsModalSubmitting(true);
+
+    try {
+      const result = await loginWithCredentials(modalEmail.trim(), modalPassword);
+      if (result.success) {
+        window.location.href = result.redirectUrl;
+      } else {
+        setModalError('Invalid email or password.');
+      }
+    } catch {
+      setModalError('Invalid email or password.');
+    } finally {
+      setIsModalSubmitting(false);
+    }
+  };
 
   const departments = [
     { name: 'Cardiology & Cardiac Surgery', icon: Heart, desc: 'Advanced coronary interventions, electrophysiology, and preventative heart care.', doc: 'Dr. Arjun Rao' },
@@ -44,7 +78,6 @@ export const HospitalHomePage: React.FC = () => {
       title: 'Senior Consultant Cardiologist',
       dept: 'Department of Cardiology',
       exp: '12+ Years Experience',
-      fee: '₹800',
       rating: '4.9 ★',
       desc: 'Expertise in interventional cardiology, hypertension management, and echocardiography.'
     },
@@ -53,7 +86,6 @@ export const HospitalHomePage: React.FC = () => {
       title: 'Consultant Dermatologist',
       dept: 'Department of Dermatology',
       exp: '9+ Years Experience',
-      fee: '₹700',
       rating: '4.9 ★',
       desc: 'Specialized in clinical dermatology, autoimmune skin conditions, and pediatric care.'
     },
@@ -62,7 +94,6 @@ export const HospitalHomePage: React.FC = () => {
       title: 'Senior Neurologist',
       dept: 'Department of Neurology',
       exp: '15+ Years Experience',
-      fee: '₹900',
       rating: '4.8 ★',
       desc: 'Specialist in stroke intervention, chronic migraines, and neuromuscular disorders.'
     },
@@ -71,18 +102,9 @@ export const HospitalHomePage: React.FC = () => {
       title: 'Chief of Medicine & Critical Care',
       dept: 'Department of Internal Medicine',
       exp: '22+ Years Experience',
-      fee: '₹1200',
       rating: '5.0 ★',
       desc: 'Director of Clinical Governance, intensive care protocols, and complex diagnostic cases.'
     }
-  ];
-
-  const rolePortals = [
-    { key: 'patient', name: 'Patient Portal', desc: 'Book consultations, access medical records, prescriptions & lab results.', url: '/patient', color: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
-    { key: 'doctor', name: 'Doctor Portal', desc: 'Manage schedule, accept patient requests, issue e-prescriptions & order labs.', url: '/doctor', color: 'bg-teal-50 text-teal-700 border-teal-200' },
-    { key: 'senior', name: 'Senior Doctor Portal', desc: 'Supervise critical cases, review treatment plans, and clinical governance.', url: '/senior', color: 'bg-blue-50 text-blue-700 border-blue-200' },
-    { key: 'nurse', name: 'Nurse Station', desc: 'Inpatient ward rounds, bedside telemetry vitals logging & care rosters.', url: '/nurse', color: 'bg-amber-50 text-amber-700 border-amber-200' },
-    { key: 'lab', name: 'Diagnostic Lab Portal', desc: 'Manage diagnostic test queues, specimen processing & report publishing.', url: '/lab', color: 'bg-purple-50 text-purple-700 border-purple-200' }
   ];
 
   return (
@@ -107,9 +129,9 @@ export const HospitalHomePage: React.FC = () => {
       </div>
 
       {/* Main Navigation Bar */}
-      <header className="bg-white border-b border-slate-100 sticky top-0 z-40 px-6 sm:px-12 py-3.5 flex items-center justify-between shadow-sm">
+      <header className="bg-white border-b border-slate-100 sticky top-0 z-40 px-6 sm:px-12 py-3.5 flex items-center justify-between shadow-xs">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-[#0c756e] flex items-center justify-center text-white shadow-sm">
+          <div className="w-9 h-9 rounded-xl bg-[#0c756e] flex items-center justify-center text-white shadow-xs">
             <Plus className="w-5 h-5 stroke-[2.5]" />
           </div>
           <div>
@@ -122,10 +144,9 @@ export const HospitalHomePage: React.FC = () => {
           </div>
         </div>
 
-        {/* Navigation Links */}
+        {/* Clean Navigation Links (Removed Clinical Services) */}
         <nav className="hidden lg:flex items-center gap-6 text-xs font-semibold text-slate-600">
           <a href="#about" className="hover:text-[#0c756e] transition">About Hospital</a>
-          <a href="#services" className="hover:text-[#0c756e] transition">Clinical Services</a>
           <a href="#departments" className="hover:text-[#0c756e] transition">Departments</a>
           <a href="#doctors" className="hover:text-[#0c756e] transition">Specialists</a>
           <a href="#laboratory" className="hover:text-[#0c756e] transition">Laboratory</a>
@@ -133,26 +154,22 @@ export const HospitalHomePage: React.FC = () => {
           <a href="#contact" className="hover:text-[#0c756e] transition">Contact & Location</a>
         </nav>
 
-        {/* TOP RIGHT CORNER: [Sign In] [Sign Up] */}
+        {/* TOP RIGHT CORNER: [Sign In] Only (Removed Sign Up) */}
         <div className="flex items-center gap-2.5">
           <button
-            onClick={() => setIsAuthModalOpen(true)}
-            className="px-4 py-2 bg-[#0c756e] hover:bg-[#095e58] text-white rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-1.5 cursor-pointer"
+            onClick={() => {
+              setModalError('');
+              setIsSignInModalOpen(true);
+            }}
+            className="px-5 py-2.5 bg-[#0c756e] hover:bg-[#095e58] text-white rounded-xl text-xs font-bold shadow-xs transition flex items-center gap-1.5 cursor-pointer"
           >
             <Lock className="w-3.5 h-3.5" />
             <span>Sign In</span>
           </button>
-          <a
-            href="/patient"
-            className="px-4 py-2 bg-white hover:bg-[#e6f5f2] text-[#0c756e] border border-[#cbe7e2] rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
-          >
-            <UserPlus className="w-3.5 h-3.5" />
-            <span>Sign Up</span>
-          </a>
         </div>
       </header>
 
-      {/* Hero Section */}
+      {/* Hero Section - Attractive, Warm, Humanized */}
       <section className="relative bg-gradient-to-b from-white to-[#f3f8f7] border-b border-slate-100 py-16 sm:py-24 px-6 sm:px-12 overflow-hidden">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-7 space-y-6">
@@ -162,8 +179,8 @@ export const HospitalHomePage: React.FC = () => {
             </div>
 
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#132e2b] tracking-tight leading-tight">
-              Exceptional Healthcare. <br />
-              <span className="text-[#0c756e]">Compassionate Patient Care.</span>
+              Exceptional Medical Care. <br />
+              <span className="text-[#0c756e]">Compassionate Patient Support.</span>
             </h1>
 
             <p className="text-sm text-[#4d7872] leading-relaxed max-w-xl">
@@ -171,16 +188,19 @@ export const HospitalHomePage: React.FC = () => {
             </p>
 
             <div className="flex flex-wrap items-center gap-3 pt-2">
-              <a
-                href="/patient"
-                className="px-5 py-3 bg-[#0c756e] hover:bg-[#095e58] text-white rounded-xl text-xs font-bold shadow-md hover:shadow-lg transition flex items-center gap-2"
+              <button
+                onClick={() => {
+                  setModalError('');
+                  setIsSignInModalOpen(true);
+                }}
+                className="px-5 py-3 bg-[#0c756e] hover:bg-[#095e58] text-white rounded-xl text-xs font-bold shadow-xs hover:shadow-md transition flex items-center gap-2 cursor-pointer"
               >
                 <Calendar className="w-4 h-4" />
                 <span>Book Doctor Appointment</span>
-              </a>
+              </button>
               <a
                 href="tel:108"
-                className="px-5 py-3 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold shadow-md transition flex items-center gap-2"
+                className="px-5 py-3 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold shadow-xs transition flex items-center gap-2"
               >
                 <PhoneCall className="w-4 h-4" />
                 <span>Emergency 24/7: 108</span>
@@ -193,7 +213,7 @@ export const HospitalHomePage: React.FC = () => {
               </a>
             </div>
 
-            {/* Quick Metrics */}
+            {/* Hospital Key Metrics */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-slate-200">
               <div>
                 <div className="text-2xl font-black text-[#0c756e]">500+</div>
@@ -221,33 +241,36 @@ export const HospitalHomePage: React.FC = () => {
                 <Activity className="w-6 h-6" />
               </div>
               <div>
-                <span className="text-[11px] font-bold uppercase tracking-wider text-[#0c756e]">Integrated Digital Healthcare</span>
-                <h3 className="text-lg font-bold text-[#132e2b] mt-0.5">Real-Time Connected Medical Care</h3>
+                <span className="text-[11px] font-bold uppercase tracking-wider text-[#0c756e]">Integrated Hospital Care</span>
+                <h3 className="text-lg font-bold text-[#132e2b] mt-0.5">Patient-First Modern Healthcare</h3>
                 <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                  From electronic consultations and diagnostic pathology to in-house pharmacy dispensing, every step of your health journey is coordinated seamlessly in real time.
+                  From electronic consultations and diagnostic pathology to in-house pharmacy dispensing, your medical care is coordinated seamlessly with clinical precision.
                 </p>
               </div>
 
               <div className="p-4 bg-[#f8fbfb] rounded-2xl border border-[#eef6f5] space-y-2.5">
                 <div className="flex items-center gap-2 text-xs font-semibold text-[#132e2b]">
                   <CheckCircle2 className="w-4 h-4 text-[#0c756e]" />
-                  <span>Immediate Electronic Appointments & Live Queues</span>
+                  <span>Direct Consultations with Board-Certified Specialists</span>
                 </div>
                 <div className="flex items-center gap-2 text-xs font-semibold text-[#132e2b]">
                   <CheckCircle2 className="w-4 h-4 text-[#0c756e]" />
-                  <span>Automated Pathology Lab & Digital Report Delivery</span>
+                  <span>Fully Automated NABL Pathology with Digital Reports</span>
                 </div>
                 <div className="flex items-center gap-2 text-xs font-semibold text-[#132e2b]">
                   <CheckCircle2 className="w-4 h-4 text-[#0c756e]" />
-                  <span>24/7 Critical Care Supervision & Patient Monitoring</span>
+                  <span>Continuous 24/7 Critical Care Supervision & Patient Safety</span>
                 </div>
               </div>
 
               <button
-                onClick={() => setIsAuthModalOpen(true)}
-                className="w-full py-3 bg-[#0c756e] hover:bg-[#095e58] text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-sm transition"
+                onClick={() => {
+                  setModalError('');
+                  setIsSignInModalOpen(true);
+                }}
+                className="w-full py-3 bg-[#0c756e] hover:bg-[#095e58] text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-xs transition cursor-pointer"
               >
-                <span>Access Role Portals (Patient, Doctor, Staff)</span>
+                <span>Sign in to CarePlus Portal</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
@@ -266,7 +289,7 @@ export const HospitalHomePage: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white rounded-2xl p-6 border border-[#d6ebe7] shadow-sm space-y-3">
+          <div className="bg-white rounded-2xl p-6 border border-[#d6ebe7] shadow-xs space-y-3">
             <div className="w-10 h-10 rounded-xl bg-teal-50 text-[#0c756e] flex items-center justify-center font-bold">
               <Stethoscope className="w-5 h-5" />
             </div>
@@ -276,7 +299,7 @@ export const HospitalHomePage: React.FC = () => {
             </p>
           </div>
 
-          <div className="bg-white rounded-2xl p-6 border border-[#d6ebe7] shadow-sm space-y-3">
+          <div className="bg-white rounded-2xl p-6 border border-[#d6ebe7] shadow-xs space-y-3">
             <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center font-bold">
               <TestTube className="w-5 h-5" />
             </div>
@@ -286,7 +309,7 @@ export const HospitalHomePage: React.FC = () => {
             </p>
           </div>
 
-          <div className="bg-white rounded-2xl p-6 border border-[#d6ebe7] shadow-sm space-y-3">
+          <div className="bg-white rounded-2xl p-6 border border-[#d6ebe7] shadow-xs space-y-3">
             <div className="w-10 h-10 rounded-xl bg-rose-50 text-rose-700 flex items-center justify-center font-bold">
               <PhoneCall className="w-5 h-5" />
             </div>
@@ -306,10 +329,16 @@ export const HospitalHomePage: React.FC = () => {
               <span className="text-xs font-extrabold uppercase tracking-wider text-[#0c756e]">Specialized Centers</span>
               <h2 className="text-2xl sm:text-3xl font-black text-[#132e2b] tracking-tight mt-1">Clinical Departments</h2>
             </div>
-            <a href="/patient" className="text-xs font-bold text-[#0c756e] hover:underline flex items-center gap-1">
+            <button
+              onClick={() => {
+                setModalError('');
+                setIsSignInModalOpen(true);
+              }}
+              className="text-xs font-bold text-[#0c756e] hover:underline flex items-center gap-1 cursor-pointer"
+            >
               <span>View All OPD Schedules</span>
               <ArrowRight className="w-3.5 h-3.5" />
-            </a>
+            </button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -318,7 +347,7 @@ export const HospitalHomePage: React.FC = () => {
               return (
                 <div key={i} className="p-6 rounded-2xl bg-[#f8fbfb] border border-[#d6ebe7] hover:border-[#0c756e] transition space-y-3 group">
                   <div className="flex justify-between items-start">
-                    <div className="w-10 h-10 rounded-xl bg-white text-[#0c756e] border border-[#cbe7e2] flex items-center justify-center shadow-sm">
+                    <div className="w-10 h-10 rounded-xl bg-white text-[#0c756e] border border-[#cbe7e2] flex items-center justify-center shadow-xs">
                       <Icon className="w-5 h-5" />
                     </div>
                     <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-white text-[#0c756e] border border-[#cbe7e2]">
@@ -334,7 +363,7 @@ export const HospitalHomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* Doctors & Specialists Catalog */}
+      {/* Doctors & Specialists Catalog (No prices, clean & attractive) */}
       <section id="doctors" className="py-16 px-6 sm:px-12 max-w-6xl mx-auto space-y-10">
         <div className="text-center max-w-2xl mx-auto space-y-2">
           <span className="text-xs font-extrabold uppercase tracking-wider text-[#0c756e]">Medical Faculty</span>
@@ -346,9 +375,9 @@ export const HospitalHomePage: React.FC = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {doctors.map((doc, i) => (
-            <div key={i} className="bg-white rounded-2xl p-5 border border-[#d6ebe7] shadow-sm flex flex-col justify-between space-y-4">
+            <div key={i} className="bg-white rounded-2xl p-5 border border-[#d6ebe7] shadow-xs flex flex-col justify-between space-y-4">
               <div>
-                <div className="w-14 h-14 rounded-2xl bg-[#e6f5f2] border border-[#0c756e] text-[#0c756e] flex items-center justify-center font-black text-base shadow-sm mb-3">
+                <div className="w-14 h-14 rounded-2xl bg-[#e6f5f2] border border-[#0c756e] text-[#0c756e] flex items-center justify-center font-black text-base shadow-xs mb-3">
                   {doc.name.split(' ').map(n=>n[0]).join('').slice(0, 2)}
                 </div>
                 <div className="flex justify-between items-baseline">
@@ -361,13 +390,16 @@ export const HospitalHomePage: React.FC = () => {
               </div>
 
               <div className="pt-3 border-t border-[#eef6f5] flex justify-between items-center text-xs">
-                <span className="font-semibold text-[#0c756e] bg-[#e6f5f2] px-2 py-0.5 rounded text-[11px] font-medium">Available Today</span>
-                <a
-                  href="/patient"
-                  className="px-3 py-1.5 bg-[#0c756e] hover:bg-[#095e58] text-white rounded-lg font-bold text-[11px]"
+                <span className="font-semibold text-[#0c756e] bg-[#e6f5f2] px-2 py-0.5 rounded text-[11px]">Available Today</span>
+                <button
+                  onClick={() => {
+                    setModalError('');
+                    setIsSignInModalOpen(true);
+                  }}
+                  className="px-3 py-1.5 bg-[#0c756e] hover:bg-[#095e58] text-white rounded-lg font-bold text-[11px] cursor-pointer"
                 >
                   Book Visit
-                </a>
+                </button>
               </div>
             </div>
           ))}
@@ -422,7 +454,7 @@ export const HospitalHomePage: React.FC = () => {
             </div>
             <a
               href="tel:108"
-              className="inline-block w-full py-2.5 text-center text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-xl shadow-sm transition"
+              className="inline-block w-full py-2.5 text-center text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-xl shadow-xs transition"
             >
               Call National Emergency: 108
             </a>
@@ -430,7 +462,7 @@ export const HospitalHomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* Facilities & Patient Care Information */}
+      {/* Facilities & Infrastructure */}
       <section id="facilities" className="py-16 px-6 sm:px-12 max-w-6xl mx-auto space-y-10">
         <div className="text-center max-w-2xl mx-auto space-y-2">
           <span className="text-xs font-extrabold uppercase tracking-wider text-[#0c756e]">Hospital Infrastructure</span>
@@ -464,7 +496,7 @@ export const HospitalHomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* Hospital Location, Address & Contact Details */}
+      {/* Hospital Location & Contact Details */}
       <section id="contact" className="bg-white py-16 px-6 sm:px-12 border-t border-slate-100">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           <div className="lg:col-span-5 space-y-5">
@@ -510,7 +542,7 @@ export const HospitalHomePage: React.FC = () => {
           </div>
 
           {/* Interactive Map Visual Card */}
-          <div className="lg:col-span-7 bg-[#f8fbfb] p-6 rounded-3xl border border-[#d6ebe7] shadow-sm space-y-4">
+          <div className="lg:col-span-7 bg-[#f8fbfb] p-6 rounded-3xl border border-[#d6ebe7] shadow-xs space-y-4">
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-2">
                 <Building className="w-4 h-4 text-[#0c756e]" />
@@ -519,7 +551,6 @@ export const HospitalHomePage: React.FC = () => {
               <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Open 24/7</span>
             </div>
 
-            {/* Stylized Hospital Map Diagram */}
             <div className="h-56 bg-slate-200 rounded-2xl overflow-hidden relative border border-slate-300 flex items-center justify-center p-4">
               <div className="absolute inset-0 bg-[#e8f3f1] flex items-center justify-center">
                 <div className="text-center space-y-2">
@@ -547,7 +578,7 @@ export const HospitalHomePage: React.FC = () => {
 
       {/* Public Footer */}
       <footer className="bg-[#0b2421] text-teal-100 py-12 px-6 sm:px-12 border-t border-[#143a35]">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 text-xs">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mb-8 text-xs">
           <div className="space-y-3">
             <div className="flex items-center gap-2.5">
               <div className="w-7 h-7 rounded-lg bg-[#1de9b6] text-[#0b2421] flex items-center justify-center font-black">
@@ -558,17 +589,6 @@ export const HospitalHomePage: React.FC = () => {
             <p className="text-teal-300 leading-relaxed text-[11px]">
               Multi-specialty healthcare institution committed to delivering cutting-edge medical interventions and compassionate clinical care.
             </p>
-          </div>
-
-          <div>
-            <h4 className="font-bold text-white mb-3 uppercase tracking-wider text-[11px]">Role Portals</h4>
-            <div className="space-y-2 text-teal-300">
-              <div><a href="/patient" className="hover:text-white transition">Patient Portal</a></div>
-              <div><a href="/doctor" className="hover:text-white transition">Physician Portal</a></div>
-              <div><a href="/senior" className="hover:text-white transition">Senior Doctor Portal</a></div>
-              <div><a href="/nurse" className="hover:text-white transition">Nurse Station</a></div>
-              <div><a href="/lab" className="hover:text-white transition">Diagnostic Lab Portal</a></div>
-            </div>
           </div>
 
           <div>
@@ -583,9 +603,9 @@ export const HospitalHomePage: React.FC = () => {
           </div>
 
           <div>
-            <h4 className="font-bold text-white mb-3 uppercase tracking-wider text-[11px]">Accreditation</h4>
+            <h4 className="font-bold text-white mb-3 uppercase tracking-wider text-[11px]">Accreditation & Quality</h4>
             <p className="text-teal-300 text-[11px] leading-relaxed">
-              CarePlus Healthcare is fully certified by NABH, NABL, and ISO 9001:2015 for clinical quality, patient safety, and medical governance.
+              CarePlus Healthcare is certified by NABH, NABL, and ISO 9001:2015 for clinical quality, patient safety, and medical governance.
             </p>
           </div>
         </div>
@@ -596,52 +616,108 @@ export const HospitalHomePage: React.FC = () => {
         </div>
       </footer>
 
-      {/* Role Sign In Modal */}
-      {isAuthModalOpen && (
+      {/* Single Clean Sign-In Modal (NO ROLE CARDS, NO ROLE BUTTONS) */}
+      {isSignInModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0a1e1b]/60 backdrop-blur-xs">
-          <div className="bg-white w-full max-w-lg rounded-2xl shadow-2xl border border-[#cbe7e2] overflow-hidden">
-            <div className="px-6 py-4 border-b border-[#e4f3f0] flex items-center justify-between bg-[#f8fbfb]">
-              <div>
-                <h3 className="font-bold text-sm text-[#0c756e]">Sign In to CarePlus Healthcare</h3>
-                <p className="text-xs text-slate-500">Select your role to access your dedicated clinical portal</p>
+          <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-[#cbe7e2] overflow-hidden p-8 sm:p-10 space-y-6 relative animate-in fade-in duration-200">
+            <button
+              onClick={() => setIsSignInModalOpen(false)}
+              className="absolute top-5 right-5 text-slate-400 hover:text-slate-700 font-bold p-1 rounded-full text-sm"
+            >
+              ✕
+            </button>
+
+            {/* Header */}
+            <div className="text-center space-y-2">
+              <div className="w-12 h-12 rounded-2xl bg-[#e6f5f2] border border-[#cbe7e2] text-[#0c756e] flex items-center justify-center mx-auto mb-3 shadow-xs">
+                <ShieldCheck className="w-6 h-6" />
               </div>
+              <h2 className="text-2xl font-black text-[#132e2b] tracking-tight">
+                Sign in to CarePlus Healthcare
+              </h2>
+              <p className="text-xs text-[#4d7872] leading-relaxed">
+                Enter your credentials to continue
+              </p>
+            </div>
+
+            {/* Error Feedback */}
+            {modalError && (
+              <div className="p-3.5 bg-rose-50 border border-rose-200 rounded-xl text-rose-700 text-xs flex items-center gap-2 font-medium">
+                <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
+                <span>{modalError}</span>
+              </div>
+            )}
+
+            {/* Form */}
+            <form onSubmit={handleModalSignIn} className="space-y-4 pt-1">
+              <div>
+                <label className="block text-xs font-bold text-[#234c47] mb-1.5">
+                  Email
+                </label>
+                <div className="relative">
+                  <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="email"
+                    required
+                    value={modalEmail}
+                    onChange={(e) => setModalEmail(e.target.value)}
+                    placeholder="Enter your email"
+                    className="w-full pl-10 pr-3.5 py-2.5 bg-slate-50 border border-[#d6ebe7] rounded-xl text-xs font-semibold text-[#132e2b] focus:bg-white focus:border-[#0c756e] transition outline-none"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <div className="flex justify-between items-center mb-1.5">
+                  <label className="block text-xs font-bold text-[#234c47]">
+                    Password
+                  </label>
+                  <a
+                    href="#"
+                    onClick={(e) => { e.preventDefault(); setModalError('Please contact hospital administration at +91 80 2345 6789 to reset credentials.'); }}
+                    className="text-[11px] font-semibold text-[#0c756e] hover:underline"
+                  >
+                    Forgot password?
+                  </a>
+                </div>
+                <div className="relative">
+                  <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    type={showModalPassword ? 'text' : 'password'}
+                    required
+                    value={modalPassword}
+                    onChange={(e) => setModalPassword(e.target.value)}
+                    placeholder="Enter your password"
+                    className="w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-[#d6ebe7] rounded-xl text-xs font-semibold text-[#132e2b] focus:bg-white focus:border-[#0c756e] transition outline-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowModalPassword(!showModalPassword)}
+                    className="p-1 text-slate-400 hover:text-slate-600 absolute right-2.5 top-1/2 -translate-y-1/2"
+                  >
+                    {showModalPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+              </div>
+
               <button
-                onClick={() => setIsAuthModalOpen(false)}
-                className="text-slate-400 hover:text-slate-700 font-bold p-1 rounded"
+                type="submit"
+                disabled={isModalSubmitting}
+                className="w-full py-3 bg-[#0c756e] hover:bg-[#095e58] text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-xs transition disabled:opacity-50 mt-4 cursor-pointer"
               >
-                ✕
+                {isModalSubmitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Signing In...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Sign In</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
               </button>
-            </div>
-
-            <div className="p-6 space-y-3">
-              {rolePortals.map((p) => (
-                <a
-                  key={p.key}
-                  href={p.url}
-                  className="p-3.5 rounded-xl border border-[#d6ebe7] hover:border-[#0c756e] hover:bg-[#f8fbfb] transition flex items-center justify-between group block"
-                >
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span className="font-bold text-xs text-[#132e2b] group-hover:text-[#0c756e] transition">
-                        {p.name}
-                      </span>
-                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${p.color}`}>
-                        {p.key.toUpperCase()}
-                      </span>
-                    </div>
-                    <p className="text-[11px] text-slate-500 mt-0.5">{p.desc}</p>
-                  </div>
-                  <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-[#0c756e] transition shrink-0 ml-2" />
-                </a>
-              ))}
-            </div>
-
-            <div className="px-6 py-3 bg-[#f8fbfb] border-t border-[#e4f3f0] flex justify-between items-center text-xs">
-              <span className="text-slate-500">New patient?</span>
-              <a href="/patient" className="font-bold text-[#0c756e] hover:underline">
-                Create Patient Account →
-              </a>
-            </div>
+            </form>
           </div>
         </div>
       )}

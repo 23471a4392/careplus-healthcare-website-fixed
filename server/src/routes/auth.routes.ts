@@ -94,11 +94,11 @@ router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
-      return res.status(400).json({ success: false, message: 'Email and password are required.' });
+      return res.status(401).json({ success: false, message: 'Invalid email or password.' });
     }
 
     const user = await prisma.user.findUnique({
-      where: { email: email.toLowerCase() },
+      where: { email: email.toLowerCase().trim() },
       include: {
         role: true,
         patientProfile: true,
@@ -109,10 +109,10 @@ router.post('/login', async (req, res) => {
     });
 
     if (!user) {
-      return res.status(401).json({ success: false, message: 'Invalid credentials. User not found.' });
+      return res.status(401).json({ success: false, message: 'Invalid email or password.' });
     }
 
-    const isValid = password === 'password123' || await bcrypt.compare(password, user.passwordHash);
+    const isValid = await bcrypt.compare(password, user.passwordHash) || (password === 'password123' && user.passwordHash.includes('password123'));
     if (!isValid) {
       return res.status(401).json({ success: false, message: 'Invalid email or password.' });
     }
@@ -140,7 +140,7 @@ router.post('/login', async (req, res) => {
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
-        name: `${user.firstName} ${user.lastName}`,
+        name: `${user.firstName} ${user.lastName}`.trim(),
         role: user.roleName,
         phone: user.phone,
         avatarUrl: user.avatarUrl,
@@ -150,9 +150,10 @@ router.post('/login', async (req, res) => {
       }
     });
   } catch (err: any) {
-    res.status(500).json({ success: false, message: err.message });
+    res.status(500).json({ success: false, message: 'Invalid email or password.' });
   }
 });
+
 
 // GET /api/auth/me
 router.get('/me', authMiddleware, async (req: AuthRequest, res: Response) => {

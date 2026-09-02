@@ -7,9 +7,9 @@ interface AuthContextType {
   portalKey: string;
   demoUsers: { id: string; email: string; name: string; role: UserRole; specialty?: string }[];
   isLoading: boolean;
-  loginWithCredentials: (email: string, password: string, targetPortalKey: string) => Promise<boolean>;
+  loginWithCredentials: (email: string, password: string, targetPortalKey?: string) => Promise<{ success: boolean; redirectUrl: string; user?: any }>;
   registerUser: (formData: any) => Promise<boolean>;
-  loginAsDemoUser: (email: string) => Promise<boolean>;
+  loginAsDemoUser: (email: string) => Promise<any>;
   logout: () => void;
   updateUserAvatar: (avatarUrl: string) => void;
 }
@@ -30,9 +30,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const portalKey = getPortalKey();
   const tokenStorageKey = `careplus_session_${portalKey}`;
 
-  // Session-isolated per tab so every new tab starts at the Login page requiring manual credential entry
   const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(sessionStorage.getItem(tokenStorageKey));
+  const [token, setToken] = useState<string | null>(sessionStorage.getItem(tokenStorageKey) || sessionStorage.getItem('careplus_token'));
   const [demoUsers, setDemoUsers] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -94,46 +93,49 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, [portalKey]);
 
-  // Manual Credentials Login
-  const loginWithCredentials = async (email: string, pass: string, targetPortalKey: string): Promise<boolean> => {
+  // Clean Generic Login - Identifies role from unique credentials and routes accordingly
+  const loginWithCredentials = async (email: string, pass: string, _targetPortalKey?: string) => {
     setIsLoading(true);
     try {
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.trim(), password: pass.trim() })
+        body: JSON.stringify({ email: email.trim().toLowerCase(), password: pass })
       });
       const data = await res.json();
 
       if (data.success && data.user && data.token) {
         const role = data.user.role;
-        const isAuthorized =
-          (targetPortalKey === 'patient' && role === 'PATIENT') ||
-          (targetPortalKey === 'doctor' && (role === 'DOCTOR' || role === 'SENIOR_DOCTOR')) ||
-          (targetPortalKey === 'senior' && role === 'SENIOR_DOCTOR') ||
-          (targetPortalKey === 'nurse' && role === 'NURSE') ||
-          (targetPortalKey === 'lab' && role === 'LAB_TECHNICIAN');
+        let redirectUrl = '/patient';
 
-        if (!isAuthorized) {
-          throw new Error(`Your account role (${role}) is not authorized for the ${targetPortalKey} portal.`);
-        }
+        if (role === 'DOCTOR') redirectUrl = '/doctor';
+        else if (role === 'SENIOR_DOCTOR') redirectUrl = '/senior';
+        else if (role === 'NURSE') redirectUrl = '/nurse';
+        else if (role === 'LAB_TECHNICIAN') redirectUrl = '/lab';
+        else redirectUrl = '/patient';
 
         setToken(data.token);
         setUser(data.user);
-        sessionStorage.setItem(tokenStorageKey, data.token);
-        return true;
+
+        // Store tokens across session scopes for instant seamless load
+        sessionStorage.setItem('careplus_token', data.token);
+        sessionStorage.setItem('careplus_session_patient', data.token);
+        sessionStorage.setItem('careplus_session_doctor', data.token);
+        sessionStorage.setItem('careplus_session_senior', data.token);
+        sessionStorage.setItem('careplus_session_nurse', data.token);
+        sessionStorage.setItem('careplus_session_lab', data.token);
+
+        return { success: true, redirectUrl, user: data.user };
       } else {
-        throw new Error(data.message || 'Invalid email or password.');
+        throw new Error('Invalid email or password.');
       }
     } catch (err: any) {
-      console.error('Login error:', err);
-      throw err;
+      throw new Error('Invalid email or password.');
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Dynamic Registration
   const registerUser = async (formData: any): Promise<boolean> => {
     setIsLoading(true);
     try {
@@ -148,6 +150,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setToken(data.token);
         setUser(data.user);
         sessionStorage.setItem(tokenStorageKey, data.token);
+        sessionStorage.setItem('careplus_token', data.token);
         return true;
       } else {
         throw new Error(data.message || 'Registration failed.');
@@ -161,14 +164,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const loginAsDemoUser = async (email: string) => {
-    return loginWithCredentials(email, 'password123', portalKey);
+    return loginWithCredentials(email, 'password123');
   };
 
   const logout = () => {
-    sessionStorage.removeItem(tokenStorageKey);
+    sessionStorage.clear();
+    localStorage.removeItem('careplus_token');
     setUser(null);
     setToken(null);
     setIsLoading(false);
+    window.location.href = '/';
   };
 
   const updateUserAvatar = (avatarUrl: string) => {
