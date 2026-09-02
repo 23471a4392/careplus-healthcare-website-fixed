@@ -742,10 +742,7 @@ Trauma Desk: +91 80 2345 6789`;
                       {doc.bio}
                     </p>
 
-                    <div className="flex justify-between items-center text-xs py-1.5 px-2.5 bg-[#f8fbfb] dark:bg-slate-800 rounded-lg mb-3">
-                      <span className="text-[#4d7872]">Consultation Fee</span>
-                      <span className="font-semibold text-[#132e2b] dark:text-white">₹{doc.fee}</span>
-                    </div>
+                    
                   </div>
 
                   <div className="flex gap-2">
@@ -1313,10 +1310,7 @@ Trauma Desk: +91 80 2345 6789`;
             <p className="text-[#36615b] dark:text-[#6b9690] mt-1 leading-relaxed">{selectedDoctorProfile?.bio}</p>
           </div>
 
-          <div className="flex justify-between items-center py-2 border-t text-xs">
-            <span className="text-[#4d7872]">Consultation Fee</span>
-            <span className="font-semibold text-[#132e2b] dark:text-white">₹{selectedDoctorProfile?.fee}</span>
-          </div>
+          
 
           <div className="flex justify-end gap-2 pt-2">
             <button onClick={() => setSelectedDoctorProfile(null)} className="px-3 py-1.5 text-[#4d7872] hover:bg-[#e6f5f2] rounded-lg">Close</button>
@@ -1647,7 +1641,7 @@ Trauma Desk: +91 80 2345 6789`;
       >
         <div className="space-y-3 text-xs">
           <div className="p-3 bg-[#f8fbfb] dark:bg-slate-800 rounded-lg font-medium text-[#1a3d39] dark:text-white">
-            {bookingDoctor?.name} ({bookingDoctor?.specialty}) · ₹{bookingDoctor?.fee}
+            {bookingDoctor?.name} ({bookingDoctor?.specialty})
           </div>
 
           <div className="grid grid-cols-2 gap-3">

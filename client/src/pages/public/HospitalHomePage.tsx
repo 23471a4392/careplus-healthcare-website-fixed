@@ -361,7 +361,7 @@ export const HospitalHomePage: React.FC = () => {
               </div>
 
               <div className="pt-3 border-t border-[#eef6f5] flex justify-between items-center text-xs">
-                <span className="font-bold text-[#132e2b]">Fee: {doc.fee}</span>
+                <span className="font-semibold text-[#0c756e] bg-[#e6f5f2] px-2 py-0.5 rounded text-[11px] font-medium">Available Today</span>
                 <a
                   href="/patient"
                   className="px-3 py-1.5 bg-[#0c756e] hover:bg-[#095e58] text-white rounded-lg font-bold text-[11px]"
