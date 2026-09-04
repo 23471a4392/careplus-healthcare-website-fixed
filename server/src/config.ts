@@ -1,6 +1,10 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
+if (!process.env.DATABASE_URL) {
+  process.env.DATABASE_URL = 'file:./careplus.db';
+}
+
 export const CONFIG = {
   PORT: process.env.PORT || 5000,
   JWT_SECRET: process.env.JWT_SECRET || 'careplus_jwt_secure_secret_key_2026_super_secure',
